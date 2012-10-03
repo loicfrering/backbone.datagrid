@@ -15,10 +15,14 @@ define(['backbone', 'views/cell'], function(Backbone, Cell) {
     },
 
     renderCell: function(column) {
-      var cell = new Cell({
-        model: this.model,
+      var options = {
+        model:  this.model,
         column: column
-      });
+      };
+      if (this.options.header) {
+        options.tagName = 'th';
+      }
+      var cell = new Cell(options);
       this.$el.append(cell.render().el);
     }
   });

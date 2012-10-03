@@ -21,6 +21,7 @@ require.config({
     handlebars: 'libs/handlebars',
     text: 'libs/text',
     datagrid: '../../../src/views/datagrid',
+    'views/header': '../../../src/views/header',
     'views/row': '../../../src/views/row',
     'views/cell': '../../../src/views/cell'
   },
@@ -82,7 +83,8 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
   window.planets = new Planets();
   planets.fetch();
   window.datagrid = new Datagrid({
-    collection: planets
+    collection: planets,
+    className: 'table'
   });
 
   datagrid.render().$el.appendTo('#datagrid');
