@@ -19,7 +19,7 @@ define(['backbone', 'views/cell', 'views/callback-cell'], function(Backbone, Cel
         model:  this.model,
         column: column
       };
-      if (this.options.header) {
+      if (this.options.header || column.header) {
         options.tagName = 'th';
       }
       var cellView = this._resolveCellView(column.view, options);

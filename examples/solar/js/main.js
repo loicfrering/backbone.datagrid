@@ -94,7 +94,8 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
     className: 'table',
     columns: [{
       title: 'Le nom',
-      property: 'name'
+      property: 'name',
+      header: true
     }, {
       title: 'Le rang',
       property: 'rank',
