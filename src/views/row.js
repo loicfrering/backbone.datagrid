@@ -5,9 +5,11 @@ define(['backbone', 'views/cell'], function(Backbone, Cell) {
 
     initialize: function() {
       this.columns = this.options.columns;
+      this.model.on('change', this.render, this);
     },
 
     render: function() {
+      this.$el.empty();
       _.forEach(this.columns, this.renderCell, this);
       return this;
     },
