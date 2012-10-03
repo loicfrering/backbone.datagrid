@@ -11,7 +11,7 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
 
     render: function() {
       var header = new Header({columns: this.columns});
-      this.$el.append(header.render().el);
+      this.$el.html(header.render().el);
 
       this.$el.append('<tbody></tbody>');
 
@@ -27,7 +27,7 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
 
     sort: function(column) {
       this.collection.comparator = function(model) {
-        return model.get(column.property);
+        return model.get(column);
       };
       this.collection.sort();
     },
