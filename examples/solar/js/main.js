@@ -93,10 +93,10 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
     collection: planets,
     className: 'table',
     columns: [{
-      name: 'Le nom',
+      title: 'Le nom',
       property: 'name'
     }, {
-      name: 'Le rang',
+      title: 'Le rang',
       property: 'rank',
       view: function(model) {
         var rank = model.get('rank');

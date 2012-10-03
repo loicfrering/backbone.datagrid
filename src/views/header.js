@@ -11,7 +11,7 @@ define(['backbone', 'views/row'], function(Backbone, Row) {
       var model = new Backbone.Model();
       _.each(this.columns, function(column) {
         column.header = true;
-        model.set(column.property, column.name);
+        model.set(column.property, column.title);
       }, this);
 
       row = new Row({model: model, columns: this.columns, header: true});

@@ -38,7 +38,7 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
         var model = this.collection.first();
         for (var p in model.toJSON()) {
           this.columns.push({
-            name:     p.charAt(0).toUpperCase() + p.substr(1),
+            title:     p.charAt(0).toUpperCase() + p.substr(1),
             property: p
           });
         }
