@@ -81,7 +81,7 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
 
   window.planets = new Planets();
   planets.fetch();
-  var datagrid = new Datagrid({
+  window.datagrid = new Datagrid({
     collection: planets
   });
 

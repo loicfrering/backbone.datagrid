@@ -2,6 +2,7 @@ define(['backbone', 'handlebars', 'views/row', 'text!../../../src/templates/data
 
   var Datagrid = Backbone.View.extend({
     initialize: function() {
+      this.collection.on('reset', this.render, this);
       this._prepareColumns();
     },
 
