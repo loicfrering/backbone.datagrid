@@ -23,6 +23,13 @@ define(['backbone', 'handlebars', 'views/row', 'text!../../../src/templates/data
       this.$('tbody').append(row.render(this.columns).el);
     },
 
+    sort: function(column) {
+      this.collection.comparator = function(model) {
+        return model.get(column.property);
+      };
+      this.collection.sort();
+    },
+
     _prepareColumns: function() {
       this.columns = [];
       var model = this.collection.first();
