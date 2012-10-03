@@ -21,9 +21,8 @@ require.config({
     handlebars: 'libs/handlebars',
     text: 'libs/text',
     datagrid: '../../../src/views/datagrid',
-    'views/rows': '../../../src/views/row',
-    'templates/datagrid.hbs': '../../../src/templates/datagrid.hbs',
-    'templates/row.hbs': '../../../src/templates/row.hbs'
+    'views/row': '../../../src/views/row',
+    'views/cell': '../../../src/views/cell'
   },
   config: {
     hbs: {

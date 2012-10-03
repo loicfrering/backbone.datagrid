@@ -1,4 +1,4 @@
-define(['backbone', 'handlebars', 'views/rows', 'text!../../../src/templates/datagrid.hbs'], function(Backbone, Handlebars, Row, datagridTemplate) {
+define(['backbone', 'handlebars', 'views/row', 'text!../../../src/templates/datagrid.hbs'], function(Backbone, Handlebars, Row, datagridTemplate) {
 
   var Datagrid = Backbone.View.extend({
     initialize: function() {
@@ -12,14 +12,12 @@ define(['backbone', 'handlebars', 'views/rows', 'text!../../../src/templates/dat
       });
       this.$el.html(html);
 
-      this.collection.forEach(function(model) {
-        this.addRow(model);
-      }, this);
+      this.collection.forEach(this.renderRow, this);
 
       return this;
     },
 
-    addRow: function(model) {
+    renderRow: function(model) {
       var row = new Row({model: model, columns: this.columns});
       this.$('tbody').append(row.render(this.columns).el);
     },
