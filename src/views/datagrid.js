@@ -4,6 +4,7 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
     tagName: 'table',
 
     initialize: function() {
+      this.columns = this.options.columns;
       this.collection.on('reset', this.render, this);
       this._prepareColumns();
     },
@@ -32,13 +33,15 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
     },
 
     _prepareColumns: function() {
-      this.columns = [];
-      var model = this.collection.first();
-      for (var p in model.toJSON()) {
-        this.columns.push({
-          name:     p.charAt(0).toUpperCase() + p.substr(1),
-          property: p
-        });
+      if (!this.columns || _.isEmpty(this.columns)) {
+        this.columns = [];
+        var model = this.collection.first();
+        for (var p in model.toJSON()) {
+          this.columns.push({
+            name:     p.charAt(0).toUpperCase() + p.substr(1),
+            property: p
+          });
+        }
       }
     }
   });

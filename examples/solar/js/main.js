@@ -82,11 +82,25 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
 
   window.planets = new Planets();
   planets.fetch();
-  window.datagrid = new Datagrid({
+
+  window.datagrid1 = new Datagrid({
     collection: planets,
     className: 'table'
   });
 
-  datagrid.render().$el.appendTo('#datagrid');
+  window.datagrid2 = new Datagrid({
+    collection: planets,
+    className: 'table',
+    columns: [{
+      name: 'Le nom',
+      property: 'name'
+    }, {
+      name: 'Le rang',
+      property: 'rank'
+    }]
+  });
+
+  datagrid1.render().$el.appendTo('#datagrid');
+  datagrid2.render().$el.appendTo('#datagrid');
 
 });
