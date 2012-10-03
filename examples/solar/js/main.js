@@ -23,7 +23,8 @@ require.config({
     datagrid: '../../../src/views/datagrid',
     'views/header': '../../../src/views/header',
     'views/row': '../../../src/views/row',
-    'views/cell': '../../../src/views/cell'
+    'views/cell': '../../../src/views/cell',
+    'views/callback-cell': '../../../src/views/callback-cell'
   },
   config: {
     hbs: {
@@ -96,7 +97,20 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
       property: 'name'
     }, {
       name: 'Le rang',
-      property: 'rank'
+      property: 'rank',
+      view: function(model) {
+        var rank = model.get('rank');
+        switch(model.get('rank')%10) {
+          case 1: suffix = 'st'; break;
+          case 2: suffix = 'nd'; break;
+          case 3: suffix = 'rd'; break;
+          default: suffix = 'th';
+        }
+        if (10 < rank && rank < 13) {
+          return rank + 'th';
+        }
+        return rank + suffix;
+      }
     }]
   });
 

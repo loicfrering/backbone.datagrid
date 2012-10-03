@@ -1,4 +1,4 @@
-define(['backbone', 'views/cell'], function(Backbone, Cell) {
+define(['backbone', 'views/cell', 'views/callback-cell'], function(Backbone, Cell, CallbackCell) {
 
   var Row = Backbone.View.extend({
     tagName: 'tr',
@@ -22,8 +22,17 @@ define(['backbone', 'views/cell'], function(Backbone, Cell) {
       if (this.options.header) {
         options.tagName = 'th';
       }
-      var cell = new Cell(options);
+      var cellView = this._resolveCellView(column.view, options);
+      var cell = new cellView(options);
       this.$el.append(cell.render().el);
+    },
+
+    _resolveCellView: function(view, options) {
+      if (typeof view === 'function') {
+        options.callback = view;
+        return CallbackCell;
+      }
+      return view || Cell;
     }
   });
 
