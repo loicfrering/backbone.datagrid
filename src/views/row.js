@@ -10,7 +10,7 @@ define(['backbone', 'views/cell', 'views/callback-cell'], function(Backbone, Cel
 
     render: function() {
       this.$el.empty();
-      _.forEach(this.columns, this.renderCell, this);
+      _.each(this.columns, this.renderCell, this);
       return this;
     },
 

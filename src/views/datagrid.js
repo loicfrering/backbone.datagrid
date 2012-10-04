@@ -44,14 +44,29 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
 
     _prepareColumns: function() {
       if (!this.columns || _.isEmpty(this.columns)) {
-        this.columns = [];
-        var model = this.collection.first();
-        for (var p in model.toJSON()) {
-          this.columns.push({
-            title:    p.charAt(0).toUpperCase() + p.substr(1),
-            property: p
-          });
-        }
+        this._defaultColumns();
+      } else {
+        _.each(this.columns, function(column, i) {
+          this.columns[i] = this._prepareColumn(column);
+        }, this);
+      }
+    },
+
+    _prepareColumn: function(column) {
+      if (_.isString(column)) {
+        column = { property: column };
+      }
+      if (_.isObject(column)) {
+        column.title = column.title || column.property.charAt(0).toUpperCase() + column.property.substr(1);
+      }
+      return column;
+    },
+
+    _defaultColumns: function() {
+      this.columns = [];
+      var model = this.collection.first();
+      for (var p in model.toJSON()) {
+        this.columns.push(this._prepareColumn(p));
       }
     }
   });

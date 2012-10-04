@@ -97,12 +97,11 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
       title: 'Le nom',
       property: 'name',
       header: true
-    }, {
+    }, 'gravity', {
       title: 'Le Rayon',
       property: 'radius',
       cellClassName: 'test'
     }, {
-      title: 'Le rang',
       property: 'rank',
       view: function(model) {
         var rank = model.get('rank');
