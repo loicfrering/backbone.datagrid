@@ -21,7 +21,17 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
     },
 
     renderRow: function(model) {
-      var row = new Row({model: model, columns: this.columns});
+      var options = {
+        model: model,
+        columns: this.columns
+      };
+      var rowClassName = this.options.rowClassName;
+      if (_.isFunction(rowClassName)) {
+        rowClassName = rowClassName(model);
+      }
+      options.className = rowClassName;
+
+      var row = new Row(options);
       this.$('tbody').append(row.render(this.columns).el);
     },
 

@@ -92,10 +92,15 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
   window.datagrid2 = new Datagrid({
     collection: planets,
     className: 'table',
+    rowClassName: function(planet) { return planet.get('name') === 'Mars' ? 'error' : ''; },
     columns: [{
       title: 'Le nom',
       property: 'name',
       header: true
+    }, {
+      title: 'Le Rayon',
+      property: 'radius',
+      cellClassName: 'test'
     }, {
       title: 'Le rang',
       property: 'rank',

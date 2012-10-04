@@ -22,6 +22,12 @@ define(['backbone', 'views/cell', 'views/callback-cell'], function(Backbone, Cel
       if (this.options.header || column.header) {
         options.tagName = 'th';
       }
+      var cellClassName = column.cellClassName;
+      if (_.isFunction(cellClassName)) {
+        cellClassName = cellClassName(this.model);
+      }
+      options.className = cellClassName;
+
       var cellView = this._resolveCellView(column.view, options);
       var cell = new cellView(options);
       this.$el.append(cell.render().el);
