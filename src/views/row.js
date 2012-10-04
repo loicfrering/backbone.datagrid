@@ -15,6 +15,11 @@ define(['backbone', 'views/cell', 'views/callback-cell'], function(Backbone, Cel
     },
 
     renderCell: function(column) {
+      var cellView = this._resolveCellView(column);
+      this.$el.append(cellView.render().el);
+    },
+
+    _resolveCellView: function(column) {
       var options = {
         model:  this.model,
         column: column
@@ -28,17 +33,32 @@ define(['backbone', 'views/cell', 'views/callback-cell'], function(Backbone, Cel
       }
       options.className = cellClassName;
 
-      var cellView = this._resolveCellView(column.view, options);
-      var cell = new cellView(options);
-      this.$el.append(cell.render().el);
-    },
 
-    _resolveCellView: function(view, options) {
-      if (typeof view === 'function') {
-        options.callback = view;
-        return CallbackCell;
+      var view = column.view || Cell;
+
+      // Resolve view from string or function
+      if (typeof view !== 'object' && !(view.prototype && view.prototype.render)) {
+        if (_.isString(view)) {
+          options.callback = _.template(view);
+          view = CallbackCell;
+        } else if (_.isFunction(view) && !view.prototype.render) {
+          options.callback = view;
+          view = CallbackCell;
+        } else {
+          throw new TypeError('Invalid view passed to column "' + column.title + '".');
+        }
       }
-      return view || Cell;
+
+      // Resolve view from options
+      else if (typeof view === 'object') {
+        _.extend(options, view);
+        view = view.type;
+        if (!view.prototype || !view.prototype.render) {
+          throw new TypeError('Invalid view passed to column "' + column.title + '".');
+        }
+      }
+
+      return new view(options);
     }
   });
 

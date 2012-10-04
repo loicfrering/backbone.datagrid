@@ -7,7 +7,7 @@ define(['backbone', 'views/cell'], function(Backbone, Cell) {
     },
 
     _prepareValue: function() {
-      this.value = this.callback(this.model);
+      this.value = this.callback(this.model.toJSON());
     }
   });
 

@@ -100,12 +100,13 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
     }, 'gravity', {
       title: 'Le Rayon',
       property: 'radius',
-      cellClassName: 'test'
+      cellClassName: 'test',
+      view: '<%= radius %> km'
     }, {
       property: 'rank',
       view: function(model) {
-        var rank = model.get('rank');
-        switch(model.get('rank')%10) {
+        var rank = model.rank;
+        switch(rank % 10) {
           case 1: suffix = 'st'; break;
           case 2: suffix = 'nd'; break;
           case 3: suffix = 'rd'; break;
