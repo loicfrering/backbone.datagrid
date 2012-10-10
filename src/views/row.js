@@ -53,7 +53,7 @@ define(['backbone', 'views/cell', 'views/callback-cell'], function(Backbone, Cel
       else if (typeof view === 'object') {
         _.extend(options, view);
         view = view.type;
-        if (!view.prototype || !view.prototype.render) {
+        if (!view || !view.prototype || !view.prototype.render) {
           throw new TypeError('Invalid view passed to column "' + column.title + '".');
         }
       }

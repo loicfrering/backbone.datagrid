@@ -33,8 +33,17 @@ require.config({
   }
 });
 
-require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
-  window.Datagrid = Datagrid;
+require([
+  'backbone',
+  'datagrid',
+  'views/row',
+  'views/cell',
+  'views/callback-cell'
+], function(Backbone, Datagrid, Row, Cell, CallbackCell) {
+  window.Datagrid     = Datagrid;
+  window.Row          = Row;
+  window.Cell         = Cell;
+  window.CallbackCell = CallbackCell;
   mocha.run();
 });
 
