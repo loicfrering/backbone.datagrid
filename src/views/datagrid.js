@@ -65,8 +65,10 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
     _defaultColumns: function() {
       this.columns = [];
       var model = this.collection.first();
-      for (var p in model.toJSON()) {
-        this.columns.push(this._prepareColumn(p));
+      if (model) {
+        for (var p in model.toJSON()) {
+          this.columns.push(this._prepareColumn(p));
+        }
       }
     }
   });
