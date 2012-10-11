@@ -44,6 +44,11 @@ require([
   window.Row          = Row;
   window.Cell         = Cell;
   window.CallbackCell = CallbackCell;
-  mocha.run();
+
+  if (window.mochaPhantomJS) {
+    mochaPhantomJS.run();
+  } else {
+    mocha.run();
+  }
 });
 
