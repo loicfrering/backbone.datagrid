@@ -5,8 +5,18 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
 
     initialize: function() {
       this.columns = this.options.columns;
+      this.options = _.defaults(this.options, {
+        paginated: false,
+        page:      1,
+        perPage:   10
+      });
+
       this.collection.on('reset', this.render, this);
+
       this._prepareColumns();
+      if (this.options.paginated) {
+        this.page(this.options.page, {silent: true});
+      }
     },
 
     render: function() {
@@ -40,6 +50,31 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
         return model.get(column);
       };
       this.collection.sort();
+    },
+
+    page: function(page, options) {
+      if (this.options.inMemory) {
+        this._pageInMemory(page, options);
+      } else {
+        this._page(page, options);
+      }
+    },
+
+    _page: function(page, options) {
+      this.collection.fetch(options);
+    },
+
+    _pageInMemory: function(page, options) {
+      if (!this._originalCollection) {
+        this._originalCollection = this.collection.clone();
+      }
+
+      var perPage = this.options.perPage;
+
+      var begin = (page - 1) * perPage;
+      var end   = begin + perPage;
+
+      this.collection.reset(this._originalCollection.slice(begin, end), options);
     },
 
     _prepareColumns: function() {

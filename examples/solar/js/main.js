@@ -74,23 +74,22 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
   var Planet = Backbone.Model.extend();
 
   var Planets = Backbone.Collection.extend({
-    model: Planet,
-    fetch: function() {
-      this.reset(fixtures);
-    }
+    model: Planet
   });
 
 
   window.planets = new Planets();
-  planets.fetch();
+  planets.reset(fixtures);
 
   window.datagrid1 = new Datagrid({
-    collection: planets,
+    collection: planets.clone(),
+    inMemory: true,
     className: 'table'
   });
 
   window.datagrid2 = new Datagrid({
     collection: planets,
+    inMemory: true,
     className: 'table',
     rowClassName: function(planet) { return planet.get('name') === 'Mars' ? 'error' : ''; },
     columns: [{
