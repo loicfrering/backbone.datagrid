@@ -2,9 +2,9 @@ chai.should();
 
 describe('Datagrid', function() {
   describe('constructor', function() {
-    it('should have table as tagName', function() {
+    it('should have div as tagName', function() {
       var datagrid = new Datagrid({collection: new Backbone.Collection()});
-      datagrid.tagName.should.equal('table');
+      datagrid.tagName.should.equal('div');
     });
   });
 

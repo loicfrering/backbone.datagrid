@@ -23,9 +23,9 @@ require.config({
     datagrid: '../../../src/views/datagrid',
     'views/header': '../../../src/views/header',
     'views/row': '../../../src/views/row',
-    'views/pagination': '../../../src/views/pagination',
     'views/cell': '../../../src/views/cell',
-    'views/callback-cell': '../../../src/views/callback-cell'
+    'views/callback-cell': '../../../src/views/callback-cell',
+    'views/pagination': '../../../src/views/pagination'
   },
   config: {
     hbs: {

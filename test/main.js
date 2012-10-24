@@ -24,7 +24,8 @@ require.config({
     'views/header': '../src/views/header',
     'views/row': '../src/views/row',
     'views/cell': '../src/views/cell',
-    'views/callback-cell': '../src/views/callback-cell'
+    'views/callback-cell': '../src/views/callback-cell',
+    'views/pagination': '../src/views/pagination'
   },
   config: {
     hbs: {
@@ -38,12 +39,14 @@ require([
   'datagrid',
   'views/row',
   'views/cell',
-  'views/callback-cell'
-], function(Backbone, Datagrid, Row, Cell, CallbackCell) {
+  'views/callback-cell',
+  'views/pagination'
+], function(Backbone, Datagrid, Row, Cell, CallbackCell, Pagination) {
   window.Datagrid     = Datagrid;
   window.Row          = Row;
   window.Cell         = Cell;
   window.CallbackCell = CallbackCell;
+  window.Pagination   = Pagination;
 
   if (window.mochaPhantomJS) {
     mochaPhantomJS.run();
