@@ -1,8 +1,6 @@
-define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row) {
+define(['backbone', 'views/header', 'views/row', 'views/pagination'], function(Backbone, Header, Row, Pagination) {
 
   var Datagrid = Backbone.View.extend({
-    tagName: 'table',
-
     initialize: function() {
       this.columns = this.options.columns;
       this.options = _.defaults(this.options, {
@@ -10,6 +8,10 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
         page:      1,
         perPage:   10
       });
+
+      if (this.options.paginated && this.options.perPage < 1) {
+        throw new Error('perPage must be greater than zero.');
+      }
 
       this.collection.on('reset', this.render, this);
 
@@ -20,14 +22,29 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
     },
 
     render: function() {
-      var header = new Header({columns: this.columns});
-      this.$el.html(header.render().el);
-
-      this.$el.append('<tbody></tbody>');
-
-      this.collection.forEach(this.renderRow, this);
+      this.renderTable();
+      if (this.options.paginated) {
+        this.renderPagination();
+      }
 
       return this;
+    },
+
+    renderTable: function() {
+      var $table = $('<table></table>', {'class': 'table'});
+      this.$el.append($table);
+
+      var header = new Header({columns: this.columns});
+      $table.append(header.render().el);
+
+      $table.append('<tbody></tbody>');
+
+      this.collection.forEach(this.renderRow, this);
+    },
+
+    renderPagination: function() {
+      var pagination = new Pagination({current: this.options.page, total: this.totalPages});
+      this.$el.append(pagination.render().el);
     },
 
     renderRow: function(model) {
@@ -75,6 +92,7 @@ define(['backbone', 'views/header', 'views/row'], function(Backbone, Header, Row
       var end   = begin + perPage;
 
       this.collection.reset(this._originalCollection.slice(begin, end), options);
+      this.totalPages = Math.ceil(this._originalCollection.size()/this.options.perPage, 10);
     },
 
     _prepareColumns: function() {

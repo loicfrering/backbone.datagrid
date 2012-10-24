@@ -23,6 +23,7 @@ require.config({
     datagrid: '../../../src/views/datagrid',
     'views/header': '../../../src/views/header',
     'views/row': '../../../src/views/row',
+    'views/pagination': '../../../src/views/pagination',
     'views/cell': '../../../src/views/cell',
     'views/callback-cell': '../../../src/views/callback-cell'
   },
@@ -83,14 +84,13 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
 
   window.datagrid1 = new Datagrid({
     collection: planets.clone(),
-    inMemory: true,
-    className: 'table'
+    inMemory: true
   });
 
   window.datagrid2 = new Datagrid({
     collection: planets,
     inMemory: true,
-    className: 'table',
+    paginated: true,
     rowClassName: function(planet) { return planet.get('name') === 'Mars' ? 'error' : ''; },
     columns: [{
       title: 'Le nom',
