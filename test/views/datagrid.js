@@ -2,9 +2,40 @@ chai.should();
 
 describe('Datagrid', function() {
   describe('constructor', function() {
+    var datagrid;
+
+    beforeEach(function() {
+      datagrid = new Datagrid({collection: new Backbone.Collection()});
+    });
+
     it('should have div as tagName', function() {
-      var datagrid = new Datagrid({collection: new Backbone.Collection()});
       datagrid.tagName.should.equal('div');
+    });
+
+    it('should default page option to 1', function() {
+      datagrid.options.page.should.equal(1);
+    });
+
+    it('should default perPage option to 10', function() {
+      datagrid.options.perPage.should.equal(10);
+    });
+
+    it('should throw an error when perPage is less than 1', function() {
+      (function() {
+        datagrid = new Datagrid({
+          collection: new Backbone.Collection(),
+          paginated:  true,
+          perPage:    0
+        });
+      }).should.throw(Error);
+
+      (function() {
+        datagrid = new Datagrid({
+          collection: new Backbone.Collection(),
+          paginated:  true,
+          perPage:    -1
+        });
+      }).should.throw(Error);
     });
   });
 
@@ -71,6 +102,27 @@ describe('Datagrid', function() {
       column.title.should.equal('Col3');
     });
 
+  });
+
+  describe('pagination', function() {
+    it('should paginate correctly in memory', function() {
+      var collection = new Backbone.Collection();
+      for (var i = 0; i < 5; i++) {
+        collection.push({foo: 'bar' + i});
+      }
+      var datagrid = new Datagrid({
+        collection: collection,
+        paginated:  true,
+        inMemory:   true,
+        perPage:    2
+      });
+
+      datagrid.page(2, {silent: true});
+
+      datagrid.collection.size().should.equal(2);
+      datagrid.collection.at(0).toJSON().should.deep.equal({foo: 'bar2'});
+      datagrid.collection.at(1).toJSON().should.deep.equal({foo: 'bar3'});
+    });
   });
 
 });

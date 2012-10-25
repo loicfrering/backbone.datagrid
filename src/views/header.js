@@ -17,7 +17,7 @@ define(['backbone', 'views/row'], function(Backbone, Row) {
         columns.push(headerColumn);
       }, this);
 
-      row = new Row({model: model, columns: columns, header: true});
+      var row = new Row({model: model, columns: columns, header: true});
       this.$el.html(row.render().el);
 
       return this;

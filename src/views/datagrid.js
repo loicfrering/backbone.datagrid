@@ -22,6 +22,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination'], function(B
     },
 
     render: function() {
+      this.$el.empty();
       this.renderTable();
       if (this.options.paginated) {
         this.renderPagination();
