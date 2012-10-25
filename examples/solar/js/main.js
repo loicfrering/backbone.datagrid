@@ -25,7 +25,8 @@ require.config({
     'views/row': '../../../src/views/row',
     'views/cell': '../../../src/views/cell',
     'views/callback-cell': '../../../src/views/callback-cell',
-    'views/pagination': '../../../src/views/pagination'
+    'views/pagination': '../../../src/views/pagination',
+    'models/pager': '../../../src/models/pager'
   },
   config: {
     hbs: {

@@ -1,4 +1,4 @@
-define(['backbone', 'views/header', 'views/row', 'views/pagination'], function(Backbone, Header, Row, Pagination) {
+define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pager'], function(Backbone, Header, Row, Pagination, Pager) {
 
   var Datagrid = Backbone.View.extend({
     initialize: function() {
@@ -9,16 +9,8 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination'], function(B
         perPage:   10
       });
 
-      if (this.options.paginated && this.options.perPage < 1) {
-        throw new Error('perPage must be greater than zero.');
-      }
-
       this.collection.on('reset', this.render, this);
-
-      this._prepareColumns();
-      if (this.options.paginated) {
-        this.page(this.options.page, {silent: true});
-      }
+      this._prepare();
     },
 
     render: function() {
@@ -44,7 +36,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination'], function(B
     },
 
     renderPagination: function() {
-      var pagination = new Pagination({current: this.options.page, total: this.totalPages});
+      var pagination = new Pagination({pager: this.pager});
       this.$el.append(pagination.render().el);
     },
 
@@ -70,15 +62,19 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination'], function(B
       this.collection.sort();
     },
 
-    page: function(page, options) {
-      if (this.options.inMemory) {
-        this._pageInMemory(page, options);
-      } else {
-        this._page(page, options);
-      }
+    page: function(page) {
+      this.pager.page(page);
     },
 
     _page: function(page, options) {
+      if (this.options.inMemory) {
+        this._pageInMemory(page, options);
+      } else {
+        this._pageRequest(page, options);
+      }
+    },
+
+    _pageRequest: function(page, options) {
       this.collection.fetch(options);
     },
 
@@ -87,13 +83,38 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination'], function(B
         this._originalCollection = this.collection.clone();
       }
 
-      var perPage = this.options.perPage;
+      var perPage = this.pager.get('perPage');
 
       var begin = (page - 1) * perPage;
       var end   = begin + perPage;
 
       this.collection.reset(this._originalCollection.slice(begin, end), options);
-      this.totalPages = Math.ceil(this._originalCollection.size()/this.options.perPage, 10);
+      this.pager.set('total', this._originalCollection.size());
+    },
+
+    _prepare: function() {
+      this._prepareColumns();
+      if (this.options.paginated) {
+        this._preparePager();
+        this._page(this.options.page, {silent: true});
+      }
+    },
+
+    _preparePager: function() {
+      this.pager = new Pager({
+        currentPage: this.options.page,
+        perPage:     this.options.perPage,
+        total:       this.collection.size()
+      });
+
+      this.pager.on('change:currentPage', function() {
+        this._page(this.pager.get('currentPage'));
+      }, this);
+      this.pager.on('change:perPage', function() {
+        this.page(1);
+        // manually trigger this event even if we already are on page 1
+        this.pager.trigger('change:currentPage');
+      }, this);
     },
 
     _prepareColumns: function() {
