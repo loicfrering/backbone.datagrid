@@ -5,6 +5,7 @@ define(['backbone'], function(Backbone) {
       this.on('change:perPage change:total', function() {
         this.totalPages(this.get('total'));
       }, this);
+      this.totalPages(this.get('total'));
     },
 
     totalPages: function(total) {

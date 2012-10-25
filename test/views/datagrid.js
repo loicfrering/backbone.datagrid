@@ -1,7 +1,7 @@
 chai.should();
 
 describe('Datagrid', function() {
-  describe('constructor', function() {
+  describe('initialization', function() {
     var datagrid;
 
     beforeEach(function() {
