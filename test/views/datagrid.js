@@ -105,23 +105,39 @@ describe('Datagrid', function() {
   });
 
   describe('pagination', function() {
-    it('should paginate correctly in memory', function() {
+    var datagrid;
+
+    beforeEach(function() {
       var collection = new Backbone.Collection();
       for (var i = 0; i < 5; i++) {
         collection.push({foo: 'bar' + i});
       }
-      var datagrid = new Datagrid({
+      datagrid = new Datagrid({
         collection: collection,
         paginated:  true,
         inMemory:   true,
         perPage:    2
       });
+    });
 
+    it('should paginate correctly in memory', function() {
       datagrid.page(2, {silent: true});
 
+      datagrid.pager.get('currentPage').should.equal(2);
       datagrid.collection.size().should.equal(2);
       datagrid.collection.at(0).toJSON().should.deep.equal({foo: 'bar2'});
       datagrid.collection.at(1).toJSON().should.deep.equal({foo: 'bar3'});
+    });
+
+    it('should update the datagrid when perPage changes', function() {
+      datagrid.page(2, {silent: true});
+      datagrid.pager.get('currentPage').should.equal(2);
+
+      datagrid.perPage(1);
+
+      datagrid.pager.get('currentPage').should.equal(1);
+      datagrid.collection.size().should.equal(1);
+      datagrid.collection.at(0).toJSON().should.deep.equal({foo: 'bar0'});
     });
   });
 

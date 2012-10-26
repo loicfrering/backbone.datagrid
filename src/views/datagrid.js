@@ -66,6 +66,10 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       this.pager.page(page);
     },
 
+    perPage: function(perPage) {
+      this.pager.set('perPage', perPage);
+    },
+
     _page: function(page, options) {
       if (this.options.inMemory) {
         this._pageInMemory(page, options);
