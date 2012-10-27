@@ -5,6 +5,7 @@ define(['backbone', 'views/row', 'views/header-cell'], function(Backbone, Row, H
 
     initialize: function() {
       this.columns = this.options.columns;
+      this.sorter  = this.options.sorter;
     },
 
     render: function() {
@@ -13,7 +14,10 @@ define(['backbone', 'views/row', 'views/header-cell'], function(Backbone, Row, H
       _.each(this.columns, function(column) {
         model.set(column.property, column.title);
         headerColumn      = _.clone(column);
-        headerColumn.view = column.headerView || HeaderCell;
+        headerColumn.view = column.headerView || {
+            type: HeaderCell,
+            sorter: this.sorter
+          };
         columns.push(headerColumn);
       }, this);
 

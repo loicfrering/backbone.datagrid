@@ -1,4 +1,4 @@
-define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pager'], function(Backbone, Header, Row, Pagination, Pager) {
+define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pager', 'models/sorter'], function(Backbone, Header, Row, Pagination, Pager, Sorter) {
 
   var Datagrid = Backbone.View.extend({
     initialize: function() {
@@ -27,7 +27,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       var $table = $('<table></table>', {'class': 'table'});
       this.$el.append($table);
 
-      var header = new Header({columns: this.columns});
+      var header = new Header({columns: this.columns, sorter: this.sorter});
       $table.append(header.render().el);
 
       $table.append('<tbody></tbody>');
@@ -55,11 +55,12 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       this.$('tbody').append(row.render(this.columns).el);
     },
 
-    sort: function(column) {
-      this.collection.comparator = function(model) {
-        return model.get(column);
-      };
-      this.collection.sort();
+    sort: function(column, order) {
+      if (this.options.inMemory) {
+        this._sortInMemory(column, order);
+      } else {
+        this._sortRequest(column, order);
+      }
     },
 
     page: function(page) {
@@ -68,6 +69,16 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
 
     perPage: function(perPage) {
       this.pager.set('perPage', perPage);
+    },
+
+    _sortInMemory: function(column, order) {
+      this.collection.comparator = function(model) {
+        return model.get(column);
+      };
+      this.collection.sort();
+    },
+
+    _sortRequest: function(column, order) {
     },
 
     _page: function(page, options) {
@@ -98,10 +109,18 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
 
     _prepare: function() {
       this._prepareColumns();
+      this._prepareSorter();
       if (this.options.paginated) {
         this._preparePager();
         this._page(this.options.page, {silent: true});
       }
+    },
+
+    _prepareSorter: function() {
+      this.sorter = new Sorter();
+      this.sorter.on('change', function() {
+        this.sort(this.sorter.get('column'));
+      }, this);
     },
 
     _preparePager: function() {

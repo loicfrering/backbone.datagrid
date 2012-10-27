@@ -27,7 +27,8 @@ require.config({
     'views/header-cell': '../src/views/header-cell',
     'views/callback-cell': '../src/views/callback-cell',
     'views/pagination': '../src/views/pagination',
-    'models/pager': '../src/models/pager'
+    'models/pager': '../src/models/pager',
+    'models/sorter': '../src/models/sorter'
   },
   config: {
     hbs: {

@@ -27,7 +27,8 @@ require.config({
     'views/header-cell': '../../../src/views/header-cell',
     'views/callback-cell': '../../../src/views/callback-cell',
     'views/pagination': '../../../src/views/pagination',
-    'models/pager': '../../../src/models/pager'
+    'models/pager': '../../../src/models/pager',
+    'models/sorter': '../../../src/models/sorter'
   },
   config: {
     hbs: {
@@ -103,7 +104,8 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
       title: 'Le Rayon',
       property: 'radius',
       cellClassName: 'test',
-      view: '<%= radius %> km'
+      view: '<%= radius %> km',
+      sortable: true
     }, {
       property: 'rank',
       view: function(model) {
