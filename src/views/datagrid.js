@@ -76,8 +76,19 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
     },
 
     _sortInMemory: function() {
-      this.collection.comparator = _.bind(this._comparator, this);
-      this.collection.sort();
+      if (this.options.paginated) {
+        this._originalCollection.comparator = _.bind(this._comparator, this);
+        this._originalCollection.sort();
+        // Force rendering even if we already are on page 1
+        if (this.pager.get('currentPage') === 1) {
+          this.pager.trigger('change:currentPage');
+        } else {
+          this.page(1);
+        }
+      } else {
+        this.collection.comparator = _.bind(this._comparator, this);
+        this.collection.sort();
+      }
     },
 
     _comparator: function(model1, model2) {
@@ -150,9 +161,12 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
         this._page();
       }, this);
       this.pager.on('change:perPage', function() {
-        this.page(1);
-        // manually trigger this event even if we already are on page 1
-        this.pager.trigger('change:currentPage');
+        // Force rendering even if we already are on page 1
+        if (this.pager.get('currentPage') === 1) {
+          this.pager.trigger('change:currentPage');
+        } else {
+          this.page(1);
+        }
       }, this);
     },
 
