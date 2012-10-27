@@ -79,7 +79,11 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       this.collection.comparator = function(model) {
         return model.get(column);
       };
-      this.collection.sort();
+      this.collection.sort({silent: true});
+      if (order === Sorter.DESC) {
+        this.collection.models.reverse();
+      }
+      this.collection.trigger('reset');
     },
 
     _sortRequest: function(column, order) {
@@ -123,7 +127,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
     _prepareSorter: function() {
       this.sorter = new Sorter();
       this.sorter.on('change', function() {
-        this._sort(this.sorter.get('column'));
+        this._sort(this.sorter.get('column'), this.sorter.get('order'));
       }, this);
     },
 
