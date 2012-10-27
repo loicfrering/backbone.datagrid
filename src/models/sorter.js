@@ -1,13 +1,13 @@
 define(['backbone'], function(Backbone) {
 
   var Sorter = Backbone.Model.extend({
-    sort: function(column) {
-      if (this.get('column') === column) {
+    sort: function(column, order) {
+      if (!order && this.get('column') === column) {
         this.togglerOrder();
       } else {
         this.set({
           column: column,
-          order: Sorter.ASC
+          order: order || Sorter.ASC
         });
       }
     },

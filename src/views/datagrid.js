@@ -56,11 +56,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
     },
 
     sort: function(column, order) {
-      if (this.options.inMemory) {
-        this._sortInMemory(column, order);
-      } else {
-        this._sortRequest(column, order);
-      }
+      this.sorter.sort(column, order);
     },
 
     page: function(page) {
@@ -69,6 +65,14 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
 
     perPage: function(perPage) {
       this.pager.set('perPage', perPage);
+    },
+
+    _sort: function(column, order) {
+      if (this.options.inMemory) {
+        this._sortInMemory(column, order);
+      } else {
+        this._sortRequest(column, order);
+      }
     },
 
     _sortInMemory: function(column, order) {
@@ -119,7 +123,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
     _prepareSorter: function() {
       this.sorter = new Sorter();
       this.sorter.on('change', function() {
-        this.sort(this.sorter.get('column'));
+        this._sort(this.sorter.get('column'));
       }, this);
     },
 
