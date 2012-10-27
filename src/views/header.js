@@ -1,4 +1,4 @@
-define(['backbone', 'views/row'], function(Backbone, Row) {
+define(['backbone', 'views/row', 'views/header-cell'], function(Backbone, Row, HeaderCell) {
 
   var Header = Backbone.View.extend({
     tagName: 'thead',
@@ -13,7 +13,7 @@ define(['backbone', 'views/row'], function(Backbone, Row) {
       _.each(this.columns, function(column) {
         model.set(column.property, column.title);
         headerColumn      = _.clone(column);
-        headerColumn.view = column.headerView;
+        headerColumn.view = column.headerView || HeaderCell;
         columns.push(headerColumn);
       }, this);
 

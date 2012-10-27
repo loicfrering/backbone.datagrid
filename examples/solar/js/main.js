@@ -24,6 +24,7 @@ require.config({
     'views/header': '../../../src/views/header',
     'views/row': '../../../src/views/row',
     'views/cell': '../../../src/views/cell',
+    'views/header-cell': '../../../src/views/header-cell',
     'views/callback-cell': '../../../src/views/callback-cell',
     'views/pagination': '../../../src/views/pagination',
     'models/pager': '../../../src/models/pager'
@@ -96,7 +97,8 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
     columns: [{
       title: 'Le nom',
       property: 'name',
-      header: true
+      header: true,
+      sortable: true
     }, 'gravity', {
       title: 'Le Rayon',
       property: 'radius',
