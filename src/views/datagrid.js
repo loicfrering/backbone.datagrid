@@ -67,23 +67,30 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       this.pager.set('perPage', perPage);
     },
 
-    _sort: function(column, order) {
+    _sort: function() {
       if (this.options.inMemory) {
-        this._sortInMemory(column, order);
+        this._sortInMemory();
       } else {
-        this._sortRequest(column, order);
+        this._sortRequest();
       }
     },
 
-    _sortInMemory: function(column, order) {
-      this.collection.comparator = function(model) {
-        return model.get(column);
-      };
-      this.collection.sort({silent: true});
-      if (order === Sorter.DESC) {
-        this.collection.models.reverse();
-      }
-      this.collection.trigger('reset');
+    _sortInMemory: function() {
+      this.collection.comparator = _.bind(this._comparator, this);
+      this.collection.sort();
+    },
+
+    _comparator: function(model1, model2) {
+      var columnComparator = this._comparatorForColumn(this.sorter.get('column'));
+      var order = columnComparator(model1, model2);
+      return this.sorter.sortedASC() ? order : -order;
+    },
+
+    _comparatorForColumn: function(columnProperty) {
+      var column = _.find(this.columns, function(column) {
+        return column.property === columnProperty;
+      });
+      return column ? column.comparator : null;
     },
 
     _sortRequest: function(column, order) {
@@ -164,6 +171,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       }
       if (_.isObject(column)) {
         column.title = column.title || column.property.charAt(0).toUpperCase() + column.property.substr(1);
+        column.comparator = column.comparator || this._defaultComparator(column.property);
       }
       return column;
     },
@@ -176,6 +184,12 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
           this.columns.push(this._prepareColumn(p));
         }
       }
+    },
+
+    _defaultComparator: function(column) {
+      return function(model1, model2) {
+        return model1.get(column).localeCompare(model2.get(column));
+      };
     }
   });
 

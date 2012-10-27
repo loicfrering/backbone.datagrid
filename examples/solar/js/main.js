@@ -105,7 +105,10 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
       property: 'radius',
       cellClassName: 'test',
       view: '<%= radius %> km',
-      sortable: true
+      sortable: true,
+      comparator: function(planet1, planet2) {
+        return planet1.get('radius') - planet2.get('radius');
+      }
     }, {
       property: 'rank',
       view: function(model) {

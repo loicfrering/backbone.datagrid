@@ -63,12 +63,14 @@ describe('Datagrid', function() {
 
   describe('columns preparation', function() {
     var datagrid;
+    var comparator = function(model1, model2) { return 0; };
 
     beforeEach(function() {
       var collection = new Backbone.Collection();
       var columns    = [{
         property: 'col1',
-        title:    'Column 1'
+        title:    'Column 1',
+        comparator: comparator
       }, 'col2', {
         property: 'col3'
       }];
@@ -79,7 +81,8 @@ describe('Datagrid', function() {
       var column = datagrid.columns[0];
       column.should.deep.equal({
         property: 'col1',
-        title:    'Column 1'
+        title:    'Column 1',
+        comparator: comparator
       });
     });
 
