@@ -96,23 +96,24 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
     _sortRequest: function(column, order) {
     },
 
-    _page: function(page, options) {
+    _page: function(options) {
       if (this.options.inMemory) {
-        this._pageInMemory(page, options);
+        this._pageInMemory(options);
       } else {
-        this._pageRequest(page, options);
+        this._pageRequest(options);
       }
     },
 
-    _pageRequest: function(page, options) {
+    _pageRequest: function(options) {
       this.collection.fetch(options);
     },
 
-    _pageInMemory: function(page, options) {
+    _pageInMemory: function(options) {
       if (!this._originalCollection) {
         this._originalCollection = this.collection.clone();
       }
 
+      var page    = this.pager.get('currentPage');
       var perPage = this.pager.get('perPage');
 
       var begin = (page - 1) * perPage;
@@ -127,7 +128,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       this._prepareSorter();
       if (this.options.paginated) {
         this._preparePager();
-        this._page(this.options.page, {silent: true});
+        this._page({silent: true});
       }
     },
 
@@ -146,7 +147,7 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       });
 
       this.pager.on('change:currentPage', function() {
-        this._page(this.pager.get('currentPage'));
+        this._page();
       }, this);
       this.pager.on('change:perPage', function() {
         this.page(1);
