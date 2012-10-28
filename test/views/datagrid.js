@@ -105,6 +105,11 @@ describe('Datagrid', function() {
       column.title.should.equal('Col3');
     });
 
+    it('should set a default comparator if not defined', function() {
+      datagrid.columns[1].comparator.should.exist;
+      datagrid.columns[2].comparator.should.exist;
+    });
+
   });
 
   describe('pagination', function() {
@@ -144,4 +149,105 @@ describe('Datagrid', function() {
     });
   });
 
+  describe('sorting', function() {
+    var datagrid, datagridOptions;
+
+    beforeEach(function() {
+      var collection = new Backbone.Collection([
+        {foo: 'bar0', rank: 'fourth'},
+        {foo: 'bar1', rank: 'first'},
+        {foo: 'bar2', rank: 'fifth'},
+        {foo: 'bar3', rank: 'third'},
+        {foo: 'bar4', rank: 'second'}
+      ]);
+      datagridOptions = {
+        collection: collection,
+        inMemory:   true,
+        perPage:    2,
+        columns:    [{
+          property: 'foo',
+          sortable: true
+        }, {
+          property: 'rank',
+          sortable: true,
+          comparator: function(model1, model2) {
+            var order = {first: 1, second: 2, third: 3, fourth: 4, fifth: 5};
+            return order[model1.get('rank')] - order[model2.get('rank')];
+          }
+        }]
+      };
+    });
+
+    it('should sort correctly in memory with a default alphabetical comparator', function() {
+      datagrid = new Datagrid(datagridOptions);
+      datagrid.sort('foo');
+
+      datagrid.sorter.get('column').should.equal('foo');
+      datagrid.sorter.get('order').should.equal(Sorter.ASC);
+      datagrid.collection.size().should.equal(5);
+      datagrid.collection.toJSON().should.deep.equal([
+        {foo: 'bar0', rank: 'fourth'},
+        {foo: 'bar1', rank: 'first'},
+        {foo: 'bar2', rank: 'fifth'},
+        {foo: 'bar3', rank: 'third'},
+        {foo: 'bar4', rank: 'second'}
+      ]);
+
+      datagrid.sort('foo');
+
+      datagrid.sorter.get('column').should.equal('foo');
+      datagrid.sorter.get('order').should.equal(Sorter.DESC);
+      datagrid.collection.size().should.equal(5);
+      datagrid.collection.toJSON().should.deep.equal([
+        {foo: 'bar4', rank: 'second'},
+        {foo: 'bar3', rank: 'third'},
+        {foo: 'bar2', rank: 'fifth'},
+        {foo: 'bar1', rank: 'first'},
+        {foo: 'bar0', rank: 'fourth'}
+      ]);
+    });
+
+    it('should sort correctly a paginated datagrid', function() {
+      datagridOptions.paginated = true;
+      datagrid = new Datagrid(datagridOptions);
+      datagrid.page(2);
+      datagrid.sort('foo', Sorter.DESC);
+
+      datagrid.pager.get('currentPage').should.equal(1);
+      datagrid.sorter.get('column').should.equal('foo');
+      datagrid.sorter.get('order').should.equal(Sorter.DESC);
+      datagrid.collection.size().should.equal(2);
+      datagrid.collection.toJSON().should.deep.equal([
+        {foo: 'bar4', rank: 'second'},
+        {foo: 'bar3', rank: 'third'}
+      ]);
+
+      datagrid.page(2);
+      datagrid.collection.toJSON().should.deep.equal([
+        {foo: 'bar2', rank: 'fifth'},
+        {foo: 'bar1', rank: 'first'}
+      ]);
+
+      datagrid.page(3);
+      datagrid.collection.toJSON().should.deep.equal([
+        {foo: 'bar0', rank: 'fourth'}
+      ]);
+    });
+
+    it('should use a custom comparator when specified', function() {
+      datagrid = new Datagrid(datagridOptions);
+      datagrid.sort('rank');
+
+      datagrid.sorter.get('column').should.equal('rank');
+      datagrid.sorter.get('order').should.equal(Sorter.ASC);
+      datagrid.collection.size().should.equal(5);
+      datagrid.collection.toJSON().should.deep.equal([
+        {foo: 'bar1', rank: 'first'},
+        {foo: 'bar4', rank: 'second'},
+        {foo: 'bar3', rank: 'third'},
+        {foo: 'bar0', rank: 'fourth'},
+        {foo: 'bar2', rank: 'fifth'}
+      ]);
+    });
+  });
 });

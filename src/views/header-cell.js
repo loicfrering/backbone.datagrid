@@ -13,7 +13,7 @@ define(['backbone', 'views/cell'], function(Backbone, Cell) {
 
     render: function() {
       this._prepareValue();
-      var html = this.value;
+      var html = this.value, icon;
 
       if (this.column.sortable) {
         this.$el.addClass('sortable');

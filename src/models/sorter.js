@@ -3,7 +3,7 @@ define(['backbone'], function(Backbone) {
   var Sorter = Backbone.Model.extend({
     sort: function(column, order) {
       if (!order && this.get('column') === column) {
-        this.togglerOrder();
+        this.toggleOrder();
       } else {
         this.set({
           column: column,
@@ -24,7 +24,7 @@ define(['backbone'], function(Backbone) {
       return this.get('order') === Sorter.DESC;
     },
 
-    togglerOrder: function() {
+    toggleOrder: function() {
       if (this.get('order') === Sorter.ASC) {
         this.set('order', Sorter.DESC);
       } else {

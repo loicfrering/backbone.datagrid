@@ -44,14 +44,16 @@ require([
   'views/cell',
   'views/callback-cell',
   'views/pagination',
-  'models/pager'
-], function(Backbone, Datagrid, Row, Cell, CallbackCell, Pagination, Pager) {
+  'models/pager',
+  'models/sorter'
+], function(Backbone, Datagrid, Row, Cell, CallbackCell, Pagination, Pager, Sorter) {
   window.Datagrid     = Datagrid;
   window.Row          = Row;
   window.Cell         = Cell;
   window.CallbackCell = CallbackCell;
   window.Pagination   = Pagination;
   window.Pager        = Pager;
+  window.Sorter       = Sorter;
 
   if (window.mochaPhantomJS) {
     mochaPhantomJS.run();
