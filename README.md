@@ -47,6 +47,10 @@ description of these different components. You'll also find for each component
                                   \/
                                 2 Cells
 
+              +---+---+---+---+---+---+  ˥
+              | « | 1 | 2 | 3 | 4 | » |   } Pagination
+              +---+---+---+---+---+---+  ˩
+
 ### Datagrid
 
 The backbone.datagrid entry point. A Backbone.View that will be responsible for
@@ -98,6 +102,15 @@ Datagrid options
 
 The Backbone.Collection that is gonna be managed by the datagrid.
 
+### inMemory
+
+If the collection should be manipulated in memory for pagination and sorting.
+Otherwise use REST requests.
+
+### paginated
+
+If the datagrid should be paginated or not.
+
 ### className
 
 The class attribute for the generated `table`.
@@ -139,10 +152,47 @@ the column describe a combination of different properties of the model.
 
 The title of the column which will be displayed in the table header.
 
+#### sortable (boolean)
+
+If the column is sortable or not.
+
+#### comparator (function)
+
+If the column is sortable, a comparator function that gonna be used to sort the
+datagrid by the column. See the dedicated sorting section below for more
+informations.
+
 #### cellClassName (string|callback)
 
 The class name of the cell (td or th). It can be a string or a callback which
 will be passed the model related to the current row.
+
+Pagination
+----------
+
+### datagrid.page(page)
+
+### datagrid.perPage(perPage)
+
+### datagrid.pager.next()
+
+### datagrid.pager.prev()
+
+Sorting
+-------
+
+### datagrid.sort(column, [order])
+
+### comparator
+
+The comparator function is specific to a sortable column and must be specified
+in the column's definition. The functions takes two arguments : model1 and
+model2 and should follow the specifications of the compareFunction expected for
+[Array.sort](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/sort).
+
+By default the comparator function will be based on
+[String.localeCompare](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/localeCompare)
+for a sensible alphabetical sorting.
 
 Status
 ------
