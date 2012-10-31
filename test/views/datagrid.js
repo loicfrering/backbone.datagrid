@@ -1,4 +1,4 @@
-chai.should();
+var should = chai.should();
 
 describe('Datagrid', function() {
   describe('initialization', function() {
@@ -68,11 +68,12 @@ describe('Datagrid', function() {
     beforeEach(function() {
       var collection = new Backbone.Collection();
       var columns    = [{
-        property: 'col1',
-        title:    'Column 1',
+        property:   'col1',
+        title:      'Column 1',
         comparator: comparator
       }, 'col2', {
-        property: 'col3'
+        property: 'col3',
+        sortable: true
       }];
       datagrid = new Datagrid({collection: collection, columns: columns});
     });
@@ -80,8 +81,9 @@ describe('Datagrid', function() {
     it('shouldn\'t touch the column if completely defined', function() {
       var column = datagrid.columns[0];
       column.should.deep.equal({
-        property: 'col1',
-        title:    'Column 1',
+        index:      0,
+        property:   'col1',
+        title:      'Column 1',
         comparator: comparator
       });
     });
@@ -106,7 +108,7 @@ describe('Datagrid', function() {
     });
 
     it('should set a default comparator if not defined', function() {
-      datagrid.columns[1].comparator.should.exist;
+      should.not.exist(datagrid.columns[1].comparator);
       datagrid.columns[2].comparator.should.exist;
     });
 

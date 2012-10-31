@@ -124,6 +124,13 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
         }
         return rank + suffix;
       }
+    }, {
+      title: 'Custom column',
+      view: '<%= name %> #<%= rank %>',
+      sortable: true,
+      comparator: function(p1, p2) {
+        return p1.get('rank') - p2.get('rank');
+      }
     }]
   });
 

@@ -97,11 +97,11 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       return this.sorter.sortedASC() ? order : -order;
     },
 
-    _comparatorForColumn: function(columnProperty) {
-      var column = _.find(this.columns, function(column) {
-        return column.property === columnProperty;
+    _comparatorForColumn: function(column) {
+      var c = _.find(this.columns, function(c) {
+        return c.property === column || c.index === column;
       });
-      return column ? column.comparator : null;
+      return c ? c.comparator : undefined;
     },
 
     _sortRequest: function(column, order) {
@@ -175,18 +175,24 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
         this._defaultColumns();
       } else {
         _.each(this.columns, function(column, i) {
-          this.columns[i] = this._prepareColumn(column);
+          this.columns[i] = this._prepareColumn(column, i);
         }, this);
       }
     },
 
-    _prepareColumn: function(column) {
+    _prepareColumn: function(column, index) {
       if (_.isString(column)) {
         column = { property: column };
       }
       if (_.isObject(column)) {
-        column.title = column.title || column.property.charAt(0).toUpperCase() + column.property.substr(1);
-        column.comparator = column.comparator || this._defaultComparator(column.property);
+        column.index = index;
+        column.title = column.title    || column.property.charAt(0).toUpperCase() + column.property.substr(1);
+        if (column.sortable) {
+          if (!column.comparator && !column.property && !column.sortedProperty) {
+            throw new Error('Invalid column definition: a sortable column must have a comparator, property or sortedProperty defined.');
+          }
+          column.comparator = column.comparator || this._defaultComparator(column.property);
+        }
       }
       return column;
     },
