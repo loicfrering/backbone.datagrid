@@ -26,6 +26,7 @@ require.config({
     'views/cell': '../../../src/views/cell',
     'views/header-cell': '../../../src/views/header-cell',
     'views/callback-cell': '../../../src/views/callback-cell',
+    'views/action-cell': '../../../src/views/action-cell',
     'views/pagination': '../../../src/views/pagination',
     'models/pager': '../../../src/models/pager',
     'models/sorter': '../../../src/models/sorter'
@@ -37,7 +38,7 @@ require.config({
   }
 });
 
-require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
+require(['backbone', 'datagrid', 'views/action-cell'], function(Backbone, Datagrid, ActionCell) {
 
   // Fixtures
 
@@ -130,6 +131,16 @@ require(['backbone', 'datagrid'], function(Backbone, Datagrid) {
       sortable: true,
       comparator: function(p1, p2) {
         return p1.get('rank') - p2.get('rank');
+      }
+    }, {
+      view: {
+        type: ActionCell,
+        label: 'Edit',
+        actionClassName: 'btn btn-primary',
+        action: function(planet) {
+          alert('Would edit ' + planet.get('name') + '!');
+          return false;
+        }
       }
     }]
   });
