@@ -13,7 +13,7 @@ define(['backbone', 'views/row', 'views/header-cell'], function(Backbone, Row, H
       var headerColumn, columns = [];
       _.each(this.columns, function(column, i) {
         headerColumn          = _.clone(column);
-        headerColumn.property = column.index;
+        headerColumn.property = column.property || column.index;
         headerColumn.view     = column.headerView || {
             type: HeaderCell,
             sorter: this.sorter

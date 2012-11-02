@@ -17,7 +17,7 @@ define(['backbone', 'views/cell'], function(Backbone, Cell) {
 
       if (this.column.sortable) {
         this.$el.addClass('sortable');
-        if (this.sorter.sortedBy(this.column.property)) {
+        if (this.sorter.sortedBy(this.column.property) || this.sorter.sortedBy(this.column.index)) {
           if (this.sorter.sortedASC()) {
             icon = 'icon-chevron-up';
           } else {
