@@ -199,10 +199,10 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
 
     _defaultColumns: function() {
       this.columns = [];
-      var model = this.collection.first();
+      var model = this.collection.first(), i = 0;
       if (model) {
         for (var p in model.toJSON()) {
-          this.columns.push(this._prepareColumn(p));
+          this.columns.push(this._prepareColumn(p, i++));
         }
       }
     },
