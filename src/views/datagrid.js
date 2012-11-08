@@ -186,12 +186,16 @@ define(['backbone', 'views/header', 'views/row', 'views/pagination', 'models/pag
       }
       if (_.isObject(column)) {
         column.index = index;
-        column.title = column.title || column.property && column.property.charAt(0).toUpperCase() + column.property.substr(1);
+        if (column.property) {
+          column.title = column.title || column.property.charAt(0).toUpperCase() + column.property.substr(1);
+        } else if (!column.property && !column.view) {
+          throw new Error('Column \'' + column.title + '\' has no property and must accordingly define a custom cell view.');
+        }
         if (column.sortable) {
           if (!column.comparator && !column.property && !column.sortedProperty) {
             throw new Error('Invalid column definition: a sortable column must have a comparator, property or sortedProperty defined.');
           }
-          column.comparator = column.comparator || this._defaultComparator(column.property);
+          column.comparator = column.comparator || this._defaultComparator(column.sortedProperty || column.property);
         }
       }
       return column;

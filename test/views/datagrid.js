@@ -62,12 +62,12 @@ describe('Datagrid', function() {
   });
 
   describe('columns preparation', function() {
-    var datagrid;
+    var datagrid, columns, collection;
     var comparator = function(model1, model2) { return 0; };
 
     beforeEach(function() {
-      var collection = new Backbone.Collection();
-      var columns    = [{
+      collection = new Backbone.Collection();
+      columns    = [{
         property:   'col1',
         title:      'Column 1',
         comparator: comparator
@@ -102,6 +102,12 @@ describe('Datagrid', function() {
       column.title.should.equal('Col2');
     });
 
+    it('should set the index for each column', function() {
+      datagrid.columns.forEach(function(column, i) {
+        column.index.should.equal(i);
+      });
+    });
+
     it('should set a default title if not defined', function() {
       var column = datagrid.columns[2];
       column.title.should.equal('Col3');
@@ -112,6 +118,24 @@ describe('Datagrid', function() {
       datagrid.columns[2].comparator.should.exist;
     });
 
+    it('should throw an error for a column with no property and no custom view.', function() {
+      columns.push({
+        title: 'Invalid column'
+      });
+      (function() {
+        new Datagrid({collection: collection, columns: columns});
+      }).should.throw(Error);
+    });
+
+    it('should throw an error for an invalid sortable column', function() {
+      columns.push({
+        title:    'Invalid sortable',
+        sortable: true
+      });
+      (function() {
+        new Datagrid({collection: collection, columns: columns});
+      }).should.throw(Error);
+    });
   });
 
   describe('pagination', function() {
