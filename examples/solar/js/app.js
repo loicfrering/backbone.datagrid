@@ -1,44 +1,4 @@
-require.config({
-  shim: {
-    underscore: {
-      exports: '_'
-    },
-    handlebars: {
-      exports: 'Handlebars'
-    },
-    backbone: {
-      deps: [
-        'underscore',
-        'jquery'
-      ],
-      exports: 'Backbone'
-    }
-  },
-  paths: {
-    jquery: 'libs/jquery.min',
-    underscore: 'libs/underscore.min',
-    backbone: 'libs/backbone',
-    handlebars: 'libs/handlebars',
-    text: 'libs/text',
-    datagrid: '../../../src/views/datagrid',
-    'views/header': '../../../src/views/header',
-    'views/row': '../../../src/views/row',
-    'views/cell': '../../../src/views/cell',
-    'views/header-cell': '../../../src/views/header-cell',
-    'views/callback-cell': '../../../src/views/callback-cell',
-    'views/action-cell': '../../../src/views/action-cell',
-    'views/pagination': '../../../src/views/pagination',
-    'models/pager': '../../../src/models/pager',
-    'models/sorter': '../../../src/models/sorter'
-  },
-  config: {
-    hbs: {
-      extension: 'hbs'
-    }
-  }
-});
-
-require(['backbone', 'datagrid', 'views/action-cell'], function(Backbone, Datagrid, ActionCell) {
+(function(Backbone, Datagrid, ActionCell) {
 
   // Fixtures
 
@@ -148,4 +108,4 @@ require(['backbone', 'datagrid', 'views/action-cell'], function(Backbone, Datagr
   datagrid1.render().$el.appendTo('#datagrid');
   datagrid2.render().$el.appendTo('#datagrid');
 
-});
+})(Backbone, Datagrid, ActionCell);

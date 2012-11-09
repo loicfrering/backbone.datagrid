@@ -1,16 +1,10 @@
-define(['backbone', 'views/cell'], function(Backbone, Cell) {
+var CallbackCell = Cell.extend({
+  initialize: function() {
+    CallbackCell.__super__.initialize.call(this);
+    this.callback = this.options.callback;
+  },
 
-  var CallbackCell = Cell.extend({
-    initialize: function() {
-      CallbackCell.__super__.initialize.call(this);
-      this.callback = this.options.callback;
-    },
-
-    _prepareValue: function() {
-      this.value = this.callback(this.model.toJSON());
-    }
-  });
-
-  return CallbackCell;
-
+  _prepareValue: function() {
+    this.value = this.callback(this.model.toJSON());
+  }
 });

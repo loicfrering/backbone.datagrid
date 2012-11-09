@@ -6,16 +6,36 @@
   </head>
   <body>
     <div id="mocha"></div>
+
+    <script src="../examples/solar/js/libs/jquery.min.js"></script>
+    <script src="../examples/solar/js/libs/underscore.min.js"></script>
+    <script src="../examples/solar/js/libs/backbone.js"></script>
+
+    <script src="../src/models/pager.js"></script>
+    <script src="../src/models/sorter.js"></script>
+    <script src="../src/views/cell.js"></script>
+    <script src="../src/views/callback-cell.js"></script>
+    <script src="../src/views/action-cell.js"></script>
+    <script src="../src/views/header-cell.js"></script>
+    <script src="../src/views/header.js"></script>
+    <script src="../src/views/row.js"></script>
+    <script src="../src/views/pagination.js"></script>
+    <script src="../src/views/datagrid.js"></script>
+
     <script src="libs/chai.js"></script>
     <script src="libs/mocha.js"></script>
-    <script data-main="main" src="libs/require.js"></script>
     <script>mocha.setup('bdd')</script>
+
     <script src="views/datagrid.js"></script>
     <script src="views/row.js"></script>
     <script src="models/pager.js"></script>
     <script src="models/sorter.js"></script>
     <script>
-      //mocha.run();
+      if (window.mochaPhantomJS) {
+        mochaPhantomJS.run();
+      } else {
+        mocha.run();
+      }
     </script>
   </body>
 </html>
