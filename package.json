@@ -1,0 +1,28 @@
+{
+  "name": "backbone.datagrid",
+  "version": "0.0.1",
+  "author": "Loïc Frering <loic.frering@gmail.com>",
+  "description": "A powerful component, based on Backbone.View, that displays your Bakbone collections in a dynamic datagrid table.",
+  "keywords": [
+    "front-end",
+    "web",
+    "backbone",
+    "datagrid",
+    "grid"
+  ],
+  "homepage": "http://loicfrering.github.com/backbone.datagrid/",
+  "bugs": "https://github.com/loicfrering/backbone.datagrid/issues",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/loicfrering/backbone.datagrid.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.3",
+    "grunt-mocha": "~0.1"
+  },
+  "license": "MIT"
+}
