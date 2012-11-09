@@ -1,2 +1,1 @@
 language: node_js
-script: phantomjs test/libs/mocha-phantomjs.js test/index.html
