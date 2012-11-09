@@ -1,5 +1,3 @@
-chai.should();
-
 describe('Row', function() {
   describe('constructor', function() {
     it('should have tr as tagName', function() {

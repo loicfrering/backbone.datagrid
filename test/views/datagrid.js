@@ -1,5 +1,3 @@
-var should = chai.should();
-
 describe('Datagrid', function() {
   describe('initialization', function() {
     var datagrid;

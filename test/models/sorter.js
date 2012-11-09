@@ -1,5 +1,3 @@
-chai.should();
-
 describe('Sorter', function() {
   var sorter;
 

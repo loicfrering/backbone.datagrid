@@ -1,5 +1,3 @@
-chai.should();
-
 describe('Pager', function() {
   var pager;
 

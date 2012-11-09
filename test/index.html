@@ -24,7 +24,10 @@
 
     <script src="libs/chai.js"></script>
     <script src="libs/mocha.js"></script>
-    <script>mocha.setup('bdd')</script>
+    <script>
+      mocha.setup('bdd')
+      var should = chai.should();
+    </script>
 
     <script src="views/datagrid.js"></script>
     <script src="views/row.js"></script>
