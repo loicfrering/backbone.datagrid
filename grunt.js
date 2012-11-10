@@ -7,10 +7,7 @@ module.exports = function(grunt) {
       grunt: 'grunt.js'
     },
     mocha: {
-      index: {
-        src: ['test/index.html']
-        //run: true
-      }
+      all: ['test/index.html']
     }
   });
 
