@@ -10,11 +10,12 @@ module.exports = function(grunt) {
               '// Distributed under the <%= pkg.license %> license'
     },
     lint: {
-      src:   'src/**/*.js',
-      grunt: 'grunt.js'
+      grunt: 'grunt.js',
+      src:   'src/**/!(intro|outro).js',
+      dist:  'dist/<%= pkg.name %>.js'
     },
     mocha: {
-      all: ['test/index.html']
+      src: 'test/index.html'
     },
     concat: {
       dist: {
@@ -42,7 +43,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha');
 
   // Default task.
-  grunt.registerTask('test', 'lint mocha');
-  grunt.registerTask('dist', 'concat min');
-  grunt.registerTask('default', 'lint mocha concat min');
+  grunt.registerTask('test', 'lint:grunt lint:src mocha');
+  grunt.registerTask('dist', 'concat lint:dist min');
+  grunt.registerTask('default', 'test dist');
 };
