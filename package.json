@@ -1,6 +1,6 @@
 {
   "name": "backbone.datagrid",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Loïc Frering <loic.frering@gmail.com>",
   "description": "A powerful component, based on Backbone.View, that displays your Bakbone collections in a dynamic datagrid table.",
   "keywords": [

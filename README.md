@@ -7,8 +7,20 @@ customizable and configurable with sane defaults.
 
 [![Build Status](https://secure.travis-ci.org/loicfrering/backbone.datagrid.png)](http://travis-ci.org/loicfrering/backbone.datagrid)
 
-Usage
------
+Download
+--------
+
+Tha raw sources can be navigated on [GitHub](https://github.com/loicfrering/backbone.datagrid).
+The distributed sources can be found in the `dist/` directory or can be
+downloaded directly via one of the following links:
+
+* Production minified version: [backbone.datagrid.min.js](https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.min.js)
+* Development version: [backbone.datagrid.js](https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.js)
+
+Getting started
+---------------
+
+### Usage
 
 Create a new Datagrid with your collection and options, render it and attach
 the resulting element to your document:
@@ -20,6 +32,16 @@ var datagrid = new Datagrid({
 });
 $('#datagrid').html(datagrid.render().el);
 ```
+
+### Examples
+
+Examples are available in the [examples](https://github.com/loicfrering/backbone.datagrid/tree/master/examples)
+directory in the repository.
+
+* Solar: a simple and complete example with an in memory collection of planets from the
+  Solar System.
+  * [Live version](http://loicfrering.github.com/backbone.datagrid/examples/solar/).
+  * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/solar).
 
 Description
 -----------
@@ -87,13 +109,10 @@ There are specialized cells views extending the base Cell and that allows
 custom renderings that suit your needs:
 
 * Cell
-
   * CallbackCell
-
-    * TemplateCell
-
-      * UnderscoreTemplateCell
-      * HandlebarsTemplateCell
+    * TemplateCell (not available yet)
+      * UnderscoreTemplateCell (not available yet)
+      * HandlebarsTemplateCell (not available yet)
 
 Datagrid options
 ----------------
@@ -197,8 +216,32 @@ for a sensible alphabetical sorting.
 Status
 ------
 
-It is for now in its early stage of development and not yet distributed as a
-single, embeddable JavaScript file.
+It is for now in its early stage of developments: the API may be subject to
+changes. Also it only manages in memory collections but REST API should be
+supported very soon.
+
+Contributing
+------------
+
+[Grunt](http://gruntjs.com/) is used for managing the development workflow,
+here is how you cant get up everything you need to contribute to
+backbone.datagrid:
+
+1. Install [Node.js](http://nodejs.org/download/).
+2. Install [phantomjs](http://phantomjs.org) for testing from the CLI.
+3. Clone the project: `git clone https://github.com/loicfrering/backbone.datagrid.git`.
+4. Install dependencies with npm: `npm install`.
+5. Use Grunt for:
+   * Linting and tesing: `grunt test`
+   * Building: `grunt dist`
+
+Changelog
+---------
+
+### 0.1.0
+
+* Initial backbone.datagrid release.
+* Manages in memory collections.
 
 License
 -------

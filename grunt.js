@@ -39,7 +39,7 @@ module.exports = function(grunt) {
     }
   });
 
-  // Grunt plugins.@
+  // Grunt plugins.
   grunt.loadNpmTasks('grunt-mocha');
 
   // Default task.
