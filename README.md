@@ -1,21 +1,22 @@
 Backbone.Datagrid
 =================
 
-Backbone.Datagrid is a powerful component, based on Backbone.View, that
-displays your Bakbone collections in a dynamic datagrid table. It is highly
-customizable and configurable with sane defaults.
+[Backbone.Datagrid](http://loicfrering.github.com/backbone.datagrid/) is a
+powerful component, based on Backbone.View, that displays your Bakbone
+collections in a dynamic datagrid table. It is highly customizable and
+configurable with sane defaults.
 
 [![Build Status](https://secure.travis-ci.org/loicfrering/backbone.datagrid.png)](http://travis-ci.org/loicfrering/backbone.datagrid)
 
 Download
 --------
 
-Tha raw sources can be navigated on [GitHub](https://github.com/loicfrering/backbone.datagrid).
+The raw sources can be navigated on [GitHub](https://github.com/loicfrering/backbone.datagrid).
 The distributed sources can be found in the `dist/` directory or can be
 downloaded directly via one of the following links:
 
-* Production minified version: [backbone.datagrid.min.js](https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.min.js)
-* Development version: [backbone.datagrid.js](https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.js)
+* Production minified version: [backbone.datagrid.min.js (v0.1.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.min.js)
+* Development version: [backbone.datagrid.js (v0.1.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.js)
 
 Getting started
 ---------------
@@ -229,11 +230,15 @@ backbone.datagrid:
 
 1. Install [Node.js](http://nodejs.org/download/).
 2. Install [phantomjs](http://phantomjs.org) for testing from the CLI.
-3. Clone the project: `git clone https://github.com/loicfrering/backbone.datagrid.git`.
-4. Install dependencies with npm: `npm install`.
+3. Clone the project:
+       $ git clone https://github.com/loicfrering/backbone.datagrid.git
+4. Install dependencies with npm:
+       $ npm install
 5. Use Grunt for:
-   * Linting and tesing: `grunt test`
-   * Building: `grunt dist`
+   * Linting and tesing:
+         $ grunt test
+   * Building:
+         $ grunt dist
 
 Changelog
 ---------
@@ -246,5 +251,5 @@ Changelog
 License
 -------
 
-Copyright (c) 2012 Loïc Frering, licensed under the MIT license. See the
-LICENSE file for more informations.
+Copyright (c) 2012 [Loïc Frering](https://github.com/loicfrering), licensed
+under the MIT license. See the LICENSE file for more informations.

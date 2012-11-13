@@ -1,5 +1,8 @@
 module.exports = function(grunt) {
 
+  var marked = require('marked');
+  var hljs   = require('highlight.js');
+
   // Project configuration.
   grunt.initConfig({
     pkg: '<json:package.json>',
@@ -42,8 +45,27 @@ module.exports = function(grunt) {
   // Grunt plugins.
   grunt.loadNpmTasks('grunt-mocha');
 
-  // Default task.
+  // Custom site task.
+  grunt.registerTask('site', 'Generate index.html from README.md.', function() {
+    var readme   = grunt.file.read('README.md');
+    var template = grunt.file.read('template.html');
+    var html     = marked(readme, {
+      gfm: true,
+      highlight: function(code, lang) {
+        if (lang) {
+          return hljs.highlight(lang, code).value;
+        }
+        return code;
+      }
+    });
+
+    html = grunt.template.process(template, {content: html});
+    grunt.file.write('index.html', html);
+    grunt.log.writeln('File "index.html" created.');
+  });
+
+  // Default task and aliases.
   grunt.registerTask('test', 'lint:grunt lint:src mocha');
   grunt.registerTask('dist', 'concat lint:dist min');
-  grunt.registerTask('default', 'test dist');
+  grunt.registerTask('default', 'test dist site');
 };

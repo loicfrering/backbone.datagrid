@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Backbone.Datagrid</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/solarized_dark.min.css" />
+  <style>
+    body {
+      margin: 0 auto;
+      margin-top: 120px;
+      padding: 0 20px;
+      max-width: 1024px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background-color: #eee;
+      color: #444;
+    }
+
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      padding: 30px 0;
+      background-color: white;
+      font-weight: normal;
+      text-align: center;
+      z-index: -1;
+    }
+
+    h2 {
+      padding-bottom: 4px;
+      border-bottom: solid 1px;
+    }
+
+    a {
+      color: #08c;
+      text-decoration: none;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    code {
+      overflow-x: scroll;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="https://github.com/loicfrering/backbone.datagrid"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+
+  <h1>Backbone.Datagrid</h1>
+<p><a href="http://loicfrering.github.com/backbone.datagrid/">Backbone.Datagrid</a> is a
+powerful component, based on Backbone.View, that displays your Bakbone
+collections in a dynamic datagrid table. It is highly customizable and
+configurable with sane defaults.
+
+</p>
+<p><a href="http://travis-ci.org/loicfrering/backbone.datagrid"><img src="https://secure.travis-ci.org/loicfrering/backbone.datagrid.png" alt="Build Status"></a>
+
+</p>
+<h2>Download</h2>
+<p>The raw sources can be navigated on <a href="https://github.com/loicfrering/backbone.datagrid">GitHub</a>.
+The distributed sources can be found in the <code>dist/</code> directory or can be
+downloaded directly via one of the following links:
+
+</p>
+<ul>
+<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.1.0)</a></li>
+<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.js">backbone.datagrid.js (v0.1.0)</a></li>
+</ul>
+<h2>Getting started</h2>
+<h3>Usage</h3>
+<p>Create a new Datagrid with your collection and options, render it and attach
+the resulting element to your document:
+
+</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> myCollection = <span class="keyword">new</span> MyCollection();
+<span class="keyword">var</span> datagrid = <span class="keyword">new</span> Datagrid({
+  collection: myCollection
+});
+$(<span class="string">'#datagrid'</span>).html(datagrid.render().el);</code></pre>
+<h3>Examples</h3>
+<p>Examples are available in the <a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples">examples</a>
+directory in the repository.
+
+</p>
+<ul>
+<li>Solar: a simple and complete example with an in memory collection of planets from the
+Solar System.<ul>
+<li><a href="http://loicfrering.github.com/backbone.datagrid/examples/solar/">Live version</a>.</li>
+<li><a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples/solar">Sources</a>.</li>
+</ul>
+</li>
+</ul>
+<h2>Description</h2>
+<p>Each component composing the datagrid really are Backbone views. Here is a
+description of these different components. You&#39;ll also find for each component
+(or view), the events that will cause a rendering of the view.
+
+</p>
+<pre><code>                  Datagrid
+ ____________________/\____________________
+/                                          \
+
++----------+----------+----------+----------+  ˥
+| Column 1 | Column 2 | Column 3 | Column 4 |   } Header
+ǂ==========ǂ==========ǂ==========ǂ==========ǂ  ˩
+| Val 1-1  | Val 1-2  | Val 1-3  | Val 1-4  |
++----------+----------+----------+----------+  ˥
+| Val 2-1  | Val 2-2  | Val 2-3  | Val 2-4  |   } Row
++----------+---------\+----------+----------+  ˩
+| Val 3-1  | Val 3-2  \ Val 3-3  | Val 3-4  |
++----------+----------+\--------\+----------+
+| Val 4-1  | Val 4-2  | \al 4-3  \ Val 4-4  |
++----------+----------+--\-------+\---------+
+                          \___  ___\
+                              \/
+                            2 Cells
+
+          +---+---+---+---+---+---+  ˥
+          | « | 1 | 2 | 3 | 4 | » |   } Pagination
+          +---+---+---+---+---+---+  ˩</code></pre>
+<h3>Datagrid</h3>
+<p>The backbone.datagrid entry point. A Backbone.View that will be responsible for
+the entire datagrid management and rendering. It uses the collection passed to
+the constructor as data source. The Datagrid view takes care of creating the
+<code>table</code> HTML element and each of the components described below.
+
+</p>
+<p>Event bindings:
+
+</p>
+<ul>
+<li>collection#reset will cause a rendering of the whole datagrid.</li>
+</ul>
+<h3>Header</h3>
+<p>A Backbone.View for the datagrid&#39;s header which gonna render the <code>thead</code> HTML
+element. It is also responsible for creating a Cell for each column&#39;s header.
+
+</p>
+<h3>Row</h3>
+<p>A Backbone.View for each row of the datagrid. The Row is responsible for
+rendering a row in the table, that is to say a <code>tr</code> HTML element, and for
+creating a Cell for each column of the datagrid. The Row uses an entry of the
+collection: a model.
+
+</p>
+<p>Events bindings:
+
+</p>
+<ul>
+<li>model#change will cause a rendering of the row.</li>
+</ul>
+<h3>Cell</h3>
+<p>A Backbone.View for each cell in a Row. One Cell is responsible for rendering a
+<code>td</code> (or <code>th</code> for a header) HTML element.
+
+</p>
+<p>There are specialized cells views extending the base Cell and that allows
+custom renderings that suit your needs:
+
+</p>
+<ul>
+<li>Cell<ul>
+<li>CallbackCell<ul>
+<li>TemplateCell (not available yet)<ul>
+<li>UnderscoreTemplateCell (not available yet)</li>
+<li>HandlebarsTemplateCell (not available yet)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>Datagrid options</h2>
+<h3>collection</h3>
+<p>The Backbone.Collection that is gonna be managed by the datagrid.
+
+</p>
+<h3>inMemory</h3>
+<p>If the collection should be manipulated in memory for pagination and sorting.
+Otherwise use REST requests.
+
+</p>
+<h3>paginated</h3>
+<p>If the datagrid should be paginated or not.
+
+</p>
+<h3>className</h3>
+<p>The class attribute for the generated <code>table</code>.
+
+</p>
+<h3>rowClassName</h3>
+<p>The class attribute for each datagrid&#39;s row: <code>tr</code> tags. Can be a simple string
+with classes separated by spaces or a computed string by passing a callback
+function. The callback function will be called with the model associated to the
+current row.
+
+</p>
+<h3>columns</h3>
+<p>The columns definitions, see the dedicated section below.
+
+</p>
+<h2>Columns definitions</h2>
+<p>You can customize the datagrid using columns definition. It is an array of
+definitions, one for each column you want to see in the datagrid. If no
+definition is passed to the datagrid, a default column definition is gonna be
+created for you for each property of the model managed by the collection you
+passed to the datagrid.
+
+</p>
+<p>A column definition can be a string or an object. If a string is passed, a
+default column definition will be generated with the specified string used as
+the column&#39;s property property (no there&#39;s no typo here).
+
+</p>
+<h3>Default column definition</h3>
+<h3>Column definition</h3>
+<h4>property (string)</h4>
+<p>The model&#39;s property that gonna be displayed in the column. Can be omitted if
+the column describe a combination of different properties of the model.
+
+</p>
+<h4>title (string)</h4>
+<p>The title of the column which will be displayed in the table header.
+
+</p>
+<h4>sortable (boolean)</h4>
+<p>If the column is sortable or not.
+
+</p>
+<h4>comparator (function)</h4>
+<p>If the column is sortable, a comparator function that gonna be used to sort the
+datagrid by the column. See the dedicated sorting section below for more
+informations.
+
+</p>
+<h4>cellClassName (string|callback)</h4>
+<p>The class name of the cell (td or th). It can be a string or a callback which
+will be passed the model related to the current row.
+
+</p>
+<h2>Pagination</h2>
+<h3>datagrid.page(page)</h3>
+<h3>datagrid.perPage(perPage)</h3>
+<h3>datagrid.pager.next()</h3>
+<h3>datagrid.pager.prev()</h3>
+<h2>Sorting</h2>
+<h3>datagrid.sort(column, [order])</h3>
+<h3>comparator</h3>
+<p>The comparator function is specific to a sortable column and must be specified
+in the column&#39;s definition. The functions takes two arguments : model1 and
+model2 and should follow the specifications of the compareFunction expected for
+<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/sort">Array.sort</a>.
+
+</p>
+<p>By default the comparator function will be based on
+<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/localeCompare">String.localeCompare</a>
+for a sensible alphabetical sorting.
+
+</p>
+<h2>Status</h2>
+<p>It is for now in its early stage of developments: the API may be subject to
+changes. Also it only manages in memory collections but REST API should be
+supported very soon.
+
+</p>
+<h2>Contributing</h2>
+<p><a href="http://gruntjs.com/">Grunt</a> is used for managing the development workflow,
+here is how you cant get up everything you need to contribute to
+backbone.datagrid:
+
+</p>
+<ol>
+<li>Install <a href="http://nodejs.org/download/">Node.js</a>.</li>
+<li>Install <a href="http://phantomjs.org">phantomjs</a> for testing from the CLI.</li>
+<li>Clone the project:<pre><code>$ git clone https://github.com/loicfrering/backbone.datagrid.git</code></pre>
+</li>
+<li>Install dependencies with npm:<pre><code>$ npm install</code></pre>
+</li>
+<li>Use Grunt for:<ul>
+<li>Linting and tesing:<pre><code>$ grunt test</code></pre>
+</li>
+<li>Building:<pre><code>$ grunt dist</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<h2>Changelog</h2>
+<h3>0.1.0</h3>
+<ul>
+<li>Initial backbone.datagrid release.</li>
+<li>Manages in memory collections.</li>
+</ul>
+<h2>License</h2>
+<p>Copyright (c) 2012 <a href="https://github.com/loicfrering">Loïc Frering</a>, licensed
+under the MIT license. See the LICENSE file for more informations.
+</p>
+
+
+</body>
+</html>
