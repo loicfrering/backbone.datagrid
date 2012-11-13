@@ -2,7 +2,7 @@ describe('Pager', function() {
   var pager;
 
   beforeEach(function() {
-    pager = new Pager({
+    pager = new Datagrid.Pager({
       currentPage: 4,
       perPage: 10,
       total: 42
@@ -70,7 +70,7 @@ describe('Pager', function() {
 
     it('should throw an error for an invalid perPage value', function() {
       (function() {
-        new Pager({currentPage: 2, perPage: 0, total: 42});
+        new Datagrid.Pager({currentPage: 2, perPage: 0, total: 42});
       }).should.throw(Error);
 
       (function() {

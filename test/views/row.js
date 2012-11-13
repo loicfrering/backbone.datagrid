@@ -1,7 +1,7 @@
 describe('Row', function() {
   describe('constructor', function() {
     it('should have tr as tagName', function() {
-      var row = new Row({model: new Backbone.Model()});
+      var row = new Datagrid.Row({model: new Backbone.Model()});
       row.tagName.should.equal('tr');
     });
   });
@@ -10,7 +10,7 @@ describe('Row', function() {
     var row;
 
     beforeEach(function() {
-      row = new Row({model: new Backbone.Model({foo: 'bar'})});
+      row = new Datagrid.Row({model: new Backbone.Model({foo: 'bar'})});
     });
 
     it('should instantiate a cell view with correct common options', function() {
@@ -33,13 +33,13 @@ describe('Row', function() {
 
     it('should default to a simple Cell view', function() {
       var view = row._resolveCellView({});
-      view.should.be.an.instanceof(Cell);
+      view.should.be.an.instanceof(Datagrid.Cell);
     });
 
     it('should resolve to callback view with an underscore template function for a string', function() {
       var view = row._resolveCellView({view: 'Hello <%= col1 %>'});
 
-      view.should.be.an.instanceof(CallbackCell)
+      view.should.be.an.instanceof(Datagrid.CallbackCell)
         .and.have.a.property('callback')
           .that.is.a('function');
       view.callback({col1: 'World'}).should.equal('Hello World');
@@ -48,7 +48,7 @@ describe('Row', function() {
     it('should resolve to callback view with the specified function for a function', function() {
       var view = row._resolveCellView({view: function() { return 'Hello!'; }});
 
-      view.should.be.an.instanceof(CallbackCell)
+      view.should.be.an.instanceof(Datagrid.CallbackCell)
         .and.have.a.property('callback')
           .that.is.a('function');
       view.callback().should.equal('Hello!');

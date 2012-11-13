@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>backbone.datagrid tests</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="libs/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    <script src="../examples/solar/js/libs/jquery.min.js"></script>
+    <script src="../examples/solar/js/libs/underscore.min.js"></script>
+    <script src="../examples/solar/js/libs/backbone.js"></script>
+
+    <script src="../dist/backbone.datagrid.min.js"></script>
+
+    <script src="libs/chai.js"></script>
+    <script src="libs/mocha.js"></script>
+    <script>
+      mocha.setup('bdd')
+      var should = chai.should();
+    </script>
+
+    <script src="../node_modules/grunt-mocha/tasks/mocha/mocha-helper.js"></script>
+
+    <script src="views/datagrid.js"></script>
+    <script src="views/row.js"></script>
+    <script src="models/pager.js"></script>
+    <script src="models/sorter.js"></script>
+    <script>
+      window.Datagrid = Backbone.Datagrid;
+
+      if (window.mochaPhantomJS) {
+        mochaPhantomJS.run();
+      } else {
+        mocha.run();
+      }
+    </script>
+  </body>
+</html>

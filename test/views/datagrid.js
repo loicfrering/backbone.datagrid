@@ -207,7 +207,7 @@ describe('Datagrid', function() {
       datagrid.sort('foo');
 
       datagrid.sorter.get('column').should.equal('foo');
-      datagrid.sorter.get('order').should.equal(Sorter.ASC);
+      datagrid.sorter.get('order').should.equal(Datagrid.Sorter.ASC);
       datagrid.collection.size().should.equal(5);
       datagrid.collection.toJSON().should.deep.equal([
         {foo: 'bar0', rank: 'fourth'},
@@ -220,7 +220,7 @@ describe('Datagrid', function() {
       datagrid.sort('foo');
 
       datagrid.sorter.get('column').should.equal('foo');
-      datagrid.sorter.get('order').should.equal(Sorter.DESC);
+      datagrid.sorter.get('order').should.equal(Datagrid.Sorter.DESC);
       datagrid.collection.size().should.equal(5);
       datagrid.collection.toJSON().should.deep.equal([
         {foo: 'bar4', rank: 'second'},
@@ -235,11 +235,11 @@ describe('Datagrid', function() {
       datagridOptions.paginated = true;
       datagrid = new Datagrid(datagridOptions);
       datagrid.page(2);
-      datagrid.sort('foo', Sorter.DESC);
+      datagrid.sort('foo', Datagrid.Sorter.DESC);
 
       datagrid.pager.get('currentPage').should.equal(1);
       datagrid.sorter.get('column').should.equal('foo');
-      datagrid.sorter.get('order').should.equal(Sorter.DESC);
+      datagrid.sorter.get('order').should.equal(Datagrid.Sorter.DESC);
       datagrid.collection.size().should.equal(2);
       datagrid.collection.toJSON().should.deep.equal([
         {foo: 'bar4', rank: 'second'},
@@ -263,7 +263,7 @@ describe('Datagrid', function() {
       datagrid.sort('rank');
 
       datagrid.sorter.get('column').should.equal('rank');
-      datagrid.sorter.get('order').should.equal(Sorter.ASC);
+      datagrid.sorter.get('order').should.equal(Datagrid.Sorter.ASC);
       datagrid.collection.size().should.equal(5);
       datagrid.collection.toJSON().should.deep.equal([
         {foo: 'bar1', rank: 'first'},

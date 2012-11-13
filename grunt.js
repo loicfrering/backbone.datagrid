@@ -18,7 +18,8 @@ module.exports = function(grunt) {
       dist:  'dist/<%= pkg.name %>.js'
     },
     mocha: {
-      src: 'test/index.html'
+      src:  'test/index.html',
+      dist: 'test/dist.html'
     },
     concat: {
       dist: {
@@ -65,7 +66,7 @@ module.exports = function(grunt) {
   });
 
   // Default task and aliases.
-  grunt.registerTask('test', 'lint:grunt lint:src mocha');
-  grunt.registerTask('dist', 'concat lint:dist min');
+  grunt.registerTask('test', 'lint:grunt lint:src mocha:src');
+  grunt.registerTask('dist', 'concat lint:dist min mocha:dist');
   grunt.registerTask('default', 'test dist site');
 };
