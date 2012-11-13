@@ -25,10 +25,10 @@ module.exports = function(grunt) {
         src: [
           '<banner>',
           'src/intro.js',
-          'src/models/*.js',
-          'src/views/cell.js', 'src/views/callback-cell.js', 'src/views/action-cell.js', 'src/views/header-cell.js',
-          'src/views/header.js', 'src/views/row.js', 'src/views/pagination.js',
           'src/views/datagrid.js',
+          'src/views/header.js', 'src/views/row.js', 'src/views/pagination.js',
+          'src/views/cells/cell.js', 'src/views/cells/callback-cell.js', 'src/views/cells/action-cell.js', 'src/views/cells/header-cell.js',
+          'src/models/pager.js', 'src/models/sorter.js',
           'src/outro.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
