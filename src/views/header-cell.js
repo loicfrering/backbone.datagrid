@@ -1,4 +1,4 @@
-var HeaderCell = Cell.extend({
+var HeaderCell = Datagrid.HeaderCell = Cell.extend({
   initialize: function() {
     HeaderCell.__super__.initialize.call(this);
 

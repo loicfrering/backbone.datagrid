@@ -1,4 +1,4 @@
-var Pagination = Backbone.View.extend({
+var Pagination = Datagrid.Pagination = Backbone.View.extend({
   className: 'pagination pagination-centered',
 
   events: {

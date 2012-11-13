@@ -1,4 +1,4 @@
-var Header = Backbone.View.extend({
+var Header = Datagrid.Header = Backbone.View.extend({
   tagName: 'thead',
 
   initialize: function() {

@@ -1,4 +1,4 @@
-var ActionCell = Cell.extend({
+var ActionCell = Datagrid.ActionCell = Cell.extend({
   initialize: function() {
     ActionCell.__super__.initialize.call(this);
   },

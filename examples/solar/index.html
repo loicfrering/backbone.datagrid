@@ -27,16 +27,19 @@
     <script src="js/libs/underscore.min.js"></script>
     <script src="js/libs/backbone.js"></script>
 
-    <script src="../../src/models/pager.js"></script>
-    <script src="../../src/models/sorter.js"></script>
+    <script src="../../src/views/datagrid.js"></script>
+    <script src="../../src/views/header.js"></script>
+    <script src="../../src/views/row.js"></script>
+    <script src="../../src/views/pagination.js"></script>
     <script src="../../src/views/cell.js"></script>
     <script src="../../src/views/callback-cell.js"></script>
     <script src="../../src/views/action-cell.js"></script>
     <script src="../../src/views/header-cell.js"></script>
-    <script src="../../src/views/header.js"></script>
-    <script src="../../src/views/row.js"></script>
-    <script src="../../src/views/pagination.js"></script>
-    <script src="../../src/views/datagrid.js"></script>
+    <script src="../../src/models/pager.js"></script>
+    <script src="../../src/models/sorter.js"></script>
+    <script>
+      Backbone.Datagrid = Datagrid;
+    </script>
 
     <script src="js/app.js"></script>
   </body>

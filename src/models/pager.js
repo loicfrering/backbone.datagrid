@@ -1,4 +1,4 @@
-var Pager = Backbone.Model.extend({
+var Pager = Datagrid.Pager = Backbone.Model.extend({
   initialize: function() {
     this.on('change:perPage change:total', function() {
       this.totalPages(this.get('total'));

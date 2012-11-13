@@ -1,4 +1,4 @@
-(function(Backbone, Datagrid, ActionCell) {
+(function(Backbone) {
 
   // Fixtures
 
@@ -46,12 +46,12 @@
   window.planets = new Planets();
   planets.reset(fixtures);
 
-  window.datagrid1 = new Datagrid({
+  window.datagrid1 = new Backbone.Datagrid({
     collection: planets.clone(),
     inMemory: true
   });
 
-  window.datagrid2 = new Datagrid({
+  window.datagrid2 = new Backbone.Datagrid({
     collection: planets,
     inMemory: true,
     paginated: true,
@@ -94,7 +94,7 @@
       }
     }, {
       view: {
-        type: ActionCell,
+        type: Backbone.Datagrid.ActionCell,
         label: 'Edit',
         actionClassName: 'btn btn-primary',
         action: function(planet) {
@@ -108,4 +108,4 @@
   datagrid1.render().$el.appendTo('#datagrid');
   datagrid2.render().$el.appendTo('#datagrid');
 
-})(Backbone, Datagrid, ActionCell);
+})(Backbone);

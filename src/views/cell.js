@@ -1,4 +1,4 @@
-var Cell = Backbone.View.extend({
+var Cell = Datagrid.Cell = Backbone.View.extend({
   tagName: 'td',
 
   initialize: function() {

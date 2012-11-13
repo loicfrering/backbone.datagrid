@@ -1,4 +1,4 @@
-var Sorter = Backbone.Model.extend({
+var Sorter = Datagrid.Sorter = Backbone.Model.extend({
   sort: function(column, order) {
     if (!order && this.get('column') === column) {
       this.toggleOrder();
