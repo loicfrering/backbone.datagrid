@@ -1,321 +1,9 @@
-// backbone.datagrid v0.1.0
+// backbone.datagrid v0.2.0
 //
 // Copyright (c) 2012 Loïc Frering <loic.frering@gmail.com>
 // Distributed under the MIT license
 
 (function() {
-
-var Sorter = Backbone.Model.extend({
-  sort: function(column, order) {
-    if (!order && this.get('column') === column) {
-      this.toggleOrder();
-    } else {
-      this.set({
-        column: column,
-        order: order || Sorter.ASC
-      });
-    }
-  },
-
-  sortedBy: function(column) {
-    return this.get('column') === column;
-  },
-
-  sortedASC: function() {
-    return this.get('order') === Sorter.ASC;
-  },
-
-  sortedDESC: function() {
-    return this.get('order') === Sorter.DESC;
-  },
-
-  toggleOrder: function() {
-    if (this.get('order') === Sorter.ASC) {
-      this.set('order', Sorter.DESC);
-    } else {
-      this.set('order', Sorter.ASC);
-    }
-  }
-});
-
-Sorter.ASC  = 'asc';
-Sorter.DESC = 'desc';
-
-var Pager = Backbone.Model.extend({
-  initialize: function() {
-    this.on('change:perPage change:total', function() {
-      this.totalPages(this.get('total'));
-    }, this);
-    this.totalPages(this.get('total'));
-  },
-
-  totalPages: function(total) {
-    this.set('totalPages', Math.ceil(total/this.get('perPage')));
-  },
-
-  page: function(page) {
-    if (this.inBounds(page)) {
-      this.set('currentPage', page);
-    }
-  },
-
-  next: function() {
-    this.page(this.get('currentPage') + 1);
-  },
-
-  prev: function() {
-    this.page(this.get('currentPage') - 1);
-  },
-
-  inBounds: function(page) {
-    return page > 0 && page <= this.get('totalPages');
-  },
-
-  validate: function(attrs) {
-    if (attrs.perPage < 1) {
-      throw new Error('perPage must be greater than zero.');
-    }
-  }
-});
-
-var Cell = Backbone.View.extend({
-  tagName: 'td',
-
-  initialize: function() {
-    this.column = this.options.column;
-  },
-
-  render: function() {
-    this._prepareValue();
-    this.$el.html(this.value);
-    return this;
-  },
-
-  _prepareValue: function() {
-    this.value = this.model.get(this.column.property);
-  }
-});
-
-var CallbackCell = Cell.extend({
-  initialize: function() {
-    CallbackCell.__super__.initialize.call(this);
-    this.callback = this.options.callback;
-  },
-
-  _prepareValue: function() {
-    this.value = this.callback(this.model.toJSON());
-  }
-});
-
-var ActionCell = Cell.extend({
-  initialize: function() {
-    ActionCell.__super__.initialize.call(this);
-  },
-
-  action: function() {
-    return this.options.action(this.model);
-  },
-
-  _prepareValue: function() {
-    var a = $('<a></a>');
-
-    a.html(this.options.label);
-    a.attr('href', this.options.href || '#');
-    if (this.options.actionClassName) {
-      a.addClass(this.options.actionClassName);
-    }
-    if (this.options.action) {
-      this.delegateEvents({
-        'click a': this.action
-      });
-    }
-
-    this.value = a;
-  }
-});
-
-var HeaderCell = Cell.extend({
-  initialize: function() {
-    HeaderCell.__super__.initialize.call(this);
-
-    this.sorter = this.options.sorter;
-
-    if (this.column.sortable) {
-      this.delegateEvents({click: 'sort'});
-    }
-  },
-
-  render: function() {
-    this._prepareValue();
-    var html = this.value, icon;
-
-    if (this.column.sortable) {
-      this.$el.addClass('sortable');
-      if (this.sorter.sortedBy(this.column.property) || this.sorter.sortedBy(this.column.index)) {
-        if (this.sorter.sortedASC()) {
-          icon = 'icon-chevron-up';
-        } else {
-          icon = 'icon-chevron-down';
-        }
-      } else {
-        icon = 'icon-minus';
-      }
-
-      html += ' <i class="' + icon + ' pull-right"></i>';
-    }
-
-    this.$el.html(html);
-    return this;
-  },
-
-  sort: function() {
-    this.sorter.sort(this.column.property);
-  }
-});
-
-var Header = Backbone.View.extend({
-  tagName: 'thead',
-
-  initialize: function() {
-    this.columns = this.options.columns;
-    this.sorter  = this.options.sorter;
-  },
-
-  render: function() {
-    var model = new Backbone.Model();
-    var headerColumn, columns = [];
-    _.each(this.columns, function(column, i) {
-      headerColumn          = _.clone(column);
-      headerColumn.property = column.property || column.index;
-      headerColumn.view     = column.headerView || {
-          type: HeaderCell,
-          sorter: this.sorter
-        };
-
-      model.set(headerColumn.property, column.title);
-      columns.push(headerColumn);
-    }, this);
-
-    var row = new Row({model: model, columns: columns, header: true});
-    this.$el.html(row.render().el);
-
-    return this;
-  }
-});
-
-var Row = Backbone.View.extend({
-  tagName: 'tr',
-
-  initialize: function() {
-    this.columns = this.options.columns;
-    this.model.on('change', this.render, this);
-  },
-
-  render: function() {
-    this.$el.empty();
-    _.each(this.columns, this.renderCell, this);
-    return this;
-  },
-
-  renderCell: function(column) {
-    var cellView = this._resolveCellView(column);
-    this.$el.append(cellView.render().el);
-  },
-
-  _resolveCellView: function(column) {
-    var options = {
-      model:  this.model,
-      column: column
-    };
-    if (this.options.header || column.header) {
-      options.tagName = 'th';
-    }
-    var cellClassName = column.cellClassName;
-    if (_.isFunction(cellClassName)) {
-      cellClassName = cellClassName(this.model);
-    }
-    options.className = cellClassName;
-
-
-    var view = column.view || Cell;
-
-    // Resolve view from string or function
-    if (typeof view !== 'object' && !(view.prototype && view.prototype.render)) {
-      if (_.isString(view)) {
-        options.callback = _.template(view);
-        view = CallbackCell;
-      } else if (_.isFunction(view) && !view.prototype.render) {
-        options.callback = view;
-        view = CallbackCell;
-      } else {
-        throw new TypeError('Invalid view passed to column "' + column.title + '".');
-      }
-    }
-
-    // Resolve view from options
-    else if (typeof view === 'object') {
-      _.extend(options, view);
-      view = view.type;
-      if (!view || !view.prototype || !view.prototype.render) {
-        throw new TypeError('Invalid view passed to column "' + column.title + '".');
-      }
-    }
-
-    return new view(options);
-  }
-});
-
-var Pagination = Backbone.View.extend({
-  className: 'pagination pagination-centered',
-
-  events: {
-    'click a': 'page'
-  },
-
-  initialize: function() {
-    this.pager = this.options.pager;
-  },
-
-  render: function() {
-    var $ul = $('<ul></ul>'), $li;
-
-    $li = $('<li class="prev"><a href="#">«</a></li>');
-    if (this.pager.get('currentPage') === 1) {
-      $li.addClass('disabled');
-    }
-    $ul.append($li);
-
-    for (var i = 1; i <= this.pager.get('totalPages'); i++) {
-      $li = $('<li></li>');
-      if (i === this.pager.get('currentPage')) {
-        $li.addClass('active');
-      }
-      $li.append('<a href="#">' + i + '</a>');
-      $ul.append($li);
-    }
-
-    $li = $('<li class="next"><a href="#">»</a></li>');
-    if (this.pager.get('currentPage') === this.pager.get('totalPages')) {
-      $li.addClass('disabled');
-    }
-    $ul.append($li);
-
-    this.$el.append($ul);
-    return this;
-  },
-
-  page: function(event) {
-    var $target = $(event.target), page;
-    if ($target.parent().hasClass('prev')) {
-      this.pager.prev();
-    } else if ($target.parent().hasClass('next')) {
-      this.pager.next();
-    }
-    else {
-      this.pager.page(parseInt($(event.target).html(), 10));
-    }
-  }
-});
 
 var Datagrid = Backbone.View.extend({
   initialize: function() {
@@ -535,16 +223,317 @@ var Datagrid = Backbone.View.extend({
   }
 });
 
-window.Datagrid     = Datagrid;
-window.Header       = Header;
-window.Row          = Row;
-window.Pagination   = Pagination;
+var Header = Datagrid.Header = Backbone.View.extend({
+  tagName: 'thead',
 
-window.Cell         = Cell;
-window.CallbackCell = CallbackCell;
-window.ActionCell   = ActionCell;
-window.HeaderCell   = HeaderCell;
+  initialize: function() {
+    this.columns = this.options.columns;
+    this.sorter  = this.options.sorter;
+  },
 
-window.Pager        = Pager;
-window.Sorter       = Sorter;
+  render: function() {
+    var model = new Backbone.Model();
+    var headerColumn, columns = [];
+    _.each(this.columns, function(column, i) {
+      headerColumn          = _.clone(column);
+      headerColumn.property = column.property || column.index;
+      headerColumn.view     = column.headerView || {
+          type: HeaderCell,
+          sorter: this.sorter
+        };
+
+      model.set(headerColumn.property, column.title);
+      columns.push(headerColumn);
+    }, this);
+
+    var row = new Row({model: model, columns: columns, header: true});
+    this.$el.html(row.render().el);
+
+    return this;
+  }
+});
+
+var Row = Datagrid.Row = Backbone.View.extend({
+  tagName: 'tr',
+
+  initialize: function() {
+    this.columns = this.options.columns;
+    this.model.on('change', this.render, this);
+  },
+
+  render: function() {
+    this.$el.empty();
+    _.each(this.columns, this.renderCell, this);
+    return this;
+  },
+
+  renderCell: function(column) {
+    var cellView = this._resolveCellView(column);
+    this.$el.append(cellView.render().el);
+  },
+
+  _resolveCellView: function(column) {
+    var options = {
+      model:  this.model,
+      column: column
+    };
+    if (this.options.header || column.header) {
+      options.tagName = 'th';
+    }
+    var cellClassName = column.cellClassName;
+    if (_.isFunction(cellClassName)) {
+      cellClassName = cellClassName(this.model);
+    }
+    options.className = cellClassName;
+
+
+    var view = column.view || Cell;
+
+    // Resolve view from string or function
+    if (typeof view !== 'object' && !(view.prototype && view.prototype.render)) {
+      if (_.isString(view)) {
+        options.callback = _.template(view);
+        view = CallbackCell;
+      } else if (_.isFunction(view) && !view.prototype.render) {
+        options.callback = view;
+        view = CallbackCell;
+      } else {
+        throw new TypeError('Invalid view passed to column "' + column.title + '".');
+      }
+    }
+
+    // Resolve view from options
+    else if (typeof view === 'object') {
+      _.extend(options, view);
+      view = view.type;
+      if (!view || !view.prototype || !view.prototype.render) {
+        throw new TypeError('Invalid view passed to column "' + column.title + '".');
+      }
+    }
+
+    return new view(options);
+  }
+});
+
+var Pagination = Datagrid.Pagination = Backbone.View.extend({
+  className: 'pagination pagination-centered',
+
+  events: {
+    'click a': 'page'
+  },
+
+  initialize: function() {
+    this.pager = this.options.pager;
+  },
+
+  render: function() {
+    var $ul = $('<ul></ul>'), $li;
+
+    $li = $('<li class="prev"><a href="#">«</a></li>');
+    if (this.pager.get('currentPage') === 1) {
+      $li.addClass('disabled');
+    }
+    $ul.append($li);
+
+    for (var i = 1; i <= this.pager.get('totalPages'); i++) {
+      $li = $('<li></li>');
+      if (i === this.pager.get('currentPage')) {
+        $li.addClass('active');
+      }
+      $li.append('<a href="#">' + i + '</a>');
+      $ul.append($li);
+    }
+
+    $li = $('<li class="next"><a href="#">»</a></li>');
+    if (this.pager.get('currentPage') === this.pager.get('totalPages')) {
+      $li.addClass('disabled');
+    }
+    $ul.append($li);
+
+    this.$el.append($ul);
+    return this;
+  },
+
+  page: function(event) {
+    var $target = $(event.target), page;
+    if ($target.parent().hasClass('prev')) {
+      this.pager.prev();
+    } else if ($target.parent().hasClass('next')) {
+      this.pager.next();
+    }
+    else {
+      this.pager.page(parseInt($(event.target).html(), 10));
+    }
+  }
+});
+
+var Cell = Datagrid.Cell = Backbone.View.extend({
+  tagName: 'td',
+
+  initialize: function() {
+    this.column = this.options.column;
+  },
+
+  render: function() {
+    this._prepareValue();
+    this.$el.html(this.value);
+    return this;
+  },
+
+  _prepareValue: function() {
+    this.value = this.model.get(this.column.property);
+  }
+});
+
+var CallbackCell = Datagrid.CallbackCell = Cell.extend({
+  initialize: function() {
+    CallbackCell.__super__.initialize.call(this);
+    this.callback = this.options.callback;
+  },
+
+  _prepareValue: function() {
+    this.value = this.callback(this.model.toJSON());
+  }
+});
+
+var ActionCell = Datagrid.ActionCell = Cell.extend({
+  initialize: function() {
+    ActionCell.__super__.initialize.call(this);
+  },
+
+  action: function() {
+    return this.options.action(this.model);
+  },
+
+  _prepareValue: function() {
+    var a = $('<a></a>');
+
+    a.html(this.options.label);
+    a.attr('href', this.options.href || '#');
+    if (this.options.actionClassName) {
+      a.addClass(this.options.actionClassName);
+    }
+    if (this.options.action) {
+      this.delegateEvents({
+        'click a': this.action
+      });
+    }
+
+    this.value = a;
+  }
+});
+
+var HeaderCell = Datagrid.HeaderCell = Cell.extend({
+  initialize: function() {
+    HeaderCell.__super__.initialize.call(this);
+
+    this.sorter = this.options.sorter;
+
+    if (this.column.sortable) {
+      this.delegateEvents({click: 'sort'});
+    }
+  },
+
+  render: function() {
+    this._prepareValue();
+    var html = this.value, icon;
+
+    if (this.column.sortable) {
+      this.$el.addClass('sortable');
+      if (this.sorter.sortedBy(this.column.property) || this.sorter.sortedBy(this.column.index)) {
+        if (this.sorter.sortedASC()) {
+          icon = 'icon-chevron-up';
+        } else {
+          icon = 'icon-chevron-down';
+        }
+      } else {
+        icon = 'icon-minus';
+      }
+
+      html += ' <i class="' + icon + ' pull-right"></i>';
+    }
+
+    this.$el.html(html);
+    return this;
+  },
+
+  sort: function() {
+    this.sorter.sort(this.column.property);
+  }
+});
+
+var Pager = Datagrid.Pager = Backbone.Model.extend({
+  initialize: function() {
+    this.on('change:perPage change:total', function() {
+      this.totalPages(this.get('total'));
+    }, this);
+    this.totalPages(this.get('total'));
+  },
+
+  totalPages: function(total) {
+    this.set('totalPages', Math.ceil(total/this.get('perPage')));
+  },
+
+  page: function(page) {
+    if (this.inBounds(page)) {
+      this.set('currentPage', page);
+    }
+  },
+
+  next: function() {
+    this.page(this.get('currentPage') + 1);
+  },
+
+  prev: function() {
+    this.page(this.get('currentPage') - 1);
+  },
+
+  inBounds: function(page) {
+    return page > 0 && page <= this.get('totalPages');
+  },
+
+  validate: function(attrs) {
+    if (attrs.perPage < 1) {
+      throw new Error('perPage must be greater than zero.');
+    }
+  }
+});
+
+var Sorter = Datagrid.Sorter = Backbone.Model.extend({
+  sort: function(column, order) {
+    if (!order && this.get('column') === column) {
+      this.toggleOrder();
+    } else {
+      this.set({
+        column: column,
+        order: order || Sorter.ASC
+      });
+    }
+  },
+
+  sortedBy: function(column) {
+    return this.get('column') === column;
+  },
+
+  sortedASC: function() {
+    return this.get('order') === Sorter.ASC;
+  },
+
+  sortedDESC: function() {
+    return this.get('order') === Sorter.DESC;
+  },
+
+  toggleOrder: function() {
+    if (this.get('order') === Sorter.ASC) {
+      this.set('order', Sorter.DESC);
+    } else {
+      this.set('order', Sorter.ASC);
+    }
+  }
+});
+
+Sorter.ASC  = 'asc';
+Sorter.DESC = 'desc';
+
+  Backbone.Datagrid = Datagrid;
 })();

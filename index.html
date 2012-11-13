@@ -69,8 +69,8 @@ downloaded directly via one of the following links:
 
 </p>
 <ul>
-<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.1.0)</a></li>
-<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.js">backbone.datagrid.js (v0.1.0)</a></li>
+<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.2.0)</a></li>
+<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.js">backbone.datagrid.js (v0.2.0)</a></li>
 </ul>
 <h2>Getting started</h2>
 <h3>Usage</h3>
@@ -246,12 +246,41 @@ will be passed the model related to the current row.
 
 </p>
 <h2>Pagination</h2>
+<p>By default, pagination controls are displayed for a paginated datagrid. But an
+API is also available to manually control pagination. Each of the following
+functions cause a datagrid rendering.
+
+</p>
 <h3>datagrid.page(page)</h3>
+<p>Go to the specified page.
+
+</p>
 <h3>datagrid.perPage(perPage)</h3>
+<p>Set the number of items displayed per page.
+
+</p>
 <h3>datagrid.pager.next()</h3>
+<p>Go to the next page.
+
+</p>
 <h3>datagrid.pager.prev()</h3>
+<p>Go to the previous page.
+
+</p>
 <h2>Sorting</h2>
+<p>Sorted datagrid columns can be sorted by clicking on the column&#39;s header cell.
+A first click will sort in ascending order, the following clicks will toggle
+sorting direction between descending and ascending. You can also control
+sorting thanks to the following function.
+
+</p>
 <h3>datagrid.sort(column, [order])</h3>
+<p>Sort the datagrid by the specified column in the specified order. The column
+can be the column&#39;s property name or the column&#39;s index (beginning at 0). You
+can use <code>Datagrid.Sorter.ASC</code> and <code>Datagrid.Sorter.DESC</code> to specifiy the
+sorting direction.
+
+</p>
 <h3>comparator</h3>
 <p>The comparator function is specific to a sortable column and must be specified
 in the column&#39;s definition. The functions takes two arguments : model1 and
@@ -292,6 +321,12 @@ backbone.datagrid:
 </li>
 </ol>
 <h2>Changelog</h2>
+<h3>0.2.0</h3>
+<ul>
+<li>Group Datagrid objects in Backbone.Datagrid namespace.</li>
+<li>Release a dedicated <a href="http://loicfrering.github.com/backbone.datagrid/">Backbone.Datagrid</a>
+web page with resources and documentation.</li>
+</ul>
 <h3>0.1.0</h3>
 <ul>
 <li>Initial backbone.datagrid release.</li>

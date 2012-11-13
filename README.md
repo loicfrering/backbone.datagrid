@@ -15,8 +15,8 @@ The raw sources can be navigated on [GitHub](https://github.com/loicfrering/back
 The distributed sources can be found in the `dist/` directory or can be
 downloaded directly via one of the following links:
 
-* Production minified version: [backbone.datagrid.min.js (v0.1.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.min.js)
-* Development version: [backbone.datagrid.js (v0.1.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.1.0/dist/backbone.datagrid.js)
+* Production minified version: [backbone.datagrid.min.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js)
+* Development version: [backbone.datagrid.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.js)
 
 Getting started
 ---------------
@@ -190,18 +190,40 @@ will be passed the model related to the current row.
 Pagination
 ----------
 
+By default, pagination controls are displayed for a paginated datagrid. But an
+API is also available to manually control pagination. Each of the following
+functions cause a datagrid rendering.
+
 ### datagrid.page(page)
+
+Go to the specified page.
 
 ### datagrid.perPage(perPage)
 
+Set the number of items displayed per page.
+
 ### datagrid.pager.next()
 
+Go to the next page.
+
 ### datagrid.pager.prev()
+
+Go to the previous page.
 
 Sorting
 -------
 
+Sorted datagrid columns can be sorted by clicking on the column's header cell.
+A first click will sort in ascending order, the following clicks will toggle
+sorting direction between descending and ascending. You can also control
+sorting thanks to the following function.
+
 ### datagrid.sort(column, [order])
+
+Sort the datagrid by the specified column in the specified order. The column
+can be the column's property name or the column's index (beginning at 0). You
+can use `Datagrid.Sorter.ASC` and `Datagrid.Sorter.DESC` to specifiy the
+sorting direction.
 
 ### comparator
 
@@ -242,6 +264,12 @@ backbone.datagrid:
 
 Changelog
 ---------
+
+### 0.2.0
+
+* Group Datagrid objects in Backbone.Datagrid namespace.
+* Release a dedicated [Backbone.Datagrid](http://loicfrering.github.com/backbone.datagrid/)
+  web page with resources and documentation.
 
 ### 0.1.0
 
