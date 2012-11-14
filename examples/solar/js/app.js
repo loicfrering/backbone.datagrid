@@ -55,6 +55,7 @@
     collection: planets,
     inMemory: true,
     paginated: true,
+    perPage: 2,
     rowClassName: function(planet) { return planet.get('name') === 'Mars' ? 'error' : ''; },
     columns: [{
       title: 'Le nom',
