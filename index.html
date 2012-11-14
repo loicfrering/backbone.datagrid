@@ -69,17 +69,17 @@ downloaded directly via one of the following links:
 
 </p>
 <ul>
-<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.2.0)</a></li>
-<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.js">backbone.datagrid.js (v0.2.0)</a></li>
+<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.2.0)</a>.</li>
+<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.js">backbone.datagrid.js (v0.2.0)</a>.</li>
 </ul>
 <h2>Getting started</h2>
 <h3>Usage</h3>
-<p>Create a new Datagrid with your collection and options, render it and attach
+<p>Create a new datagrid with your collection and options, render it and attach
 the resulting element to your document:
 
 </p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> myCollection = <span class="keyword">new</span> MyCollection();
-<span class="keyword">var</span> datagrid = <span class="keyword">new</span> Datagrid({
+<span class="keyword">var</span> datagrid = <span class="keyword">new</span> Backbone.Datagrid({
   collection: myCollection
 });
 $(<span class="string">'#datagrid'</span>).html(datagrid.render().el);</code></pre>
@@ -91,8 +91,8 @@ directory in the repository.
 <ul>
 <li>Solar: a simple and complete example with an in memory collection of planets from the
 Solar System.<ul>
-<li><a href="http://loicfrering.github.com/backbone.datagrid/examples/solar/">Live version</a>.</li>
-<li><a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples/solar">Sources</a>.</li>
+<li><a href="http://loicfrering.github.com/backbone.datagrid/examples/solar/">Live version</a></li>
+<li><a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples/solar">Sources</a></li>
 </ul>
 </li>
 </ul>
@@ -313,7 +313,7 @@ backbone.datagrid:
 <li>Install dependencies with npm:<pre><code>$ npm install</code></pre>
 </li>
 <li>Use Grunt for:<ul>
-<li>Linting and tesing:<pre><code>$ grunt test</code></pre>
+<li>Linting and testing:<pre><code>$ grunt test</code></pre>
 </li>
 <li>Building:<pre><code>$ grunt dist</code></pre>
 </li>

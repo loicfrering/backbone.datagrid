@@ -15,20 +15,20 @@ The raw sources can be navigated on [GitHub](https://github.com/loicfrering/back
 The distributed sources can be found in the `dist/` directory or can be
 downloaded directly via one of the following links:
 
-* Production minified version: [backbone.datagrid.min.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js)
-* Development version: [backbone.datagrid.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.js)
+* Production minified version: [backbone.datagrid.min.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js).
+* Development version: [backbone.datagrid.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.js).
 
 Getting started
 ---------------
 
 ### Usage
 
-Create a new Datagrid with your collection and options, render it and attach
+Create a new datagrid with your collection and options, render it and attach
 the resulting element to your document:
 
 ```javascript
 var myCollection = new MyCollection();
-var datagrid = new Datagrid({
+var datagrid = new Backbone.Datagrid({
   collection: myCollection
 });
 $('#datagrid').html(datagrid.render().el);
@@ -41,8 +41,8 @@ directory in the repository.
 
 * Solar: a simple and complete example with an in memory collection of planets from the
   Solar System.
-  * [Live version](http://loicfrering.github.com/backbone.datagrid/examples/solar/).
-  * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/solar).
+  * [Live version](http://loicfrering.github.com/backbone.datagrid/examples/solar/)
+  * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/solar)
 
 Description
 -----------
@@ -257,7 +257,7 @@ backbone.datagrid:
 4. Install dependencies with npm:
        $ npm install
 5. Use Grunt for:
-   * Linting and tesing:
+   * Linting and testing:
          $ grunt test
    * Building:
          $ grunt dist
