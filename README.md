@@ -36,13 +36,14 @@ $('#datagrid').html(datagrid.render().el);
 
 ### Examples
 
-Examples are available in the [examples](https://github.com/loicfrering/backbone.datagrid/tree/master/examples)
-directory in the repository.
+You will find all the examples listed on [this page](examples/). Their sources
+are available in the [examples](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/)
+directory of the repository.
 
 * Solar: a simple and complete example with an in memory collection of planets from the
   Solar System.
-  * [Live version](http://loicfrering.github.com/backbone.datagrid/examples/solar/)
-  * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/solar)
+  * [Live version](examples/solar.html)
+  * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/js/solar.js)
 
 Description
 -----------
