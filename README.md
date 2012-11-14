@@ -44,6 +44,9 @@ directory of the repository.
   Solar System.
   * [Live version](examples/solar.html)
   * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/js/solar.js)
+* GitHub: an example with a collection connected to GitHub's REST API.
+  * [Live version](examples/github.html)
+  * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/js/github.js)
 
 Description
 -----------

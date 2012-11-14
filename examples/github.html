@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <title>GitHub repositories: a backbone.datagrid example</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="brand" href="#">Backbone.Datagrid</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="datagrid" class="span12">
+
+        </div>
+      </div>
+    </div>
+
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/libs/underscore.min.js"></script>
+    <script src="js/libs/backbone.js"></script>
+
+    <script src="../src/views/datagrid.js"></script>
+    <script src="../src/views/header.js"></script>
+    <script src="../src/views/row.js"></script>
+    <script src="../src/views/pagination.js"></script>
+    <script src="../src/views/cells/cell.js"></script>
+    <script src="../src/views/cells/callback-cell.js"></script>
+    <script src="../src/views/cells/action-cell.js"></script>
+    <script src="../src/views/cells/header-cell.js"></script>
+    <script src="../src/models/pager.js"></script>
+    <script src="../src/models/sorter.js"></script>
+    <script>
+      Backbone.Datagrid = Datagrid;
+    </script>
+
+    <script src="js/github.js"></script>
+  </body>
+</html>
