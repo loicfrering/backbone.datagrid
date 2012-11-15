@@ -47,5 +47,6 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
     else {
       this.pager.page(parseInt($(event.target).html(), 10));
     }
+    return false;
   }
 });
