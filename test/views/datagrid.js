@@ -70,7 +70,7 @@ describe('Datagrid', function() {
         title:      'Column 1',
         comparator: comparator
       }, 'col2', {
-        property: 'col3',
+        property: 'my_col_3',
         sortable: true
       }];
       datagrid = new Datagrid({collection: collection, columns: columns});
@@ -108,7 +108,7 @@ describe('Datagrid', function() {
 
     it('should set a default title if not defined', function() {
       var column = datagrid.columns[2];
-      column.title.should.equal('Col3');
+      column.title.should.equal('My Col 3');
     });
 
     it('should set a default comparator if not defined', function() {

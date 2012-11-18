@@ -212,7 +212,7 @@ var Datagrid = Backbone.View.extend({
     if (_.isObject(column)) {
       column.index = index;
       if (column.property) {
-        column.title = column.title || column.property.charAt(0).toUpperCase() + column.property.substr(1);
+        column.title = column.title || this._formatTitle(column.property);
       } else if (!column.property && !column.view) {
         throw new Error('Column \'' + column.title + '\' has no property and must accordingly define a custom cell view.');
       }
@@ -224,6 +224,12 @@ var Datagrid = Backbone.View.extend({
       }
     }
     return column;
+  },
+
+  _formatTitle: function(title) {
+    return _.map(title.split(/\s|_/), function(word) {
+      return word.charAt(0).toUpperCase() + word.substr(1);
+    }).join(' ');
   },
 
   _defaultColumns: function() {
