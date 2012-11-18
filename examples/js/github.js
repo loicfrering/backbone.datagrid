@@ -10,19 +10,25 @@
     },
 
     parse: function(resp) {
+      var link = _.find(resp.meta.Link, function(link) {
+        return link[1].rel === 'last';
+      });
+      if (link) {
+        var lastPage = link[0].match(/page=(\d+)/)[1];
+        var perPage  = link[0].match(/per_page=(\d+)/)[1];
+        this.total = lastPage * perPage;
+      }
       return resp.data;
     }
   });
 
   repositories = new Repositories([], 'loicfrering');
-  repositories.fetch({success: function() {
-    window.datagrid = new Backbone.Datagrid({
-      collection: repositories,
-      paginated: true,
-      columns: []
-    });
+  window.datagrid = new Backbone.Datagrid({
+    collection: repositories,
+    paginated: true,
+    columns: []
+  });
 
-    datagrid.render().$el.appendTo('#datagrid');
-  }});
+  datagrid.render().$el.appendTo('#datagrid');
 
 })(Backbone);
