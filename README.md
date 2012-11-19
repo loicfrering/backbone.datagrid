@@ -4,7 +4,7 @@ Backbone.Datagrid
 [Backbone.Datagrid](http://loicfrering.github.com/backbone.datagrid/) is a
 powerful component, based on Backbone.View, that displays your Bakbone
 collections in a dynamic datagrid table. It is highly customizable and
-configurable with sane defaults.
+configurable with sensible defaults.
 
 [![Build Status](https://secure.travis-ci.org/loicfrering/backbone.datagrid.png)](http://travis-ci.org/loicfrering/backbone.datagrid)
 
