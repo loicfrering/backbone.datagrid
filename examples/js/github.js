@@ -10,14 +10,13 @@
     },
 
     parse: function(resp) {
+      this.hasNext = false;
       var link = _.find(resp.meta.Link, function(link) {
-        return link[1].rel === 'last';
-      });
-      if (link) {
-        var lastPage = link[0].match(/page=(\d+)/)[1];
-        var perPage  = link[0].match(/per_page=(\d+)/)[1];
-        this.total = lastPage * perPage;
-      }
+        if (link[1].rel == 'next') {
+          this.hasNext = true;
+          return true;
+        }
+      }, this);
       return resp.data;
     }
   });

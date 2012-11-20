@@ -126,7 +126,7 @@ var Datagrid = Backbone.View.extend({
       if (success) {
         success();
       }
-      this.pager.set('total', collection.total);
+      this.pager.update(collection);
       if (!silent) {
         collection.trigger('reset', collection);
       }
@@ -178,8 +178,7 @@ var Datagrid = Backbone.View.extend({
   _preparePager: function() {
     this.pager = new Pager({
       currentPage: this.options.page,
-      perPage:     this.options.perPage,
-      total:       this.collection.size()
+      perPage:     this.options.perPage
     });
 
     this.pager.on('change:currentPage', function() {

@@ -2,7 +2,7 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
   className: 'pagination pagination-centered',
 
   events: {
-    'click a': 'page'
+    'click li:not(.disabled) a': 'page'
   },
 
   initialize: function() {
@@ -13,22 +13,24 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
     var $ul = $('<ul></ul>'), $li;
 
     $li = $('<li class="prev"><a href="#">«</a></li>');
-    if (this.pager.get('currentPage') === 1) {
+    if (!this.pager.hasPrev()) {
       $li.addClass('disabled');
     }
     $ul.append($li);
 
-    for (var i = 1; i <= this.pager.get('totalPages'); i++) {
-      $li = $('<li></li>');
-      if (i === this.pager.get('currentPage')) {
-        $li.addClass('active');
+    if (this.pager.hasTotal()) {
+      for (var i = 1; i <= this.pager.get('totalPages'); i++) {
+        $li = $('<li></li>');
+        if (i === this.pager.get('currentPage')) {
+          $li.addClass('active');
+        }
+        $li.append('<a href="#">' + i + '</a>');
+        $ul.append($li);
       }
-      $li.append('<a href="#">' + i + '</a>');
-      $ul.append($li);
     }
 
     $li = $('<li class="next"><a href="#">»</a></li>');
-    if (this.pager.get('currentPage') === this.pager.get('totalPages')) {
+    if (!this.pager.hasNext()) {
       $li.addClass('disabled');
     }
     $ul.append($li);

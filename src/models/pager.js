@@ -3,7 +3,17 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
     this.on('change:perPage change:total', function() {
       this.totalPages(this.get('total'));
     }, this);
-    this.totalPages(this.get('total'));
+    if (this.has('total')) {
+      this.totalPages(this.get('total'));
+    }
+  },
+
+  update: function(options) {
+    _.each(['hasNext', 'hasPrev', 'total', 'totalPages', 'lastPage'], function(p) {
+      if (!_.isUndefined(options[p])) {
+        this.set(p, options[p]);
+      }
+    }, this);
   },
 
   totalPages: function(total) {
@@ -24,8 +34,28 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
     this.page(this.get('currentPage') - 1);
   },
 
+  hasTotal: function() {
+    return this.has('totalPages');
+  },
+
+  hasNext: function() {
+    if (this.hasTotal()) {
+      return this.get('currentPage') < this.get('totalPages');
+    } else {
+      return this.get('hasNext');
+    }
+  },
+
+  hasPrev: function() {
+    if (this.has('hasPrev')) {
+      return this.get('hasPrev');
+    } else {
+      return this.get('currentPage') > 1;
+    }
+  },
+
   inBounds: function(page) {
-    return page > 0 && page <= this.get('totalPages');
+    return !this.hasTotal() || page > 0 && page <= this.get('totalPages');
   },
 
   validate: function(attrs) {
