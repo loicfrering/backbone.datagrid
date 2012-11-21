@@ -45,6 +45,51 @@ describe('Pager', function() {
       pager.prev();
       pager.get('currentPage').should.equal(2);
     });
+
+    it('should allow to test if the total number of pages is known', function() {
+      pager.hasTotal().should.be.true;
+
+      pager.set('total', undefined);
+      pager.hasTotal().should.be.false;
+
+      pager.set('total', 42);
+      pager.hasTotal().should.be.true;
+      pager.set('totalPages', undefined);
+      pager.hasTotal().should.be.false;
+    });
+
+    it('should manage hasNext automatically when the total number of pages is known', function() {
+      pager.hasNext().should.be.true;
+
+      pager.set('currentPage', 5);
+      pager.hasNext().should.be.false;
+    });
+
+    it('should rely on a hasNext flag when the total number of pages is unknown', function() {
+      pager.set('totalPages', undefined);
+      should.not.exist(pager.hasNext());
+
+      pager.set('hasNext', true);
+      pager.hasNext().should.be.true;
+
+      pager.set('hasNext', false);
+      pager.hasNext().should.be.false;
+    });
+
+    it ('should manage hasPrev when the corresponding flag is not set', function() {
+      pager.hasPrev().should.be.true;
+
+      pager.set('currentPage', 1);
+      pager.hasPrev().should.be.false;
+    });
+
+    it('should rely on the hasPrev flag when defined', function() {
+      pager.set('hasPrev', false);
+      pager.hasPrev().should.be.false;
+
+      pager.set('hasPrev', true);
+      pager.hasPrev().should.be.true;
+    });
   });
 
   describe('bindings', function() {

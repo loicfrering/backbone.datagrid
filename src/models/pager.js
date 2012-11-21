@@ -17,7 +17,11 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
   },
 
   totalPages: function(total) {
-    this.set('totalPages', Math.ceil(total/this.get('perPage')));
+    if (_.isNumber(total)) {
+      this.set('totalPages', Math.ceil(total/this.get('perPage')));
+    } else {
+      this.set('totalPages', undefined);
+    }
   },
 
   page: function(page) {
