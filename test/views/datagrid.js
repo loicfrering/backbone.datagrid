@@ -171,6 +171,43 @@ describe('Datagrid', function() {
       datagrid.collection.size().should.equal(1);
       datagrid.collection.at(0).toJSON().should.deep.equal({foo: 'bar0'});
     });
+
+    it('should use sensible defaults for request data', function() {
+      datagrid.pager.set('perPage', 2);
+      datagrid.pager.set('currentPage', 4);
+      var data = datagrid._getRequestData();
+
+      should.exist(data.per_page);
+      data.per_page.should.equal(2);
+      should.exist(data.page);
+      data.page.should.equal(4);
+    });
+
+    it('should allow to specify request data via an object', function() {
+      datagrid.collection.data = {
+        per_page: 10,
+        page:     function(pager) { return pager.get('currentPage'); }
+      };
+      datagrid.pager.set('currentPage', 4);
+
+      var data = datagrid._getRequestData();
+      data.per_page.should.equal(10);
+      data.page.should.equal(4);
+    });
+
+    it('should allow to specify request data via a function', function() {
+      datagrid.collection.data = function(pager) {
+        return {
+          per_page: 10,
+          page:     pager.get('currentPage')
+        };
+      };
+      datagrid.pager.set('currentPage', 4);
+
+      var data = datagrid._getRequestData();
+      data.per_page.should.equal(10);
+      data.page.should.equal(4);
+    });
   });
 
   describe('sorting', function() {
