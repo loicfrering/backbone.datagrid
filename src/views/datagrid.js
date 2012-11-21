@@ -118,10 +118,7 @@ var Datagrid = Backbone.View.extend({
     var success = options.success;
     var silent  = options.silent;
 
-    options.data = {
-      page:     this.pager.get('currentPage'),
-      per_page: this.pager.get('perPage')
-    };
+    options.data = this._getRequestData();
     options.success = _.bind(function(collection) {
       if (success) {
         success();
@@ -134,6 +131,26 @@ var Datagrid = Backbone.View.extend({
     options.silent = true;
 
     this.collection.fetch(options);
+  },
+
+  _getRequestData: function() {
+    if (this.collection.data && _.isFunction(this.collection.data)) {
+      return this.collection.data(this.pager, this.sorter);
+    } else if (this.collection.data && typeof this.collection.data === 'object') {
+      var data = {};
+      _.each(this.collection.data, function(value, param) {
+        if (_.isFunction(value)) {
+          value = value(this.pager, this.sorter);
+        }
+        data[param] = value;
+      }, this);
+      return data;
+    }
+
+    return {
+      page:     this.pager.get('currentPage'),
+      per_page: this.pager.get('perPage')
+    };
   },
 
   _pageInMemory: function(options) {

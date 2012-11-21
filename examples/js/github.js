@@ -9,6 +9,13 @@
       return 'https://api.github.com/users/' + this.user + '/repos?callback=?';
     },
 
+    data: function(pager) {
+      return {
+        per_page: pager.get('perPage'),
+        page:     pager.get('currentPage')
+      };
+    },
+
     parse: function(resp) {
       this.hasNext = false;
       var link = _.find(resp.meta.Link, function(link) {
