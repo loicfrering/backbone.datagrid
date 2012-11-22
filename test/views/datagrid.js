@@ -18,6 +18,10 @@ describe('Datagrid', function() {
       datagrid.options.perPage.should.equal(10);
     });
 
+    it('should default tableClassName option to "table"', function() {
+      datagrid.options.tableClassName.should.equal('table');
+    });
+
     it('should throw an error when perPage is less than 1', function() {
       (function() {
         datagrid = new Datagrid({

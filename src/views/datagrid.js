@@ -2,9 +2,10 @@ var Datagrid = Backbone.View.extend({
   initialize: function() {
     this.columns = this.options.columns;
     this.options = _.defaults(this.options, {
-      paginated: false,
-      page:      1,
-      perPage:   10
+      paginated:      false,
+      page:           1,
+      perPage:        10,
+      tableClassName: 'table'
     });
 
     this.collection.on('reset', this.render, this);
@@ -22,7 +23,7 @@ var Datagrid = Backbone.View.extend({
   },
 
   renderTable: function() {
-    var $table = $('<table></table>', {'class': 'table'});
+    var $table = $('<table></table>', {'class': this.options.tableClassName});
     this.$el.append($table);
 
     var header = new Header({columns: this.columns, sorter: this.sorter});
