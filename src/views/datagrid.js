@@ -102,7 +102,8 @@ var Datagrid = Backbone.View.extend({
     return c ? c.comparator : undefined;
   },
 
-  _sortRequest: function(column, order) {
+  _sortRequest: function() {
+    this._request();
   },
 
   _page: function(options) {
@@ -114,6 +115,10 @@ var Datagrid = Backbone.View.extend({
   },
 
   _pageRequest: function(options) {
+    this._request(options);
+  },
+
+  _request: function(options) {
     options     = options || {};
     var success = options.success;
     var silent  = options.silent;
@@ -232,7 +237,7 @@ var Datagrid = Backbone.View.extend({
       } else if (!column.property && !column.view) {
         throw new Error('Column \'' + column.title + '\' has no property and must accordingly define a custom cell view.');
       }
-      if (column.sortable) {
+      if (this.options.inMemory && column.sortable) {
         if (!column.comparator && !column.property && !column.sortedProperty) {
           throw new Error('Invalid column definition: a sortable column must have a comparator, property or sortedProperty defined.');
         }

@@ -73,7 +73,7 @@ describe('Datagrid', function() {
         property: 'my_col_3',
         sortable: true
       }];
-      datagrid = new Datagrid({collection: collection, columns: columns});
+      datagrid = new Datagrid({collection: collection, columns: columns, inMemory: true});
     });
 
     it('shouldn\'t touch the column if completely defined', function() {

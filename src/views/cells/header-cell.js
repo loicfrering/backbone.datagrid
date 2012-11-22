@@ -15,7 +15,7 @@ var HeaderCell = Datagrid.HeaderCell = Cell.extend({
 
     if (this.column.sortable) {
       this.$el.addClass('sortable');
-      if (this.sorter.sortedBy(this.column.property) || this.sorter.sortedBy(this.column.index)) {
+      if (this.sorter.sortedBy(this.column.sortedProperty || this.column.property) || this.sorter.sortedBy(this.column.index)) {
         if (this.sorter.sortedASC()) {
           icon = 'icon-chevron-up';
         } else {
@@ -33,6 +33,6 @@ var HeaderCell = Datagrid.HeaderCell = Cell.extend({
   },
 
   sort: function() {
-    this.sorter.sort(this.column.property);
+    this.sorter.sort(this.column.sortedProperty || this.column.property);
   }
 });
