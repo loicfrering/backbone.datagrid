@@ -9,10 +9,12 @@
       return 'https://api.github.com/users/' + this.user + '/repos?callback=?';
     },
 
-    data: function(pager) {
+    data: function(pager, sorter) {
       return {
-        per_page: pager.get('perPage'),
-        page:     pager.get('currentPage')
+        per_page:  pager.get('perPage'),
+        page:      pager.get('currentPage'),
+        sort:      sorter.get('column'),
+        direction: sorter.get('order')
       };
     },
 
@@ -32,9 +34,24 @@
   window.datagrid = new Backbone.Datagrid({
     collection: repositories,
     paginated: true,
-    columns: []
+    columns: [
+      'name',
+      'language',
+      'watchers',
+      'forks', {
+        property:       'pushed_at',
+        sortable:       true,
+        sortedProperty: 'pushed',
+        view: function(repo) {
+          return new Date(repo.pushed_at).toLocaleDateString();
+        }
+      }, {
+        property: 'html_url',
+        view: '<a class="btn btn-primary" href="<%= html_url %>">Go &gt;&gt;</a>'
+      }
+    ]
   });
 
-  datagrid.render().$el.appendTo('#datagrid');
+  datagrid.$el.appendTo('#datagrid');
 
 })(Backbone);
