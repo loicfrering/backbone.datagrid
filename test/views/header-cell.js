@@ -2,7 +2,7 @@ describe('HeaderCell', function() {
   var headerCell;
 
   beforeEach(function() {
-    headerCell = new HeaderCell({sorter: new Sorter(), column: {property: 'foo', sortable: true}});
+    headerCell = new Datagrid.HeaderCell({sorter: new Datagrid.Sorter(), column: {property: 'foo', sortable: true}});
   });
 
   describe('initialization', function() {
