@@ -272,6 +272,31 @@ describe('Datagrid', function() {
       ]);
     });
 
+    it('should be able to sort undefined attributes with the default comparator', function() {
+      datagrid.collection.add({rank: 'undefined'});
+      datagrid.sort('foo');
+
+      datagrid.collection.toJSON().should.deep.equal([
+        {rank: 'undefined'},
+        {foo: 'bar0', rank: 'fourth'},
+        {foo: 'bar1', rank: 'first'},
+        {foo: 'bar2', rank: 'fifth'},
+        {foo: 'bar3', rank: 'third'},
+        {foo: 'bar4', rank: 'second'}
+      ]);
+
+      datagrid.sort('foo');
+
+      datagrid.collection.toJSON().should.deep.equal([
+        {foo: 'bar4', rank: 'second'},
+        {foo: 'bar3', rank: 'third'},
+        {foo: 'bar2', rank: 'fifth'},
+        {foo: 'bar1', rank: 'first'},
+        {foo: 'bar0', rank: 'fourth'},
+        {rank: 'undefined'}
+      ]);
+    });
+
     it('should sort correctly a paginated datagrid', function() {
       datagridOptions.paginated = true;
       datagrid = new Datagrid(datagridOptions);

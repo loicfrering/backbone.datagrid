@@ -266,7 +266,9 @@ var Datagrid = Backbone.View.extend({
 
   _defaultComparator: function(column) {
     return function(model1, model2) {
-      return model1.get(column).localeCompare(model2.get(column));
+      var val1 = model1.has(column) ? model1.get(column) : '';
+      var val2 = model2.has(column) ? model2.get(column) : '';
+      return val1.localeCompare(val2);
     };
   }
 });
