@@ -2,7 +2,8 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
   className: 'pagination pagination-centered',
 
   events: {
-    'click li:not(.disabled) a': 'page'
+    'click li:not(.disabled) a': 'page',
+    'click li.disabled a': function(e) { e.preventDefault(); }
   },
 
   initialize: function() {
