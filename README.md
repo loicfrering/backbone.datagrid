@@ -135,7 +135,7 @@ Otherwise use REST requests.
 
 If the datagrid should be paginated or not.
 
-### className
+### tableClassName
 
 The class attribute for the generated `table`.
 
@@ -180,6 +180,8 @@ The title of the column which will be displayed in the table header.
 
 If the column is sortable or not.
 
+#### sortBy (string)
+
 #### comparator (function)
 
 If the column is sortable, a comparator function that gonna be used to sort the
@@ -198,21 +200,161 @@ By default, pagination controls are displayed for a paginated datagrid. But an
 API is also available to manually control pagination. Each of the following
 functions cause a datagrid rendering.
 
-### datagrid.page(page)
+### Pager
 
-Go to the specified page.
+#### datagrid.page(page)
 
-### datagrid.perPage(perPage)
+Go to the specified page. Delegates to `datagrid.pager.page(page)`.
 
-Set the number of items displayed per page.
+#### datagrid.perPage(perPage)
 
-### datagrid.pager.next()
+Set the number of items displayed per page. Delegates to
+`datagrid.pager.perPage(perPage)`.
+
+#### datagrid.pager.next()
 
 Go to the next page.
 
-### datagrid.pager.prev()
+#### datagrid.pager.prev()
 
 Go to the previous page.
+
+#### datagrid.pager.get('currentPage')
+
+#### datagrid.pager.get('perPage')
+
+#### datagrid.pager.hesPrev()
+
+#### datagrid.pager.hasNext()
+
+### In memory
+
+If the datagrid manages an in memory collection, pagination will be
+automatically handled for you by slicing the collection with the right start
+and end indexes according to the current page and the number of elements per
+page you want to be displayed.
+
+### Server API
+
+When dealing with a server API, there are two things you need to configure in
+your collection for pagination to work properly:
+
+* set some properties, generally fetched from the API, that will tell the
+  datagrid if a previous, next or specific page is available to display
+  relevant pagination controls.
+* set a `data` property that will tell the datagrid which request parameters it
+  needs to send to the server to the specify the current page and the number of
+  items per page you want.
+
+#### Configuring pagination controls
+
+Some of the following properties must be set to the collection:
+
+* `hasPrev` if there is a previous page to enable a control which links to the
+  previous page.
+* `hasNext` if there is a next page to enable a control which links to the next
+  page.
+* `totalPages` or `total` the total number of pages or elements to be able to
+  display full pagination controls with a link to each of the available pages.
+
+In the case you know from the server API the total number of pages or elements,
+you just have to set one of these value for the datagrid to be able to display
+full pagination controls.
+
+In the case where this information is not available, the datagrid will only be
+able to display controls for previous and next page according to the related
+hasNext and hasPrev flags.
+
+You will be able to retrieve these informations from the server API you are
+dealing with, so the best place to set these properties to the collection is in
+`collection.parse(resp)` which is called by Backbone when fetching from the
+server.
+
+For example, if the server API provides the total number of elements by
+wrapping the collection:
+
+```javascript
+{
+  total: 24
+  content: [{
+    foo: 'bar'
+  }, {
+    foo: 'foobar'
+  }]
+}
+```
+
+Here is how you could implement your collection's fetch function:
+
+```javascript
+parse: function(resp) {
+  this.total = resp.total;
+  return resp.content;
+}
+```
+
+* you first need to store the total number of elements in the collection.
+* Then you have to return the actual array which gonna be used by Backbone to
+  populate the collection. See
+  [collection.parse(resp)](http://backbonejs.org/#Collection-parse) for more
+  details.
+
+Here is a second example using GitHub's API with JSON-P:
+
+```javascript
+parse: function(resp) {
+  this.hasNext = false;
+  var link = _.find(resp.meta.Link, function(link) {
+    if (link[1].rel == 'next') {
+      this.hasNext = true;
+      return true;
+    }
+  }, this);
+  return resp.data;
+}
+```
+
+Here we just set an `hasNext` flag based on the meta link informations provided
+by GitHub. As the total number of pages is unknown, only next and previous page
+will be available as pagination controls.
+
+#### Configuring request parameters
+
+You have to set the data property in your collection. This can be an object or
+a function returning an object. This object will be passed as a data option to
+Backone's collection.fetch(options) and finally passed as a query string by
+jquery to your server API while fetching a new page.
+
+The pager will be passed to the function so that you will be able to get the
+currentPage and the number of element perPage wanted to pass them as query
+parameters values. Here is an example:
+
+```javascript
+data: function(pager) {
+  return {
+    page:     pager.get('currentPage'),
+    per_page: pager.get('perPage')
+  }
+}
+```
+
+Here would be the query string resulted from fetching the 4th page with 10
+elements per page:
+
+    ?page=4&per_page=10
+
+Here is an alternative example that will produce the same query string but by
+directly setting an object:
+
+```javascript
+data: {
+  page:     function(pager) { return pager.get('currentPage'); },
+  per_page: 10
+}
+```
+
+Here the number of elements per page is definitely fixed (which is generally
+not a good idea).
 
 Sorting
 -------
@@ -222,14 +364,25 @@ A first click will sort in ascending order, the following clicks will toggle
 sorting direction between descending and ascending. You can also control
 sorting thanks to the following function.
 
-### datagrid.sort(column, [order])
+### Sorter
+
+#### datagrid.sort(column, [order])
 
 Sort the datagrid by the specified column in the specified order. The column
 can be the column's property name or the column's index (beginning at 0). You
-can use `Datagrid.Sorter.ASC` and `Datagrid.Sorter.DESC` to specifiy the
+can use `Datagrid.Sorter.ASC` and `Datagrid.Sorter.DESC` to specify the
 sorting direction.
 
-### comparator
+Delegates to `datagrid.sorter.sort(column, [order])`.
+
+#### sorter.get('column')
+
+#### sorter.get('order')
+
+### In memory
+
+An in memory collection will be sorted using a comparator function that gonna
+be passed to Backbone's `collection.sort(options)`.
 
 The comparator function is specific to a sortable column and must be specified
 in the column's definition. The functions takes two arguments : model1 and
@@ -239,6 +392,47 @@ model2 and should follow the specifications of the compareFunction expected for
 By default the comparator function will be based on
 [String.localeCompare](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/localeCompare)
 for a sensible alphabetical sorting.
+
+Example of a column definition with a custom comparator function:
+
+```javascript
+{
+  property: 'rank',
+  sortable: true,
+  comparator: function(p1, p2) {
+    return p1.get('rank') - p2.get('rank');
+  }
+}
+```
+
+### Server API
+
+Configuring how the datagrid will pass sorting parameters to the server API is
+done in the same way as we configured pagination: using the collection's data
+attribute.
+
+In addition to the pager, the sorter is passed as a second parameter to the
+functions which generate request parameters data. All you need to do is to map
+the request parameters your API is using for sorting to the current sorting
+status provided by the datagrid in the sorter.
+
+Here is an example:
+
+```javascript
+data: function(pager, sorter) {
+  return {
+    per_page:  pager.get('perPage'),
+    page:      pager.get('currentPage'),
+    sort:      sorter.get('column'),
+    direction: sorter.get('order')
+  };
+}
+```
+
+With this configuration, requesting the 4th page with 10 element per page and
+sorting by name descendant would produce the following query string:
+
+    ?page=4&per_page=10&sort=name&direction=desc
 
 Status
 ------
@@ -268,6 +462,13 @@ backbone.datagrid:
 
 Changelog
 ---------
+
+### 0.3.0
+
+* Support server API with request based pagination and sorting.
+* New example based on GitHub's API which demonstrate server API support.
+* Add a tableClassName option.
+* Minor bug fixes.
 
 ### 0.2.0
 
