@@ -118,6 +118,7 @@ custom renderings that suit your needs:
     * TemplateCell (not available yet)
       * UnderscoreTemplateCell (not available yet)
       * HandlebarsTemplateCell (not available yet)
+  * ActionCell
 
 Datagrid options
 ----------------
@@ -161,26 +162,34 @@ passed to the datagrid.
 
 A column definition can be a string or an object. If a string is passed, a
 default column definition will be generated with the specified string used as
-the column's property property (no there's no typo here).
-
-### Default column definition
+the column's property.
 
 ### Column definition
 
 #### property (string)
 
 The model's property that gonna be displayed in the column. Can be omitted if
-the column describe a combination of different properties of the model.
+the column describe a combination of different properties of the model, refer
+custom views below.
 
 #### title (string)
 
-The title of the column which will be displayed in the table header.
+The title of the column which will be displayed in the table header. If not
+defined, the column's property will be used for generating a nicely formated
+title, here are some examples:
+
+* name => Name
+* events_url => Events Url
+* issue_events_url => Issue Events Url
 
 #### sortable (boolean)
 
-If the column is sortable or not.
+If the column is sortable or not. Default to false.
 
 #### sortBy (string)
+
+The column which will be used for sorting, see dedicated sorting section below
+for more details.
 
 #### comparator (function)
 
@@ -193,6 +202,36 @@ informations.
 The class name of the cell (td or th). It can be a string or a callback which
 will be passed the model related to the current row.
 
+#### view (string|callback|object)
+
+The CellView that's gonna be used for rendering the column's cell associated to
+the current row.
+
+If not defined, the model's attribute corresponding to `column.property`.
+
+You can pass an [Underscore template](http://underscorejs.org/#template) as a
+string, it will be compiled and executed with the `model.toJSON()` as context.
+
+You can finally pass an object to use one of the specific views provided or a
+custom view. This object must have a type property which refers to view's type
+that gonna be used for the Cell. The other properties are gonna be passed to
+the constructor function of the view.
+
+```javascript
+{
+  title: 'Edit',
+  view: {
+    type: Backbone.Datagrid.ActionCell,
+    label: 'Edit',
+    actionClassName: 'btn btn-primary',
+    action: function(planet) {
+      alert('Would edit ' + planet.get('name') + '!');
+      return false;
+    }
+  }
+}
+```
+
 Pagination
 ----------
 
@@ -201,6 +240,9 @@ API is also available to manually control pagination. Each of the following
 functions cause a datagrid rendering.
 
 ### Pager
+
+The Pager is an object extending Backbone.Model which manages the state of the
+pagination for the datagrid.
 
 #### datagrid.page(page)
 
@@ -221,11 +263,42 @@ Go to the previous page.
 
 #### datagrid.pager.get('currentPage')
 
+Returns the current page number.
+
 #### datagrid.pager.get('perPage')
 
-#### datagrid.pager.hesPrev()
+Returns the current number of element per page.
+
+#### datagrid.pager.hasPrev()
+
+Tests if the collection has a previous page.
 
 #### datagrid.pager.hasNext()
+
+Tests if the collection has a next page.
+
+#### Pager's events
+
+As Backbone.Model, you can bind [events triggered by any object extending
+Backbone.Model](http://backbonejs.org/#FAQ-events) if you want to bind some
+behavior when the user interact with the pager. You can for example very easily
+save the current pager status in the sessionStorage:
+
+```javascript
+datagrid.pager.on('change', function(pager) {
+  sessionStorage.setItem('datagrid-current-page', pager.get('currentPage'));
+  sessionStorage.setItem('datagrid-per-page', pager.get('perPage'));
+});
+```
+
+Here is another example which observes changes of the current page only:
+
+```javascript
+datagrid.pager.on('change:currentPage', function(pager) {
+  // A really convenient alert...
+  alert("Hey you are changing page for: " + pager.get('currentPage'));
+});
+```
 
 ### In memory
 
@@ -327,7 +400,7 @@ jquery to your server API while fetching a new page.
 
 The pager will be passed to the function so that you will be able to get the
 currentPage and the number of element perPage wanted to pass them as query
-parameters values. Here is an example:
+parameters values. Here is an example (in your collection):
 
 ```javascript
 data: function(pager) {
@@ -366,6 +439,9 @@ sorting thanks to the following function.
 
 ### Sorter
 
+As for the Pager, the Sorter is an object extending Backbone.Model. Its role is
+to manage the sorting state of the datagrid.
+
 #### datagrid.sort(column, [order])
 
 Sort the datagrid by the specified column in the specified order. The column
@@ -377,7 +453,30 @@ Delegates to `datagrid.sorter.sort(column, [order])`.
 
 #### sorter.get('column')
 
+Returns the column which is currently sorted identified by (in order of
+priority):
+
+* sortBy if defined in the column definition.
+* property if defined in the column definition.
+* column's index otherwise.
+
 #### sorter.get('order')
+
+Returns the sorting direction, can be `Datagrid.Sorter.ASC` or
+`Datagrid.Sorter.DESC`.
+
+#### Sorter's events
+
+In the same way you can bind events triggered by the Pager, you can also bind
+[events triggered by the Sorter](http://backbonejs.org/#FAQ-events) (as a
+Backbone.Model) and react to sorting state changes.
+
+```javascript
+datagrid.sorter.on('change', function(sorter) {
+  sessionStorage.setItem('datagrid-sorted-column', sorter.get('column'));
+  sessionStorage.setItem('datagrid-sorted-order', sorter.get('order'));
+});
+```
 
 ### In memory
 
@@ -416,7 +515,7 @@ functions which generate request parameters data. All you need to do is to map
 the request parameters your API is using for sorting to the current sorting
 status provided by the datagrid in the sorter.
 
-Here is an example:
+Here is an example data function implementation in your collection:
 
 ```javascript
 data: function(pager, sorter) {
@@ -438,8 +537,7 @@ Status
 ------
 
 It is for now in its early stage of developments: the API may be subject to
-changes. Also it only manages in memory collections but REST API should be
-supported very soon.
+changes.
 
 Contributing
 ------------
