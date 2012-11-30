@@ -15,8 +15,8 @@ The raw sources can be navigated on [GitHub](https://github.com/loicfrering/back
 The distributed sources can be found in the `dist/` directory or
 downloaded directly via one of the following links:
 
-* Production minified version: [backbone.datagrid.min.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js).
-* Development version: [backbone.datagrid.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.js).
+* Production minified version: [backbone.datagrid.min.js (v0.3.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.3.0/dist/backbone.datagrid.min.js).
+* Development version: [backbone.datagrid.js (v0.3.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.3.0/dist/backbone.datagrid.js).
 
 Getting started
 ---------------

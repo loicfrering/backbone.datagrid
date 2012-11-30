@@ -1,4 +1,4 @@
-// backbone.datagrid v0.2.0
+// backbone.datagrid v0.3.0
 //
 // Copyright (c) 2012 Loïc Frering <loic.frering@gmail.com>
 // Distributed under the MIT license
@@ -9,9 +9,10 @@ var Datagrid = Backbone.View.extend({
   initialize: function() {
     this.columns = this.options.columns;
     this.options = _.defaults(this.options, {
-      paginated: false,
-      page:      1,
-      perPage:   10
+      paginated:      false,
+      page:           1,
+      perPage:        10,
+      tableClassName: 'table'
     });
 
     this.collection.on('reset', this.render, this);
@@ -29,7 +30,7 @@ var Datagrid = Backbone.View.extend({
   },
 
   renderTable: function() {
-    var $table = $('<table></table>', {'class': 'table'});
+    var $table = $('<table></table>', {'class': this.options.tableClassName});
     this.$el.append($table);
 
     var header = new Header({columns: this.columns, sorter: this.sorter});
@@ -109,7 +110,8 @@ var Datagrid = Backbone.View.extend({
     return c ? c.comparator : undefined;
   },
 
-  _sortRequest: function(column, order) {
+  _sortRequest: function() {
+    this._request();
   },
 
   _page: function(options) {
@@ -121,7 +123,47 @@ var Datagrid = Backbone.View.extend({
   },
 
   _pageRequest: function(options) {
+    this._request(options);
+  },
+
+  _request: function(options) {
+    options     = options || {};
+    var success = options.success;
+    var silent  = options.silent;
+
+    options.data = this._getRequestData();
+    options.success = _.bind(function(collection) {
+      if (success) {
+        success();
+      }
+      this.pager.update(collection);
+      if (!silent) {
+        collection.trigger('reset', collection);
+      }
+    }, this);
+    options.silent = true;
+
     this.collection.fetch(options);
+  },
+
+  _getRequestData: function() {
+    if (this.collection.data && _.isFunction(this.collection.data)) {
+      return this.collection.data(this.pager, this.sorter);
+    } else if (this.collection.data && typeof this.collection.data === 'object') {
+      var data = {};
+      _.each(this.collection.data, function(value, param) {
+        if (_.isFunction(value)) {
+          value = value(this.pager, this.sorter);
+        }
+        data[param] = value;
+      }, this);
+      return data;
+    }
+
+    return {
+      page:     this.pager.get('currentPage'),
+      per_page: this.pager.get('perPage')
+    };
   },
 
   _pageInMemory: function(options) {
@@ -135,16 +177,24 @@ var Datagrid = Backbone.View.extend({
     var begin = (page - 1) * perPage;
     var end   = begin + perPage;
 
-    this.collection.reset(this._originalCollection.slice(begin, end), options);
+    if (options && options.success) {
+      options.success();
+    }
     this.pager.set('total', this._originalCollection.size());
+
+    this.collection.reset(this._originalCollection.slice(begin, end), options);
   },
 
   _prepare: function() {
-    this._prepareColumns();
     this._prepareSorter();
     if (this.options.paginated) {
       this._preparePager();
-      this._page({silent: true});
+      this._page({
+        //silent: true,
+        success: _.bind(this._prepareColumns, this)
+      });
+    } else {
+      this._prepareColumns();
     }
   },
 
@@ -158,8 +208,7 @@ var Datagrid = Backbone.View.extend({
   _preparePager: function() {
     this.pager = new Pager({
       currentPage: this.options.page,
-      perPage:     this.options.perPage,
-      total:       this.collection.size()
+      perPage:     this.options.perPage
     });
 
     this.pager.on('change:currentPage', function() {
@@ -192,11 +241,11 @@ var Datagrid = Backbone.View.extend({
     if (_.isObject(column)) {
       column.index = index;
       if (column.property) {
-        column.title = column.title || column.property.charAt(0).toUpperCase() + column.property.substr(1);
+        column.title = column.title || this._formatTitle(column.property);
       } else if (!column.property && !column.view) {
         throw new Error('Column \'' + column.title + '\' has no property and must accordingly define a custom cell view.');
       }
-      if (column.sortable) {
+      if (this.options.inMemory && column.sortable) {
         if (!column.comparator && !column.property && !column.sortedProperty) {
           throw new Error('Invalid column definition: a sortable column must have a comparator, property or sortedProperty defined.');
         }
@@ -204,6 +253,12 @@ var Datagrid = Backbone.View.extend({
       }
     }
     return column;
+  },
+
+  _formatTitle: function(title) {
+    return _.map(title.split(/\s|_/), function(word) {
+      return word.charAt(0).toUpperCase() + word.substr(1);
+    }).join(' ');
   },
 
   _defaultColumns: function() {
@@ -218,7 +273,9 @@ var Datagrid = Backbone.View.extend({
 
   _defaultComparator: function(column) {
     return function(model1, model2) {
-      return model1.get(column).localeCompare(model2.get(column));
+      var val1 = model1.has(column) ? model1.get(column) : '';
+      var val2 = model2.has(column) ? model2.get(column) : '';
+      return val1.localeCompare(val2);
     };
   }
 });
@@ -319,7 +376,8 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
   className: 'pagination pagination-centered',
 
   events: {
-    'click a': 'page'
+    'click li:not(.disabled) a': 'page',
+    'click li.disabled a': function(e) { e.preventDefault(); }
   },
 
   initialize: function() {
@@ -330,22 +388,24 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
     var $ul = $('<ul></ul>'), $li;
 
     $li = $('<li class="prev"><a href="#">«</a></li>');
-    if (this.pager.get('currentPage') === 1) {
+    if (!this.pager.hasPrev()) {
       $li.addClass('disabled');
     }
     $ul.append($li);
 
-    for (var i = 1; i <= this.pager.get('totalPages'); i++) {
-      $li = $('<li></li>');
-      if (i === this.pager.get('currentPage')) {
-        $li.addClass('active');
+    if (this.pager.hasTotal()) {
+      for (var i = 1; i <= this.pager.get('totalPages'); i++) {
+        $li = $('<li></li>');
+        if (i === this.pager.get('currentPage')) {
+          $li.addClass('active');
+        }
+        $li.append('<a href="#">' + i + '</a>');
+        $ul.append($li);
       }
-      $li.append('<a href="#">' + i + '</a>');
-      $ul.append($li);
     }
 
     $li = $('<li class="next"><a href="#">»</a></li>');
-    if (this.pager.get('currentPage') === this.pager.get('totalPages')) {
+    if (!this.pager.hasNext()) {
       $li.addClass('disabled');
     }
     $ul.append($li);
@@ -364,6 +424,7 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
     else {
       this.pager.page(parseInt($(event.target).html(), 10));
     }
+    return false;
   }
 });
 
@@ -440,7 +501,7 @@ var HeaderCell = Datagrid.HeaderCell = Cell.extend({
 
     if (this.column.sortable) {
       this.$el.addClass('sortable');
-      if (this.sorter.sortedBy(this.column.property) || this.sorter.sortedBy(this.column.index)) {
+      if (this.sorter.sortedBy(this.column.sortedProperty || this.column.property) || this.sorter.sortedBy(this.column.index)) {
         if (this.sorter.sortedASC()) {
           icon = 'icon-chevron-up';
         } else {
@@ -458,7 +519,7 @@ var HeaderCell = Datagrid.HeaderCell = Cell.extend({
   },
 
   sort: function() {
-    this.sorter.sort(this.column.property);
+    this.sorter.sort(this.column.sortedProperty || this.column.property);
   }
 });
 
@@ -467,11 +528,25 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
     this.on('change:perPage change:total', function() {
       this.totalPages(this.get('total'));
     }, this);
-    this.totalPages(this.get('total'));
+    if (this.has('total')) {
+      this.totalPages(this.get('total'));
+    }
+  },
+
+  update: function(options) {
+    _.each(['hasNext', 'hasPrev', 'total', 'totalPages', 'lastPage'], function(p) {
+      if (!_.isUndefined(options[p])) {
+        this.set(p, options[p]);
+      }
+    }, this);
   },
 
   totalPages: function(total) {
-    this.set('totalPages', Math.ceil(total/this.get('perPage')));
+    if (_.isNumber(total)) {
+      this.set('totalPages', Math.ceil(total/this.get('perPage')));
+    } else {
+      this.set('totalPages', undefined);
+    }
   },
 
   page: function(page) {
@@ -488,8 +563,28 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
     this.page(this.get('currentPage') - 1);
   },
 
+  hasTotal: function() {
+    return this.has('totalPages');
+  },
+
+  hasNext: function() {
+    if (this.hasTotal()) {
+      return this.get('currentPage') < this.get('totalPages');
+    } else {
+      return this.get('hasNext');
+    }
+  },
+
+  hasPrev: function() {
+    if (this.has('hasPrev')) {
+      return this.get('hasPrev');
+    } else {
+      return this.get('currentPage') > 1;
+    }
+  },
+
   inBounds: function(page) {
-    return page > 0 && page <= this.get('totalPages');
+    return !this.hasTotal() || page > 0 && page <= this.get('totalPages');
   },
 
   validate: function(attrs) {
