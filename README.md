@@ -6,6 +6,9 @@ powerful component, based on Backbone.View, that displays your Backbone
 collections in a dynamic datagrid table. It is highly customizable and
 configurable with sensible defaults.
 
+You can refer to the project's website for a nice HTML documentation:
+http://loicfrering.github.com/backbone.datagrid/.
+
 [![Build Status](https://secure.travis-ci.org/loicfrering/backbone.datagrid.png)](http://travis-ci.org/loicfrering/backbone.datagrid)
 
 Download
@@ -36,16 +39,16 @@ $('#datagrid').html(datagrid.render().el);
 
 ### Examples
 
-You will find all the examples listed on [this page](examples/). Their sources
+You will find all the examples listed on [this page](http://loicfrering.github.com/backbone.datagrid/examples/). Their sources
 are available in the [examples](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/)
 directory of the repository.
 
 * Solar: a simple and complete example with an in memory collection of planets from the
   Solar System.
-  * [Live version](examples/solar.html)
+  * [Live version](http://loicfrering.github.com/backbone.datagrid/examples/solar.html)
   * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/js/solar.js)
 * GitHub: an example with a collection connected to GitHub's REST API.
-  * [Live version](examples/github.html)
+  * [Live version](http://loicfrering.github.com/backbone.datagrid/examples/github.html)
   * [Sources](https://github.com/loicfrering/backbone.datagrid/tree/master/examples/js/github.js)
 
 Description
@@ -556,7 +559,9 @@ backbone.datagrid:
        $ git clone https://github.com/loicfrering/backbone.datagrid.git
 4. Install dependencies with npm:
        $ npm install
-5. Use Grunt for:
+5. Add `./node_modules/.bin` to your path:
+       $ export PATH=$PATH:./node_modules/.bin
+6. Use Grunt for:
    * Linting and testing:
          $ grunt test
    * Building:

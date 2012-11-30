@@ -59,6 +59,10 @@ collections in a dynamic datagrid table. It is highly customizable and
 configurable with sensible defaults.
 
 </p>
+<p>You can refer to the project&#39;s website for a nice HTML documentation:
+<a href="http://loicfrering.github.com/backbone.datagrid/">http://loicfrering.github.com/backbone.datagrid/</a>.
+
+</p>
 <p><a href="http://travis-ci.org/loicfrering/backbone.datagrid"><img src="https://secure.travis-ci.org/loicfrering/backbone.datagrid.png" alt="Build Status"></a>
 
 </p>
@@ -84,7 +88,7 @@ the resulting element to your document:
 });
 $(<span class="string">'#datagrid'</span>).html(datagrid.render().el);</code></pre>
 <h3>Examples</h3>
-<p>You will find all the examples listed on <a href="examples/">this page</a>. Their sources
+<p>You will find all the examples listed on <a href="http://loicfrering.github.com/backbone.datagrid/examples/">this page</a>. Their sources
 are available in the <a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples/">examples</a>
 directory of the repository.
 
@@ -92,12 +96,12 @@ directory of the repository.
 <ul>
 <li>Solar: a simple and complete example with an in memory collection of planets from the
 Solar System.<ul>
-<li><a href="examples/solar.html">Live version</a></li>
+<li><a href="http://loicfrering.github.com/backbone.datagrid/examples/solar.html">Live version</a></li>
 <li><a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples/js/solar.js">Sources</a></li>
 </ul>
 </li>
 <li>GitHub: an example with a collection connected to GitHub&#39;s REST API.<ul>
-<li><a href="examples/github.html">Live version</a></li>
+<li><a href="http://loicfrering.github.com/backbone.datagrid/examples/github.html">Live version</a></li>
 <li><a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples/js/github.js">Sources</a></li>
 </ul>
 </li>
@@ -606,6 +610,8 @@ backbone.datagrid:
 <li>Clone the project:<pre><code>$ git clone https://github.com/loicfrering/backbone.datagrid.git</code></pre>
 </li>
 <li>Install dependencies with npm:<pre><code>$ npm install</code></pre>
+</li>
+<li>Add <code>./node_modules/.bin</code> to your path:<pre><code>$ export PATH=$PATH:./node_modules/.bin</code></pre>
 </li>
 <li>Use Grunt for:<ul>
 <li>Linting and testing:<pre><code>$ grunt test</code></pre>
