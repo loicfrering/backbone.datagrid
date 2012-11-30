@@ -2,7 +2,7 @@ Backbone.Datagrid
 =================
 
 [Backbone.Datagrid](http://loicfrering.github.com/backbone.datagrid/) is a
-powerful component, based on Backbone.View, that displays your Bakbone
+powerful component, based on Backbone.View, that displays your Backbone
 collections in a dynamic datagrid table. It is highly customizable and
 configurable with sensible defaults.
 
@@ -12,7 +12,7 @@ Download
 --------
 
 The raw sources can be navigated on [GitHub](https://github.com/loicfrering/backbone.datagrid).
-The distributed sources can be found in the `dist/` directory or can be
+The distributed sources can be found in the `dist/` directory or
 downloaded directly via one of the following links:
 
 * Production minified version: [backbone.datagrid.min.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js).
@@ -82,7 +82,7 @@ description of these different components. You'll also find for each component
 
 The backbone.datagrid entry point. A Backbone.View that will be responsible for
 the entire datagrid management and rendering. It uses the collection passed to
-the constructor as data source. The Datagrid view takes care of creating the
+the constructor as its data source. The Datagrid view takes care of creating the
 `table` HTML element and each of the components described below.
 
 Event bindings:
@@ -91,7 +91,7 @@ Event bindings:
 
 ### Header
 
-A Backbone.View for the datagrid's header which gonna render the `thead` HTML
+A Backbone.View for the datagrid's header which is going to render the `thead` HTML
 element. It is also responsible for creating a Cell for each column's header.
 
 ### Row
@@ -101,7 +101,7 @@ rendering a row in the table, that is to say a `tr` HTML element, and for
 creating a Cell for each column of the datagrid. The Row uses an entry of the
 collection: a model.
 
-Events bindings:
+Event bindings:
 
 * model#change will cause a rendering of the row.
 
@@ -124,7 +124,7 @@ Datagrid options
 
 ### collection
 
-The Backbone.Collection that is gonna be managed by the datagrid.
+The Backbone.Collection that is going to be managed by the datagrid.
 
 ### inMemory
 
@@ -133,7 +133,7 @@ Otherwise use REST requests.
 
 ### paginated
 
-If the datagrid should be paginated or not.
+Whether or not the datagrid should be paginated.
 
 ### className
 
@@ -142,7 +142,7 @@ The class attribute for the generated `table`.
 ### rowClassName
 
 The class attribute for each datagrid's row: `tr` tags. Can be a simple string
-with classes separated by spaces or a computed string by passing a callback
+with class names space-separated or a computed string by passing a callback
 function. The callback function will be called with the model associated to the
 current row.
 
@@ -153,9 +153,9 @@ The columns definitions, see the dedicated section below.
 Columns definitions
 -------------------
 
-You can customize the datagrid using columns definition. It is an array of
+You can customize the datagrid with columns definition. It is an array of
 definitions, one for each column you want to see in the datagrid. If no
-definition is passed to the datagrid, a default column definition is gonna be
+definition is passed to the datagrid, a default column definition is going to be
 created for you for each property of the model managed by the collection you
 passed to the datagrid.
 
@@ -169,7 +169,7 @@ the column's property property (no there's no typo here).
 
 #### property (string)
 
-The model's property that gonna be displayed in the column. Can be omitted if
+The model's property that is going to be displayed in the column. Can be omitted if
 the column describe a combination of different properties of the model.
 
 #### title (string)
@@ -178,11 +178,11 @@ The title of the column which will be displayed in the table header.
 
 #### sortable (boolean)
 
-If the column is sortable or not.
+Whether or not the column is sortable.
 
 #### comparator (function)
 
-If the column is sortable, a comparator function that gonna be used to sort the
+If the column is sortable, a comparator function that is going to be used to sort the
 datagrid by the column. See the dedicated sorting section below for more
 informations.
 
@@ -196,7 +196,7 @@ Pagination
 
 By default, pagination controls are displayed for a paginated datagrid. But an
 API is also available to manually control pagination. Each of the following
-functions cause a datagrid rendering.
+functions causes a datagrid rendering:
 
 ### datagrid.page(page)
 
@@ -244,7 +244,7 @@ Status
 ------
 
 It is for now in its early stage of developments: the API may be subject to
-changes. Also it only manages in memory collections but REST API should be
+changes. Also it only manages in-memory collections but REST API should be
 supported very soon.
 
 Contributing
