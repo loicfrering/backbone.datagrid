@@ -2,7 +2,7 @@ Backbone.Datagrid
 =================
 
 [Backbone.Datagrid](http://loicfrering.github.com/backbone.datagrid/) is a
-powerful component, based on Backbone.View, that displays your Bakbone
+powerful component, based on Backbone.View, that displays your Backbone
 collections in a dynamic datagrid table. It is highly customizable and
 configurable with sensible defaults.
 
@@ -12,7 +12,7 @@ Download
 --------
 
 The raw sources can be navigated on [GitHub](https://github.com/loicfrering/backbone.datagrid).
-The distributed sources can be found in the `dist/` directory or can be
+The distributed sources can be found in the `dist/` directory or
 downloaded directly via one of the following links:
 
 * Production minified version: [backbone.datagrid.min.js (v0.2.0)](https://raw.github.com/loicfrering/backbone.datagrid/v0.2.0/dist/backbone.datagrid.min.js).
@@ -82,8 +82,8 @@ description of these different components. You'll also find for each component
 
 The backbone.datagrid entry point. A Backbone.View that will be responsible for
 the entire datagrid management and rendering. It uses the collection passed to
-the constructor as data source. The Datagrid view takes care of creating the
-`table` HTML element and each of the components described below.
+the constructor as its data source. The Datagrid view takes care of creating
+the `table` HTML element and each of the components described below.
 
 Event bindings:
 
@@ -91,8 +91,9 @@ Event bindings:
 
 ### Header
 
-A Backbone.View for the datagrid's header which gonna render the `thead` HTML
-element. It is also responsible for creating a Cell for each column's header.
+A Backbone.View for the datagrid's header which is going to render the `thead`
+HTML element. It is also responsible for creating a Cell for each column's
+header.
 
 ### Row
 
@@ -101,7 +102,7 @@ rendering a row in the table, that is to say a `tr` HTML element, and for
 creating a Cell for each column of the datagrid. The Row uses an entry of the
 collection: a model.
 
-Events bindings:
+Event bindings:
 
 * model#change will cause a rendering of the row.
 
@@ -125,7 +126,7 @@ Datagrid options
 
 ### collection
 
-The Backbone.Collection that is gonna be managed by the datagrid.
+The Backbone.Collection that is going to be managed by the datagrid.
 
 ### inMemory
 
@@ -134,7 +135,7 @@ Otherwise use REST requests.
 
 ### paginated
 
-If the datagrid should be paginated or not.
+Whether or not the datagrid should be paginated.
 
 ### tableClassName
 
@@ -143,7 +144,7 @@ The class attribute for the generated `table`.
 ### rowClassName
 
 The class attribute for each datagrid's row: `tr` tags. Can be a simple string
-with classes separated by spaces or a computed string by passing a callback
+with class names space-separated or a computed string by passing a callback
 function. The callback function will be called with the model associated to the
 current row.
 
@@ -154,10 +155,10 @@ The columns definitions, see the dedicated section below.
 Columns definitions
 -------------------
 
-You can customize the datagrid using columns definition. It is an array of
+You can customize the datagrid with columns definition. It is an array of
 definitions, one for each column you want to see in the datagrid. If no
-definition is passed to the datagrid, a default column definition is gonna be
-created for you for each property of the model managed by the collection you
+definition is passed to the datagrid, a default column definition is going to
+be created for you for each property of the model managed by the collection you
 passed to the datagrid.
 
 A column definition can be a string or an object. If a string is passed, a
@@ -168,9 +169,9 @@ the column's property.
 
 #### property (string)
 
-The model's property that gonna be displayed in the column. Can be omitted if
-the column describe a combination of different properties of the model, refer
-custom views below.
+The model's property that is going to be displayed in the column. Can be
+omitted if the column describe a combination of different properties of the
+model: please refer to custom views below.
 
 #### title (string)
 
@@ -184,7 +185,7 @@ title, here are some examples:
 
 #### sortable (boolean)
 
-If the column is sortable or not. Default to false.
+Whether or not the column is sortable. Default to false.
 
 #### sortBy (string)
 
@@ -193,7 +194,7 @@ for more details.
 
 #### comparator (function)
 
-If the column is sortable, a comparator function that gonna be used to sort the
+If the column is sortable, a comparator function that is going to be used to sort the
 datagrid by the column. See the dedicated sorting section below for more
 informations.
 
@@ -211,6 +212,9 @@ If not defined, the model's attribute corresponding to `column.property`.
 
 You can pass an [Underscore template](http://underscorejs.org/#template) as a
 string, it will be compiled and executed with the `model.toJSON()` as context.
+
+You can also pass a callback function. It will be called with the current row's
+model and the return value will be displayed in the cell.
 
 You can finally pass an object to use one of the specific views provided or a
 custom view. This object must have a type property which refers to view's type
@@ -237,7 +241,7 @@ Pagination
 
 By default, pagination controls are displayed for a paginated datagrid. But an
 API is also available to manually control pagination. Each of the following
-functions cause a datagrid rendering.
+functions causes a datagrid rendering:
 
 ### Pager
 
