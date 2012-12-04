@@ -1,10 +1,10 @@
 (function(Backbone) {
 
-  var Repositories = Backbone.Collection.extend({
-    initialize: function(models, user) {
-      this.user = user;
-    },
+  var $alert    = $('#alert');
+  var $progress = $('#progress');
+  var $datagrid = $('#datagrid');
 
+  var Repositories = Backbone.Collection.extend({
     url: function() {
       return 'https://api.github.com/users/' + this.user + '/repos?callback=?';
     },
@@ -20,17 +20,23 @@
 
     parse: function(resp) {
       this.hasNext = false;
-      var link = _.find(resp.meta.Link, function(link) {
-        if (link[1].rel == 'next') {
-          this.hasNext = true;
-          return true;
-        }
-      }, this);
-      return resp.data;
+      if (resp.meta.status === 404) {
+        $alert.html('User <strong>' + this.user + '</strong> not found.').show();
+      } else if (resp.meta.status === 200) {
+        var link = _.find(resp.meta.Link || [], function(link) {
+          if (link[1].rel == 'next') {
+            this.hasNext = true;
+            return true;
+          }
+        }, this);
+        return resp.data;
+      } else {
+        $alert.html(resp.data.message).show();
+      }
     }
   });
 
-  repositories = new Repositories([], 'loicfrering');
+  repositories = new Repositories();
   window.datagrid = new Backbone.Datagrid({
     collection: repositories,
     paginated: true,
@@ -52,6 +58,19 @@
     ]
   });
 
-  datagrid.$el.appendTo('#datagrid');
+  $datagrid.append(datagrid.$el);
+
+  $('form').submit(function() {
+    repositories.user = $('input').val();
+    $alert.hide();
+    $progress.show();
+    $datagrid.hide();
+    datagrid.page(1);
+    datagrid._page({success: function() {
+      $progress.hide();
+      $datagrid.show();
+    }});
+    return false;
+  });
 
 })(Backbone);
