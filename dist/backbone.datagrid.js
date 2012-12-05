@@ -1,4 +1,4 @@
-// backbone.datagrid v0.3.0
+// backbone.datagrid v0.3.1
 //
 // Copyright (c) 2012 Loïc Frering <loic.frering@gmail.com>
 // Distributed under the MIT license
@@ -61,6 +61,21 @@ var Datagrid = Backbone.View.extend({
     this.$('tbody').append(row.render(this.columns).el);
   },
 
+  refresh: function(options) {
+    if (this.options.paginated) {
+      this._page(options);
+    } else {
+      if (this.options.inMemory) {
+        this.collection.trigger('reset', this.collection);
+        if (options && options.success) {
+          options.success();
+        }
+      } else {
+        this._request(options);
+      }
+    }
+  },
+
   sort: function(column, order) {
     this.sorter.sort(column, order);
   },
@@ -85,12 +100,7 @@ var Datagrid = Backbone.View.extend({
     if (this.options.paginated) {
       this._originalCollection.comparator = _.bind(this._comparator, this);
       this._originalCollection.sort();
-      // Force rendering even if we already are on page 1
-      if (this.pager.get('currentPage') === 1) {
-        this.pager.trigger('change:currentPage');
-      } else {
-        this.page(1);
-      }
+      this.page(1);
     } else {
       this.collection.comparator = _.bind(this._comparator, this);
       this.collection.sort();
@@ -133,10 +143,15 @@ var Datagrid = Backbone.View.extend({
 
     options.data = this._getRequestData();
     options.success = _.bind(function(collection) {
+      if (!this.columns || _.isEmpty(this.columns)) {
+        this._prepareColumns();
+      }
       if (success) {
         success();
       }
-      this.pager.update(collection);
+      if (this.options.paginated) {
+        this.pager.update(collection);
+      }
       if (!silent) {
         collection.trigger('reset', collection);
       }
@@ -158,12 +173,14 @@ var Datagrid = Backbone.View.extend({
         data[param] = value;
       }, this);
       return data;
+    } else if (this.options.paginated) {
+      return {
+        page:     this.pager.get('currentPage'),
+        per_page: this.pager.get('perPage')
+      };
     }
 
-    return {
-      page:     this.pager.get('currentPage'),
-      per_page: this.pager.get('perPage')
-    };
+    return {};
   },
 
   _pageInMemory: function(options) {
@@ -187,15 +204,9 @@ var Datagrid = Backbone.View.extend({
 
   _prepare: function() {
     this._prepareSorter();
-    if (this.options.paginated) {
-      this._preparePager();
-      this._page({
-        //silent: true,
-        success: _.bind(this._prepareColumns, this)
-      });
-    } else {
-      this._prepareColumns();
-    }
+    this._preparePager();
+    this._prepareColumns();
+    this.refresh();
   },
 
   _prepareSorter: function() {
@@ -211,16 +222,9 @@ var Datagrid = Backbone.View.extend({
       perPage:     this.options.perPage
     });
 
-    this.pager.on('change:currentPage', function() {
-      this._page();
-    }, this);
+    this.pager.on('change:currentPage', this._page, this);
     this.pager.on('change:perPage', function() {
-      // Force rendering even if we already are on page 1
-      if (this.pager.get('currentPage') === 1) {
-        this.pager.trigger('change:currentPage');
-      } else {
-        this.page(1);
-      }
+      this.page(1);
     }, this);
   },
 
@@ -551,7 +555,8 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
 
   page: function(page) {
     if (this.inBounds(page)) {
-      this.set('currentPage', page);
+      this.set('currentPage', page, {silent: true});
+      this.trigger('change:currentPage');
     }
   },
 

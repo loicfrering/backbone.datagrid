@@ -59,8 +59,8 @@ collections in a dynamic datagrid table. It is highly customizable and
 configurable with sensible defaults.
 
 </p>
-<p>You can refer to the project&#39;s website for a nice HTML documentation:
-<a href="http://loicfrering.github.com/backbone.datagrid/">http://loicfrering.github.com/backbone.datagrid/</a>.
+<p>You can refer to the <a href="http://loicfrering.github.com/backbone.datagrid/">project&#39;s website</a>
+for a nice HTML documentation.
 
 </p>
 <p><a href="http://travis-ci.org/loicfrering/backbone.datagrid"><img src="https://secure.travis-ci.org/loicfrering/backbone.datagrid.png" alt="Build Status"></a>
@@ -73,8 +73,8 @@ downloaded directly via one of the following links:
 
 </p>
 <ul>
-<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.0/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.3.0)</a>.</li>
-<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.0/dist/backbone.datagrid.js">backbone.datagrid.js (v0.3.0)</a>.</li>
+<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.1/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.3.1)</a>.</li>
+<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.1/dist/backbone.datagrid.js">backbone.datagrid.js (v0.3.1)</a>.</li>
 </ul>
 <h2>Getting started</h2>
 <h3>Usage</h3>
@@ -86,7 +86,7 @@ the resulting element to your document:
 <span class="keyword">var</span> datagrid = <span class="keyword">new</span> Backbone.Datagrid({
   collection: myCollection
 });
-$(<span class="string">'#datagrid'</span>).html(datagrid.render().el);</code></pre>
+$(<span class="string">'#datagrid'</span>).html(datagrid.el);</code></pre>
 <h3>Examples</h3>
 <p>You will find all the examples listed on <a href="http://loicfrering.github.com/backbone.datagrid/examples/">this page</a>. Their sources
 are available in the <a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples/">examples</a>
@@ -622,6 +622,12 @@ backbone.datagrid:
 </li>
 </ol>
 <h2>Changelog</h2>
+<h3>0.3.1</h3>
+<ul>
+<li>Datagrid is now responsible for rendering itself.</li>
+<li>Improve GitHub example: an input field allows to enter the username.</li>
+<li>Bug fixes in datagrid&#39;s preparation.</li>
+</ul>
 <h3>0.3.0</h3>
 <ul>
 <li>Support server API with request based pagination and sorting.</li>
