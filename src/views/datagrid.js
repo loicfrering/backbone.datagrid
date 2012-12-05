@@ -54,6 +54,14 @@ var Datagrid = Backbone.View.extend({
     this.$('tbody').append(row.render(this.columns).el);
   },
 
+  refresh: function() {
+    if (this.options.inMemory) {
+      this.collection.trigger('reset', this.collection);
+    } else {
+      this._request();
+    }
+  },
+
   sort: function(column, order) {
     this.sorter.sort(column, order);
   },
@@ -124,7 +132,9 @@ var Datagrid = Backbone.View.extend({
       if (success) {
         success();
       }
-      this.pager.update(collection);
+      if (this.options.paginated) {
+        this.pager.update(collection);
+      }
       if (!silent) {
         collection.trigger('reset', collection);
       }
@@ -146,12 +156,14 @@ var Datagrid = Backbone.View.extend({
         data[param] = value;
       }, this);
       return data;
+    } else if (this.options.paginated) {
+      return {
+        page:     this.pager.get('currentPage'),
+        per_page: this.pager.get('perPage')
+      };
     }
 
-    return {
-      page:     this.pager.get('currentPage'),
-      per_page: this.pager.get('perPage')
-    };
+    return {};
   },
 
   _pageInMemory: function(options) {
@@ -178,11 +190,11 @@ var Datagrid = Backbone.View.extend({
     if (this.options.paginated) {
       this._preparePager();
       this._page({
-        //silent: true,
         success: _.bind(this._prepareColumns, this)
       });
     } else {
       this._prepareColumns();
+      this.refresh();
     }
   },
 

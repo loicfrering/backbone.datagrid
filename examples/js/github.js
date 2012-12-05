@@ -58,7 +58,7 @@
     ]
   });
 
-  $datagrid.append(datagrid.$el);
+  $datagrid.append(datagrid.el);
   repositories.on('reset', function() {
     $progress.hide();
     $datagrid.show();

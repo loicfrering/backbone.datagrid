@@ -6,8 +6,8 @@ powerful component, based on Backbone.View, that displays your Backbone
 collections in a dynamic datagrid table. It is highly customizable and
 configurable with sensible defaults.
 
-You can refer to the project's website for a nice HTML documentation:
-http://loicfrering.github.com/backbone.datagrid/.
+You can refer to the [project's website](http://loicfrering.github.com/backbone.datagrid/)
+for a nice HTML documentation.
 
 [![Build Status](https://secure.travis-ci.org/loicfrering/backbone.datagrid.png)](http://travis-ci.org/loicfrering/backbone.datagrid)
 
@@ -34,7 +34,7 @@ var myCollection = new MyCollection();
 var datagrid = new Backbone.Datagrid({
   collection: myCollection
 });
-$('#datagrid').html(datagrid.render().el);
+$('#datagrid').html(datagrid.el);
 ```
 
 ### Examples

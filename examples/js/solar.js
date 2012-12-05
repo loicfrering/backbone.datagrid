@@ -106,7 +106,7 @@
     }]
   });
 
-  datagrid1.render().$el.appendTo('#datagrid');
-  datagrid2.render().$el.appendTo('#datagrid');
+  datagrid1.$el.appendTo('#datagrid');
+  datagrid2.$el.appendTo('#datagrid');
 
 })(Backbone);

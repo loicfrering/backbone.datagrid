@@ -3,7 +3,7 @@ describe('Datagrid', function() {
     var datagrid;
 
     beforeEach(function() {
-      datagrid = new Datagrid({collection: new Backbone.Collection()});
+      datagrid = new Datagrid({collection: new Backbone.Collection(), inMemory: true});
     });
 
     it('should have div as tagName', function() {
@@ -46,7 +46,7 @@ describe('Datagrid', function() {
 
     beforeEach(function() {
       var collection = new Backbone.Collection({col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4'});
-      datagrid       = new Datagrid({collection: collection});
+      datagrid       = new Datagrid({collection: collection, inMemory: true});
     });
 
     it('should set to default all columns if no definition has been passed', function() {
