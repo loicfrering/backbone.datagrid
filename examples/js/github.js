@@ -59,6 +59,10 @@
   });
 
   $datagrid.append(datagrid.$el);
+  repositories.on('reset', function() {
+    $progress.hide();
+    $datagrid.show();
+  });
 
   $('form').submit(function() {
     repositories.user = $('input').val();
@@ -66,10 +70,6 @@
     $progress.show();
     $datagrid.hide();
     datagrid.page(1);
-    datagrid._page({success: function() {
-      $progress.hide();
-      $datagrid.show();
-    }});
     return false;
   });
 

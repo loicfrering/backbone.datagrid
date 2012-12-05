@@ -78,12 +78,7 @@ var Datagrid = Backbone.View.extend({
     if (this.options.paginated) {
       this._originalCollection.comparator = _.bind(this._comparator, this);
       this._originalCollection.sort();
-      // Force rendering even if we already are on page 1
-      if (this.pager.get('currentPage') === 1) {
-        this.pager.trigger('change:currentPage');
-      } else {
-        this.page(1);
-      }
+      this.page(1);
     } else {
       this.collection.comparator = _.bind(this._comparator, this);
       this.collection.sort();
@@ -204,16 +199,9 @@ var Datagrid = Backbone.View.extend({
       perPage:     this.options.perPage
     });
 
-    this.pager.on('change:currentPage', function() {
-      this._page();
-    }, this);
+    this.pager.on('change:currentPage', this._page, this);
     this.pager.on('change:perPage', function() {
-      // Force rendering even if we already are on page 1
-      if (this.pager.get('currentPage') === 1) {
-        this.pager.trigger('change:currentPage');
-      } else {
-        this.page(1);
-      }
+      this.page(1);
     }, this);
   },
 

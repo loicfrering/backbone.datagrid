@@ -26,7 +26,8 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
 
   page: function(page) {
     if (this.inBounds(page)) {
-      this.set('currentPage', page);
+      this.set('currentPage', page, {silent: true});
+      this.trigger('change:currentPage');
     }
   },
 
