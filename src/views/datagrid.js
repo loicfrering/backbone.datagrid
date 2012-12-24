@@ -215,7 +215,9 @@ var Datagrid = Backbone.View.extend({
       perPage:     this.options.perPage
     });
 
-    this.pager.on('change:currentPage', this._page, this);
+    this.pager.on('change:currentPage', function () {
+      this._page();
+    }, this);
     this.pager.on('change:perPage', function() {
       this.page(1);
     }, this);
