@@ -570,6 +570,10 @@ backbone.datagrid:
 Changelog
 ---------
 
+### 0.3.2
+
+* Fix an issue that caused useless Ajax calls.
+
 ### 0.3.1
 
 * Datagrid is now responsible for rendering itself.
