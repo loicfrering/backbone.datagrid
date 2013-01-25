@@ -253,12 +253,19 @@ pagination for the datagrid.
 
 #### datagrid.page(page)
 
-Go to the specified page. Delegates to `datagrid.pager.page(page)`.
+Go to the specified page. Delegates to:
+
+```javascript
+datagrid.pager.page(page);
+```
 
 #### datagrid.perPage(perPage)
 
-Set the number of items displayed per page. Delegates to
-`datagrid.pager.perPage(perPage)`.
+Set the number of items displayed per page. Delegates to:
+
+```javascript
+datagrid.pager.perPage(perPage);
+```
 
 #### datagrid.pager.next()
 
