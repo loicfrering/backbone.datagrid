@@ -5,7 +5,8 @@ var Datagrid = Backbone.View.extend({
       paginated:      false,
       page:           1,
       perPage:        10,
-      tableClassName: 'table'
+      tableClassName: 'table',
+      emptyMessage:   '<p>No results found.</p>'
     });
 
     this.collection.on('reset', this.render, this);
@@ -31,7 +32,11 @@ var Datagrid = Backbone.View.extend({
 
     $table.append('<tbody></tbody>');
 
-    this.collection.forEach(this.renderRow, this);
+    if (this.collection.isEmpty()) {
+      this.$el.append(this.options.emptyMessage);
+    } else {
+      this.collection.forEach(this.renderRow, this);
+    }
   },
 
   renderPagination: function() {

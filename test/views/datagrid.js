@@ -22,6 +22,10 @@ describe('Datagrid', function() {
       datagrid.options.tableClassName.should.equal('table');
     });
 
+    it('should default emptyMessage option to "No results found."', function() {
+      datagrid.options.emptyMessage.should.equal('<p>No results found.</p>');
+    });
+
     it('should throw an error when perPage is less than 1', function() {
       (function() {
         datagrid = new Datagrid({
@@ -339,5 +343,23 @@ describe('Datagrid', function() {
         {foo: 'bar2', rank: 'fifth'}
       ]);
     });
+  });
+
+  describe('rendering', function() {
+    var datagrid;
+
+    it('should display an empty message when the collection is empty', function() {
+      datagrid = new Datagrid({
+        collection: new Backbone.Collection(),
+        inMemory: true,
+        emptyMessage: '<p>There are no foos</p>'
+      });
+
+      datagrid.render();
+
+      datagrid.$('table tbody tr').size().should.equal(0);
+      datagrid.$el.html().should.contain('<p>There are no foos</p>');
+    });
+
   });
 });
