@@ -151,6 +151,11 @@ with class names space-separated or a computed string by passing a callback
 function. The callback function will be called with the model associated to the
 current row.
 
+### emptyMessage
+
+A nice message to display when the datagrid is empty. Defaults to `<p>No
+results found.</p>`.
+
 ### columns
 
 The columns definitions, see the dedicated section below.
@@ -580,6 +585,7 @@ Changelog
 ### 0.3.2
 
 * Fix an issue that caused useless Ajax calls.
+* Display a nice message when the datagrid is empty.
 
 ### 0.3.1
 
