@@ -66,6 +66,15 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
     return !this.hasTotal() || page > 0 && page <= this.get('totalPages');
   },
 
+  set: function() {
+    var args = [];
+    for (var i = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    args[2] = _.extend({}, args[2], {validate: true});
+    Backbone.Model.prototype.set.apply(this, args);
+  },
+
   validate: function(attrs) {
     if (attrs.perPage < 1) {
       throw new Error('perPage must be greater than zero.');
