@@ -77,8 +77,8 @@ downloaded directly via one of the following links:
 
 </p>
 <ul>
-<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.1/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.3.1)</a>.</li>
-<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.1/dist/backbone.datagrid.js">backbone.datagrid.js (v0.3.1)</a>.</li>
+<li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.2/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.3.2)</a>.</li>
+<li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.2/dist/backbone.datagrid.js">backbone.datagrid.js (v0.3.2)</a>.</li>
 </ul>
 <h2>Getting started</h2>
 <h3>Usage</h3>
@@ -216,6 +216,11 @@ Otherwise use REST requests.
 with class names space-separated or a computed string by passing a callback
 function. The callback function will be called with the model associated to the
 current row.
+
+</p>
+<h3>emptyMessage</h3>
+<p>A nice message to display when the datagrid is empty. Defaults to <code>&lt;p&gt;No
+results found.&lt;/p&gt;</code>.
 
 </p>
 <h3>columns</h3>
@@ -627,6 +632,14 @@ backbone.datagrid:
 </li>
 </ol>
 <h2>Changelog</h2>
+<h3>0.3.2</h3>
+<ul>
+<li>Fix an issue that caused useless Ajax calls.</li>
+<li>Display a nice message when the datagrid is empty.</li>
+<li>Support Backbone 0.9.10.</li>
+<li>Bower support: backbone.datagrid is now a Bower package and can be installed
+via <code>bower install backbone.datagrid</code>.</li>
+</ul>
 <h3>0.3.1</h3>
 <ul>
 <li>Datagrid is now responsible for rendering itself.</li>

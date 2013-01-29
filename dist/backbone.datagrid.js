@@ -1,4 +1,4 @@
-// backbone.datagrid v0.3.1
+// backbone.datagrid v0.3.2
 //
 // Copyright (c) 2012 Loïc Frering <loic.frering@gmail.com>
 // Distributed under the MIT license
@@ -12,7 +12,8 @@ var Datagrid = Backbone.View.extend({
       paginated:      false,
       page:           1,
       perPage:        10,
-      tableClassName: 'table'
+      tableClassName: 'table',
+      emptyMessage:   '<p>No results found.</p>'
     });
 
     this.collection.on('reset', this.render, this);
@@ -38,7 +39,11 @@ var Datagrid = Backbone.View.extend({
 
     $table.append('<tbody></tbody>');
 
-    this.collection.forEach(this.renderRow, this);
+    if (this.collection.isEmpty()) {
+      this.$el.append(this.options.emptyMessage);
+    } else {
+      this.collection.forEach(this.renderRow, this);
+    }
   },
 
   renderPagination: function() {
@@ -222,7 +227,9 @@ var Datagrid = Backbone.View.extend({
       perPage:     this.options.perPage
     });
 
-    this.pager.on('change:currentPage', this._page, this);
+    this.pager.on('change:currentPage', function () {
+      this._page();
+    }, this);
     this.pager.on('change:perPage', function() {
       this.page(1);
     }, this);
@@ -555,8 +562,11 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
 
   page: function(page) {
     if (this.inBounds(page)) {
-      this.set('currentPage', page, {silent: true});
-      this.trigger('change:currentPage');
+      if (page === this.get('currentPage')) {
+        this.trigger('change:currentPage');
+      } else {
+        this.set('currentPage', page);
+      }
     }
   },
 
@@ -590,6 +600,15 @@ var Pager = Datagrid.Pager = Backbone.Model.extend({
 
   inBounds: function(page) {
     return !this.hasTotal() || page > 0 && page <= this.get('totalPages');
+  },
+
+  set: function() {
+    var args = [];
+    for (var i = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    args[2] = _.extend({}, args[2], {validate: true});
+    Backbone.Model.prototype.set.apply(this, args);
   },
 
   validate: function(attrs) {

@@ -18,8 +18,8 @@ The raw sources can be navigated on [GitHub](https://github.com/loicfrering/back
 The distributed sources can be found in the `dist/` directory or
 downloaded directly via one of the following links:
 
-* Production minified version: [backbone.datagrid.min.js (v0.3.1)](https://raw.github.com/loicfrering/backbone.datagrid/v0.3.1/dist/backbone.datagrid.min.js).
-* Development version: [backbone.datagrid.js (v0.3.1)](https://raw.github.com/loicfrering/backbone.datagrid/v0.3.1/dist/backbone.datagrid.js).
+* Production minified version: [backbone.datagrid.min.js (v0.3.2)](https://raw.github.com/loicfrering/backbone.datagrid/v0.3.2/dist/backbone.datagrid.min.js).
+* Development version: [backbone.datagrid.js (v0.3.2)](https://raw.github.com/loicfrering/backbone.datagrid/v0.3.2/dist/backbone.datagrid.js).
 
 Getting started
 ---------------
@@ -586,6 +586,7 @@ Changelog
 
 * Fix an issue that caused useless Ajax calls.
 * Display a nice message when the datagrid is empty.
+* Support Backbone 0.9.10.
 * Bower support: backbone.datagrid is now a Bower package and can be installed
   via `bower install backbone.datagrid`.
 
