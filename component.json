@@ -1,0 +1,8 @@
+{
+  "name": "backbone.datagrid",
+  "version": "0.3.1",
+  "main": "dist/backbone.datagrid.min.js",
+  "dependencies": {
+    "backbone": "~0.9.9"
+  }
+}

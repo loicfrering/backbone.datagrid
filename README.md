@@ -586,6 +586,8 @@ Changelog
 
 * Fix an issue that caused useless Ajax calls.
 * Display a nice message when the datagrid is empty.
+* Bower support: backbone.datagrid is now a Bower package and can be installed
+  via `bower install backbone.datagrid`.
 
 ### 0.3.1
 
