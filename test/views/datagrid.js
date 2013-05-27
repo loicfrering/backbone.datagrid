@@ -377,14 +377,14 @@ describe('Datagrid', function() {
         inMemory: true,
       });
 
-      datagrid.$el.html().should.not.contain('val21')
+      datagrid.$el.html().should.not.contain('val21');
 
       collection.reset([
           {col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4'},
           {col1: 'val21', col2: 'val22', col3: 'val23', col4: 'val24'}
       ]);
 
-      datagrid.$el.html().should.contain('val21')
+      datagrid.$el.html().should.contain('val21');
 
     });
 
@@ -402,7 +402,24 @@ describe('Datagrid', function() {
           {col1: 'val21', col2: 'val22', col3: 'val23', col4: 'val24'}
       ]);
 
-      datagrid.$el.html().should.contain('val21')
+      datagrid.$el.html().should.contain('val21');
+
+    });
+
+    it('should remove the a row when removing a model from the collection', function() {
+      collection.reset([
+          {col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4'},
+          {col1: 'val21', col2: 'val22', col3: 'val23', col4: 'val24'}
+      ]);
+
+      datagrid = new Datagrid({
+        collection: collection,
+        inMemory: true,
+      });
+
+      collection.pop();
+
+      datagrid.$el.html().should.not.contain('val21');
 
     });
 
