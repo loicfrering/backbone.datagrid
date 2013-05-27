@@ -10,6 +10,7 @@ var Datagrid = Backbone.View.extend({
     });
 
     this.collection.on('reset', this.render, this);
+    this.collection.on('add', this.renderRow, this);
     this._prepare();
   },
 
