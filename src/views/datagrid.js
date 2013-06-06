@@ -9,6 +9,8 @@ var Datagrid = Backbone.View.extend({
       emptyMessage:   '<p>No results found.</p>'
     });
 
+    this.subviews = [];
+
     this.listenTo(this.collection, 'add remove reset', this.render);
     this._prepare();
   },
@@ -29,6 +31,7 @@ var Datagrid = Backbone.View.extend({
 
     var header = new Header({columns: this.columns, sorter: this.sorter});
     $table.append(header.render().el);
+    this.subviews.push(header);
 
     $table.append('<tbody></tbody>');
 
@@ -42,6 +45,7 @@ var Datagrid = Backbone.View.extend({
   renderPagination: function() {
     var pagination = new Pagination({pager: this.pager});
     this.$el.append(pagination.render().el);
+    this.subviews.push(pagination);
   },
 
   renderRow: function(model) {
@@ -57,6 +61,7 @@ var Datagrid = Backbone.View.extend({
 
     var row = new Row(options);
     this.$('tbody').append(row.render(this.columns).el);
+    this.subviews.push(row);
   },
 
   refresh: function(options) {
@@ -84,6 +89,17 @@ var Datagrid = Backbone.View.extend({
 
   perPage: function(perPage) {
     this.pager.set('perPage', perPage);
+  },
+
+  remove: function() {
+    Datagrid.__super__.remove.call(this);
+
+    _.each(this.subviews, function(subview) {
+      subview.remove();
+    });
+    this.pager.off();
+
+    return this;
   },
 
   _sort: function() {
