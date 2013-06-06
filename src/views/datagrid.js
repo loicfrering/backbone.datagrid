@@ -9,9 +9,7 @@ var Datagrid = Backbone.View.extend({
       emptyMessage:   '<p>No results found.</p>'
     });
 
-    this.collection.on('reset', this.render, this);
-    this.collection.on('add', this.renderRow, this);
-    this.collection.on('remove', this.render, this);
+    this.listenTo(this.collection, 'add remove reset', this.render);
     this._prepare();
   },
 
