@@ -3,7 +3,7 @@ var Row = Datagrid.Row = Backbone.View.extend({
 
   initialize: function() {
     this.columns = this.options.columns;
-    this.model.on('change', this.render, this);
+    this.listenTo(this.model, 'change', this.render);
   },
 
   render: function() {

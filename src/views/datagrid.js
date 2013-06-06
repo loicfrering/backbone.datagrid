@@ -209,9 +209,9 @@ var Datagrid = Backbone.View.extend({
 
   _prepareSorter: function() {
     this.sorter = new Sorter();
-    this.sorter.on('change', function() {
+    this.listenTo(this.sorter, 'change', function() {
       this._sort(this.sorter.get('column'), this.sorter.get('order'));
-    }, this);
+    });
   },
 
   _preparePager: function() {
@@ -220,12 +220,12 @@ var Datagrid = Backbone.View.extend({
       perPage:     this.options.perPage
     });
 
-    this.pager.on('change:currentPage', function () {
+    this.listenTo(this.pager, 'change:currentPage', function () {
       this._page();
-    }, this);
-    this.pager.on('change:perPage', function() {
+    });
+    this.listenTo(this.pager, 'change:perPage', function() {
       this.page(1);
-    }, this);
+    });
   },
 
   _prepareColumns: function() {
