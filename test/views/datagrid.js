@@ -424,4 +424,24 @@ describe('Datagrid', function() {
     });
 
   });
+
+  describe('requests', function() {
+    var FakeCollection = Backbone.Collection.extend({
+      fetch: function(options){
+        // fake fetch action and store used options
+        this.fetch_options = options;
+      }
+    });
+
+    it('should allow extra filters', function() {
+      datagrid = new Datagrid({collection: new FakeCollection()});
+      datagrid.refresh({
+        data: {
+          some_parametter: 'some_value'
+        }
+      });
+      datagrid.collection.fetch_options.data.should.have.property('some_parametter');
+      datagrid.collection.fetch_options.data.some_parametter.should.equal('some_value');
+    });
+  });
 });
