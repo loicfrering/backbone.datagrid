@@ -9,6 +9,12 @@ var Datagrid = Backbone.View.extend({
       emptyMessage:   '<p>No results found.</p>'
     });
 
+    if (this.options.paginated && !this.options.footerControls) {
+      this.options.footerControls = {
+        middle: Pagination
+      };
+    }
+
     this.subviews = [];
 
     this.listenTo(this.collection, 'add remove reset', this.render);
@@ -17,12 +23,23 @@ var Datagrid = Backbone.View.extend({
 
   render: function() {
     this.$el.empty();
+    this.renderHeader();
     this.renderTable();
-    if (this.options.paginated) {
+    this.renderFooter();
+    /*if (this.options.paginated) {
       this.renderPagination();
-    }
+    }*/
 
     return this;
+  },
+
+  renderHeader: function() {
+    if (this.options.headerControls) {
+      var options = _.extend({pager: this.pager}, this.options.headerControls);
+      var headerControls = new Controls(options);
+      this.$el.append(headerControls.render().el);
+      this.subviews.push(headerControls);
+    }
   },
 
   renderTable: function() {
@@ -39,6 +56,15 @@ var Datagrid = Backbone.View.extend({
       this.$el.append(this.options.emptyMessage);
     } else {
       this.collection.forEach(this.renderRow, this);
+    }
+  },
+
+  renderFooter: function() {
+    if (this.options.footerControls) {
+      var options = _.extend({pager: this.pager}, this.options.footerControls);
+      var footerControls = new Controls(options);
+      this.$el.append(footerControls.render().el);
+      this.subviews.push(footerControls);
     }
   },
 

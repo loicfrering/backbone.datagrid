@@ -36,7 +36,7 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
     }
     $ul.append($li);
 
-    this.$el.append($ul);
+    this.$el.html($ul);
     return this;
   },
 
