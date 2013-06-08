@@ -8,6 +8,9 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
 
   initialize: function() {
     this.pager = this.options.pager;
+    this.options = _.defaults(this.options, {
+      full: true
+    });
   },
 
   render: function() {
@@ -19,7 +22,7 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
     }
     $ul.append($li);
 
-    if (this.pager.hasTotal()) {
+    if (this.options.full && this.pager.hasTotal()) {
       for (var i = 1; i <= this.pager.get('totalPages'); i++) {
         $li = $('<li></li>');
         if (i === this.pager.get('currentPage')) {
