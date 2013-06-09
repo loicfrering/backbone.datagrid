@@ -180,8 +180,9 @@ var Datagrid = Backbone.View.extend({
     options     = options || {};
     var success = options.success;
     var silent  = options.silent;
+    var data    = options.data || {};
 
-    options.data = this._getRequestData();
+    options.data = _.extend(data, this._getRequestData());
     options.success = _.bind(function(collection) {
       if (!this.columns || _.isEmpty(this.columns)) {
         this._prepareColumns();
