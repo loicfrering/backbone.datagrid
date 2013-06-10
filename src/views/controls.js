@@ -15,7 +15,9 @@ var Controls = Datagrid.Controls = Backbone.View.extend({
         return this[position];
       }, this)
       .each(function(position) {
-        this.$el.append(this[position].render().el);
+        $('<div></div>', {'class': 'control ' + position})
+          .append(this[position].render().el)
+          .appendTo(this.$el);
       }, this);
 
     return this;
