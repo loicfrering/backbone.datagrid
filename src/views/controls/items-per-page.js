@@ -1,10 +1,6 @@
-var ItemsPerPage = Datagrid.ItemsPerPage = Backbone.View.extend({
+var ItemsPerPage = Datagrid.ItemsPerPage = Control.extend({
   events: {
     change: 'perPage'
-  },
-
-  initialize: function() {
-    this.pager = this.options.pager;
   },
 
   render: function() {

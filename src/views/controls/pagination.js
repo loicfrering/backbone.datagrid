@@ -1,4 +1,4 @@
-var Pagination = Datagrid.Pagination = Backbone.View.extend({
+var Pagination = Datagrid.Pagination = Control.extend({
   className: 'pagination pagination-centered',
 
   events: {
@@ -7,7 +7,7 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
   },
 
   initialize: function() {
-    this.pager = this.options.pager;
+    Pagination.__super__.initialize.call(this);
     this.options = _.defaults(this.options, {
       full: true
     });
