@@ -44,20 +44,16 @@ var Datagrid = Backbone.View.extend({
   },
 
   renderTable: function() {
-    var $table = $('<table></table>', {'class': this.options.tableClassName});
-    this.$el.append($table);
+    var table = new Table({
+      collection:   this.collection,
+      columns:      this.columns,
+      sorter:       this.sorter,
+      emptyMessage: this.options.emptyMessage,
+      className:    this.options.tableClassName,
+      rowClassName: this.options.rowClassName
+    });
 
-    var header = new Header({columns: this.columns, sorter: this.sorter});
-    $table.append(header.render().el);
-    this.subviews.push(header);
-
-    $table.append('<tbody></tbody>');
-
-    if (this.collection.isEmpty()) {
-      this.$el.append(this.options.emptyMessage);
-    } else {
-      this.collection.forEach(this.renderRow, this);
-    }
+    this.$el.append(table.render().el);
   },
 
   renderFooter: function() {
@@ -73,22 +69,6 @@ var Datagrid = Backbone.View.extend({
     var pagination = new Pagination({pager: this.pager});
     this.$el.append(pagination.render().el);
     this.subviews.push(pagination);
-  },
-
-  renderRow: function(model) {
-    var options = {
-      model: model,
-      columns: this.columns
-    };
-    var rowClassName = this.options.rowClassName;
-    if (_.isFunction(rowClassName)) {
-      rowClassName = rowClassName(model);
-    }
-    options.className = rowClassName;
-
-    var row = new Row(options);
-    this.$('tbody').append(row.render(this.columns).el);
-    this.subviews.push(row);
   },
 
   refresh: function(options) {
