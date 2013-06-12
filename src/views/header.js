@@ -1,7 +1,8 @@
 var Header = Datagrid.Header = Backbone.View.extend({
   tagName: 'thead',
 
-  initialize: function() {
+  initialize: function(options) {
+    this.options = options;
     this.columns = this.options.columns;
     this.sorter  = this.options.sorter;
   },

@@ -1,6 +1,6 @@
 var CallbackCell = Datagrid.CallbackCell = Cell.extend({
   initialize: function() {
-    CallbackCell.__super__.initialize.call(this);
+    CallbackCell.__super__.initialize.apply(this, arguments);
     this.callback = this.options.callback;
   },
 

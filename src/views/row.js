@@ -1,7 +1,8 @@
 var Row = Datagrid.Row = Backbone.View.extend({
   tagName: 'tr',
 
-  initialize: function() {
+  initialize: function(options) {
+    this.options = options;
     this.columns = this.options.columns;
     this.listenTo(this.model, 'change', this.render);
   },

@@ -1,8 +1,9 @@
 var Cell = Datagrid.Cell = Backbone.View.extend({
   tagName: 'td',
 
-  initialize: function() {
-    this.column = this.options.column;
+  initialize: function(options) {
+    this.options = options;
+    this.column  = this.options.column;
   },
 
   render: function() {

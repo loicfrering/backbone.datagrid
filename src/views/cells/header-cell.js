@@ -1,6 +1,6 @@
 var HeaderCell = Datagrid.HeaderCell = Cell.extend({
   initialize: function() {
-    HeaderCell.__super__.initialize.call(this);
+    HeaderCell.__super__.initialize.apply(this, arguments);
 
     this.sorter = this.options.sorter;
 

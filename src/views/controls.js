@@ -1,6 +1,7 @@
 var Controls = Datagrid.Controls = Backbone.View.extend({
-  initialize: function() {
-    this.pager = this.options.pager;
+  initialize: function(options) {
+    this.options = options;
+    this.pager   = this.options.pager;
 
     this.left   = this._resolveView(this.options.left);
     this.middle = this._resolveView(this.options.middle);
