@@ -8,7 +8,7 @@ var Pagination = Datagrid.Pagination = Control.extend({
 
   initialize: function() {
     Pagination.__super__.initialize.apply(this, arguments);
-    this.options = _.defaults(this.options, {
+    _.defaults(this.options, {
       full: true
     });
   },

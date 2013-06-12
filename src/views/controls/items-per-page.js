@@ -3,12 +3,23 @@ var ItemsPerPage = Datagrid.ItemsPerPage = Control.extend({
     change: 'perPage'
   },
 
-  render: function() {
-    var $select = $('<select></select>'), i;
+  initialize: function() {
+    ItemsPerPage.__super__.initialize.apply(this, arguments);
 
-    for (i = 0; i < 4; i++) {
+    _.defaults(this.options, {
+      increment: this.pager.get('perPage'),
+      max:       4 * this.pager.get('perPage')
+    });
+  },
+
+  render: function() {
+    var $select   = $('<select></select>'), i,
+        increment = this.options.increment,
+        max       = this.options.max;
+
+    for (i = increment; i <= max; i += increment) {
       $option = $('<option></option>');
-      $option.html(10*i);
+      $option.html(i);
       $select.append($option);
     }
 

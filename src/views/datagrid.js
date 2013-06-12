@@ -2,7 +2,7 @@ var Datagrid = Backbone.View.extend({
   initialize: function(options) {
     this.options = options;
     this.columns = this.options.columns;
-    this.options = _.defaults(this.options, {
+    _.defaults(this.options, {
       paginated:      false,
       page:           1,
       perPage:        10,
