@@ -6,12 +6,14 @@ var Controls = Datagrid.Controls = Backbone.View.extend({
     this.left   = this._resolveView(this.options.left);
     this.middle = this._resolveView(this.options.middle);
     this.right  = this._resolveView(this.options.right);
+
+    this.subviews = [];
   },
 
   render: function() {
     _.each(this.subviews, function(subview) {
       subview.remove();
-    }
+    });
     this.$el.empty();
 
     _.chain(['left', 'middle', 'right'])
@@ -23,7 +25,7 @@ var Controls = Datagrid.Controls = Backbone.View.extend({
         $('<div></div>', {'class': 'control ' + position})
           .append(control.render().el)
           .appendTo(this.$el);
-        subviews.push(control);
+        this.subviews.push(control);
       }, this);
 
     return this;
