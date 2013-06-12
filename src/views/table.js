@@ -11,6 +11,10 @@ var Table = Datagrid.Table = Backbone.View.extend({
   },
 
   render: function() {
+    _.each(this.subviews, function(subview) {
+      subview.remove();
+    });
+
     var header = new Header({columns: this.columns, sorter: this.sorter});
     this.$el.append(header.render().el);
     this.subviews.push(header);

@@ -23,6 +23,9 @@ var Datagrid = Backbone.View.extend({
   },
 
   render: function() {
+    _.each(this.subviews, function(subview) {
+      subview.remove();
+    });
     this.$el.empty();
     this.renderHeader();
     this.renderTable();
@@ -54,6 +57,7 @@ var Datagrid = Backbone.View.extend({
     });
 
     this.$el.append(table.render().el);
+    this.subviews.push(table);
   },
 
   renderFooter: function() {
