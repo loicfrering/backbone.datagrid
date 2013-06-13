@@ -1,4 +1,4 @@
-var Table = Datagrid.Table = Backbone.View.extend({
+var Table = Datagrid.Table = ComposedView.extend({
   tagName: 'table',
 
   initialize: function(options) {
@@ -6,18 +6,14 @@ var Table = Datagrid.Table = Backbone.View.extend({
     this.collection = this.options.collection;
     this.columns    = this.options.columns;
     this.sorter     = this.options.sorter;
-
-    this.subviews = [];
   },
 
   render: function() {
-    _.each(this.subviews, function(subview) {
-      subview.remove();
-    });
+    this.removeNestedViews();
 
     var header = new Header({columns: this.columns, sorter: this.sorter});
     this.$el.append(header.render().el);
-    this.subviews.push(header);
+    this.addNestedView(header);
 
     this.$el.append('<tbody></tbody>');
 
@@ -43,16 +39,6 @@ var Table = Datagrid.Table = Backbone.View.extend({
 
     var row = new Row(options);
     this.$('tbody').append(row.render(this.columns).el);
-    this.subviews.push(row);
-  },
-
-  remove: function() {
-    Table.__super__.remove.call(this);
-
-    _.each(this.subviews, function(subview) {
-      subview.remove();
-    });
-
-    return this;
+    this.addNestedView(row);
   }
 });

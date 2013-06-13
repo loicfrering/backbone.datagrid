@@ -1,4 +1,4 @@
-var Controls = Datagrid.Controls = Backbone.View.extend({
+var Controls = Datagrid.Controls = ComposedView.extend({
   initialize: function(options) {
     this.options = options;
     this.pager   = this.options.pager;
@@ -6,15 +6,11 @@ var Controls = Datagrid.Controls = Backbone.View.extend({
     this.left   = this._resolveView(this.options.left);
     this.middle = this._resolveView(this.options.middle);
     this.right  = this._resolveView(this.options.right);
-
-    this.subviews = [];
   },
 
   render: function() {
-    _.each(this.subviews, function(subview) {
-      subview.remove();
-    });
     this.$el.empty();
+    this.removeNestedViews();
 
     _.chain(['left', 'middle', 'right'])
       .filter(function(position) {
@@ -25,18 +21,8 @@ var Controls = Datagrid.Controls = Backbone.View.extend({
         $('<div></div>', {'class': 'control ' + position})
           .append(control.render().el)
           .appendTo(this.$el);
-        this.subviews.push(control);
+        this.addNestedView(control);
       }, this);
-
-    return this;
-  },
-
-  remove: function() {
-    Datagrid.__super__.remove.call(this);
-
-    _.each(this.subviews, function(subview) {
-      subview.remove();
-    });
 
     return this;
   },

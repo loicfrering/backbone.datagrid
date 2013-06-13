@@ -1,4 +1,4 @@
-var Header = Datagrid.Header = Backbone.View.extend({
+var Header = Datagrid.Header = ComposedView.extend({
   tagName: 'thead',
 
   initialize: function(options) {
@@ -8,6 +8,8 @@ var Header = Datagrid.Header = Backbone.View.extend({
   },
 
   render: function() {
+    this.removeNestedViews();
+
     var model = new Backbone.Model();
     var headerColumn, columns = [];
     _.each(this.columns, function(column, i) {
@@ -24,6 +26,7 @@ var Header = Datagrid.Header = Backbone.View.extend({
 
     var row = new Row({model: model, columns: columns, header: true});
     this.$el.html(row.render().el);
+    this.addNestedView(row);
 
     return this;
   }

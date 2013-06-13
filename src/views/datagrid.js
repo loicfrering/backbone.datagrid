@@ -1,4 +1,4 @@
-var Datagrid = Backbone.View.extend({
+var Datagrid = ComposedView.extend({
   initialize: function(options) {
     this.options = options;
     this.columns = this.options.columns;
@@ -16,17 +16,14 @@ var Datagrid = Backbone.View.extend({
       };
     }
 
-    this.subviews = [];
-
     this.listenTo(this.collection, 'add remove reset', this.render);
     this._prepare();
   },
 
   render: function() {
-    _.each(this.subviews, function(subview) {
-      subview.remove();
-    });
     this.$el.empty();
+    this.removeNestedViews();
+
     this.renderHeader();
     this.renderTable();
     this.renderFooter();
@@ -42,7 +39,7 @@ var Datagrid = Backbone.View.extend({
       var options = _.extend({pager: this.pager}, this.options.headerControls);
       var headerControls = new Controls(options);
       this.$el.append(headerControls.render().el);
-      this.subviews.push(headerControls);
+      this.addNestedView(headerControls);
     }
   },
 
@@ -57,7 +54,7 @@ var Datagrid = Backbone.View.extend({
     });
 
     this.$el.append(table.render().el);
-    this.subviews.push(table);
+    this.addNestedView(table);
   },
 
   renderFooter: function() {
@@ -65,14 +62,14 @@ var Datagrid = Backbone.View.extend({
       var options = _.extend({pager: this.pager}, this.options.footerControls);
       var footerControls = new Controls(options);
       this.$el.append(footerControls.render().el);
-      this.subviews.push(footerControls);
+      this.addNestedView(footerControls);
     }
   },
 
   renderPagination: function() {
     var pagination = new Pagination({pager: this.pager});
     this.$el.append(pagination.render().el);
-    this.subviews.push(pagination);
+    this.addNestedView(pagination);
   },
 
   refresh: function(options) {
@@ -104,12 +101,7 @@ var Datagrid = Backbone.View.extend({
 
   remove: function() {
     Datagrid.__super__.remove.call(this);
-
-    _.each(this.subviews, function(subview) {
-      subview.remove();
-    });
     this.pager.off();
-
     return this;
   },
 
