@@ -5,6 +5,6 @@ var CallbackCell = Datagrid.CallbackCell = Cell.extend({
   },
 
   _prepareValue: function() {
-    this.value = this.callback(this.model.toJSON());
+    this.value = this.callback(this.model);
   }
 });

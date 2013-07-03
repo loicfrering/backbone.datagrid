@@ -36,13 +36,19 @@ describe('Row', function() {
       view.should.be.an.instanceof(Datagrid.Cell);
     });
 
+    it('should default render view from serialized model', function() {
+      var view = row._resolveCellView({property: 'foo'});
+      view.should.be.an.instanceof(Datagrid.Cell);
+      view.render().$el.html().should.contain('bar');
+    });
+
     it('should resolve to callback view with an underscore template function for a string', function() {
-      var view = row._resolveCellView({view: 'Hello <%= col1 %>'});
+      var view = row._resolveCellView({view: 'Hello <%= foo %>'});
 
       view.should.be.an.instanceof(Datagrid.CallbackCell)
         .and.have.a.property('callback')
           .that.is.a('function');
-      view.callback({col1: 'World'}).should.equal('Hello World');
+      view.render().$el.html().should.equal('Hello bar');
     });
 
     it('should resolve to callback view with the specified function for a function', function() {
@@ -52,6 +58,16 @@ describe('Row', function() {
         .and.have.a.property('callback')
           .that.is.a('function');
       view.callback().should.equal('Hello!');
+    });
+
+    it('should view model be passed as parameter when callback view is a function', function() {
+      var view = row._resolveCellView({view: function(model) { return model.get('foo'); }});
+
+      view.should.be.an.instanceof(Datagrid.CallbackCell)
+        .and.have.a.property('callback')
+          .that.is.a('function');
+
+      view.render().$el.html().should.contain('bar');
     });
 
     it('should throw an error for an invalid non-custom view', function() {

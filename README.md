@@ -222,7 +222,7 @@ You can pass an [Underscore template](http://underscorejs.org/#template) as a
 string, it will be compiled and executed with the `model.toJSON()` as context.
 
 You can also pass a callback function. It will be called with the current row's
-model and the return value will be displayed in the cell.
+model (the Backbone full model) and the return value will be displayed in the cell.
 
 You can finally pass an object to use one of the specific views provided or a
 custom view. This object must have a type property which refers to view's type

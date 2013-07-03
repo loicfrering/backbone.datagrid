@@ -28,7 +28,7 @@ module.exports = function(grunt) {
           'src/intro.js',
           'src/views/datagrid.js',
           'src/views/header.js', 'src/views/row.js', 'src/views/pagination.js',
-          'src/views/cells/cell.js', 'src/views/cells/callback-cell.js', 'src/views/cells/action-cell.js', 'src/views/cells/header-cell.js',
+          'src/views/cells/cell.js', 'src/views/cells/callback-cell.js', 'src/views/cells/action-cell.js', 'src/views/cells/header-cell.js', 'src/views/cells/template-cell.js',
           'src/models/pager.js', 'src/models/sorter.js',
           'src/outro.js'
         ],
