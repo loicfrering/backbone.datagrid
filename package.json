@@ -21,8 +21,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.3",
-    "grunt-mocha": "~0.1",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-mocha": "~0.3.4",
     "marked": "~0.2",
     "highlight.js": "~7"
   },

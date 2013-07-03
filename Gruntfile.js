@@ -1,3 +1,4 @@
+/* jshint scripturl: true */
 module.exports = function(grunt) {
 
   var marked = require('marked');
@@ -5,29 +6,39 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    pkg: '<json:package.json>',
+    pkg: grunt.file.readJSON('package.json'),
     meta: {
       banner: '// <%= pkg.name %> v<%= pkg.version %>\n' +
               '//\n' +
               '// Copyright (c) 2012 <%= pkg.author %>\n' +
-              '// Distributed under the <%= pkg.license %> license'
+              '// Distributed under the <%= pkg.license %> license\n'
     },
-    lint: {
-      grunt: 'grunt.js',
+    jshint: {
+      grunt: 'Gruntfile.js',
       src:   'src/**/!(intro|outro).js',
       dist:  'dist/<%= pkg.name %>.js'
     },
     mocha: {
-      src:  'test/index.html',
-      dist: 'test/dist.html'
+      src: {
+        src: 'test/index.html',
+        options: {run: true}
+      },
+      dist: {
+        src: 'test/dist.html',
+        options: {run: true}
+      }
     },
     concat: {
+      options: {
+        banner: '<%= meta.banner %>'
+      },
       dist: {
         src: [
-          '<banner>',
           'src/intro.js',
+          'src/views/composed.js',
           'src/views/datagrid.js',
-          'src/views/header.js', 'src/views/row.js', 'src/views/pagination.js',
+          'src/views/table.js', 'src/views/header.js', 'src/views/row.js', 'src/views/controls.js',
+          'src/views/controls/control.js', 'src/views/controls/pagination.js', 'src/views/controls/items-per-page.js',
           'src/views/cells/cell.js', 'src/views/cells/callback-cell.js', 'src/views/cells/action-cell.js', 'src/views/cells/header-cell.js', 'src/views/cells/template-cell.js',
           'src/models/pager.js', 'src/models/sorter.js',
           'src/outro.js'
@@ -35,7 +46,10 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
-    min: {
+    uglify: {
+      options: {
+        banner: '<%= meta.banner %>'
+      },
       dist: {
         src: ['<banner>', 'dist/<%= pkg.name %>.js'],
         dest: 'dist/<%= pkg.name %>.min.js'
@@ -44,6 +58,9 @@ module.exports = function(grunt) {
   });
 
   // Grunt plugins.
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mocha');
 
   // Custom site task.
@@ -60,13 +77,13 @@ module.exports = function(grunt) {
       }
     });
 
-    html = grunt.template.process(template, {content: html});
+    html = grunt.template.process(template, {data: {content: html}});
     grunt.file.write('index.html', html);
     grunt.log.writeln('File "index.html" created.');
   });
 
   // Default task and aliases.
-  grunt.registerTask('test', 'lint:grunt lint:src mocha:src');
-  grunt.registerTask('dist', 'concat lint:dist min mocha:dist');
-  grunt.registerTask('default', 'test dist site');
+  grunt.registerTask('test', ['jshint:grunt', 'jshint:src', 'mocha:src']);
+  grunt.registerTask('dist', ['concat', 'jshint:dist', 'uglify', 'mocha:dist']);
+  grunt.registerTask('default', ['test', 'dist', 'site']);
 };

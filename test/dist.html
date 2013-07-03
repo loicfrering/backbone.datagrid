@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>backbone.datagrid tests</title>
@@ -20,8 +21,6 @@
       var should = chai.should();
     </script>
 
-    <script src="../node_modules/grunt-mocha/tasks/mocha/mocha-helper.js"></script>
-
     <script src="views/datagrid.js"></script>
     <script src="views/row.js"></script>
     <script src="views/header-cell.js"></script>
@@ -30,9 +29,7 @@
     <script>
       window.Datagrid = Backbone.Datagrid;
 
-      if (window.mochaPhantomJS) {
-        mochaPhantomJS.run();
-      } else {
+      if (!window.PHANTOMJS) {
         mocha.run();
       }
     </script>
