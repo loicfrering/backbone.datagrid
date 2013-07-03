@@ -434,7 +434,7 @@ describe('Datagrid', function() {
     });
 
     it('should allow extra filters', function() {
-      datagrid = new Datagrid({collection: new FakeCollection()});
+      var datagrid = new Datagrid({collection: new FakeCollection()});
       datagrid.refresh({
         data: {
           some_parametter: 'some_value'
