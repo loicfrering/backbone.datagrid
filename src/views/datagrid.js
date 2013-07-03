@@ -176,6 +176,7 @@ var Datagrid = ComposedView.extend({
       }
     }, this);
     options.silent = true;
+    options.reset  = true;
 
     this.collection.fetch(options);
   },
