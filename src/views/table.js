@@ -5,10 +5,14 @@ var Table = Datagrid.Table = ComposedView.extend({
     this.options    = options;
     this.collection = this.options.collection;
     this.columns    = this.options.columns;
+    this.pager      = this.options.pager;
     this.sorter     = this.options.sorter;
+
+    this.listenTo(this.collection, 'reset', this.render);
   },
 
   render: function() {
+    this.$el.empty();
     this.removeNestedViews();
 
     var header = new Header({columns: this.columns, sorter: this.sorter});

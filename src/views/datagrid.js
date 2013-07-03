@@ -16,7 +16,7 @@ var Datagrid = ComposedView.extend({
       };
     }
 
-    this.listenTo(this.collection, 'add remove reset', this.render);
+    this.listenTo(this.collection, 'add remove', this.render);
     this._prepare();
   },
 
@@ -47,6 +47,7 @@ var Datagrid = ComposedView.extend({
     var table = new Table({
       collection:   this.collection,
       columns:      this.columns,
+      pager:        this.pager,
       sorter:       this.sorter,
       emptyMessage: this.options.emptyMessage,
       className:    this.options.tableClassName,

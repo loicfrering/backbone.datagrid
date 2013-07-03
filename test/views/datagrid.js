@@ -377,7 +377,7 @@ describe('Datagrid', function() {
         inMemory: true,
       });
 
-      datagrid.$el.html().should.not.contain('val21');
+      datagrid.render().$el.html().should.not.contain('val21');
 
       collection.reset([
           {col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4'},
@@ -434,7 +434,7 @@ describe('Datagrid', function() {
     });
 
     it('should allow extra filters', function() {
-      datagrid = new Datagrid({collection: new FakeCollection()});
+      var datagrid = new Datagrid({collection: new FakeCollection()});
       datagrid.refresh({
         data: {
           some_parametter: 'some_value'

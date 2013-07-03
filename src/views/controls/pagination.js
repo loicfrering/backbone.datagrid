@@ -11,6 +11,8 @@ var Pagination = Datagrid.Pagination = Control.extend({
     _.defaults(this.options, {
       full: true
     });
+
+    this.listenTo(this.pager, 'change', this.render);
   },
 
   render: function() {
