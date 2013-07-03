@@ -49,7 +49,7 @@
         sortable:       true,
         sortedProperty: 'pushed',
         view: function(repo) {
-          return new Date(repo.pushed_at).toLocaleDateString();
+          return new Date(repo.get('pushed_at')).toLocaleDateString();
         }
       }, {
         property: 'html_url',

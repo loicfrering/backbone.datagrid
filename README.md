@@ -582,6 +582,10 @@ backbone.datagrid:
 Changelog
 ---------
 
+### 0.3.3
+
+* Change behaviour of CallbackCell: Backbone model is passed as function parameter instead of JSON version (see issue #23)[https://github.com/loicfrering/backbone.datagrid/issues/24]
+
 ### 0.3.2
 
 * Fix an issue that caused useless Ajax calls.
