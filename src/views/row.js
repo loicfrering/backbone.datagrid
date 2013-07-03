@@ -39,7 +39,7 @@ var Row = Datagrid.Row = Backbone.View.extend({
     if (typeof view !== 'object' && !(view.prototype && view.prototype.render)) {
       if (_.isString(view)) {
         options.callback = _.template(view);
-        view = CallbackCell;
+        view = TemplateCell;
       } else if (_.isFunction(view) && !view.prototype.render) {
         options.callback = view;
         view = CallbackCell;
