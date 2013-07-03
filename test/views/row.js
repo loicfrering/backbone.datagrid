@@ -43,12 +43,12 @@ describe('Row', function() {
     });
 
     it('should resolve to callback view with an underscore template function for a string', function() {
-      var view = row._resolveCellView({view: 'Hello <%= col1 %>'});
+      var view = row._resolveCellView({view: 'Hello <%= foo %>'});
 
       view.should.be.an.instanceof(Datagrid.CallbackCell)
         .and.have.a.property('callback')
           .that.is.a('function');
-      view.callback({col1: 'World'}).should.equal('Hello World');
+      view.render().$el.html().should.equal('Hello bar');
     });
 
     it('should resolve to callback view with the specified function for a function', function() {
