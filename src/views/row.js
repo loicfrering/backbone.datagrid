@@ -20,8 +20,9 @@ var Row = Datagrid.Row = Backbone.View.extend({
 
   _resolveCellView: function(column) {
     var options = {
-      model:  this.model,
-      column: column
+      model:      this.model,
+      column:     column,
+      attributes: _.isFunction(column.cellAttrs) ? column.cellAttrs(this.model) : column.cellAttrs
     };
     if (this.options.header || column.header) {
       options.tagName = 'th';

@@ -32,8 +32,9 @@ var Table = Datagrid.Table = ComposedView.extend({
 
   renderRow: function(model) {
     var options = {
-      model: model,
-      columns: this.columns
+      model:      model,
+      columns:    this.columns,
+      attributes: _.isFunction(this.options.rowAttrs) ? this.options.rowAttrs(model) : this.options.rowAttrs
     };
     var rowClassName = this.options.rowClassName;
     if (_.isFunction(rowClassName)) {

@@ -119,7 +119,7 @@ custom renderings that suit your needs:
 
 * Cell
   * CallbackCell
-    * TemplateCell (not available yet)
+    * TemplateCell
       * UnderscoreTemplateCell (not available yet)
       * HandlebarsTemplateCell (not available yet)
   * ActionCell
@@ -142,19 +142,43 @@ Whether or not the datagrid should be paginated.
 
 ### tableClassName
 
-The class attribute for the generated `table`.
+The class attribute for the generated `table`. Will override 
+`tableAttrs.className`.
 
 ### rowClassName
 
 The class attribute for each datagrid's row: `tr` tags. Can be a simple string
 with class names space-separated or a computed string by passing a callback
 function. The callback function will be called with the model associated to the
-current row.
+current row. Will override `className` attribute that may be returned by 
+`rowAttrs`.
 
 ### emptyMessage
 
 A nice message to display when the datagrid is empty. Defaults to `<p>No
 results found.</p>`.
+
+### tableAttrs (object)
+
+If you provide an object in `tableAttrs`, they will be used as html 
+attributes of the generated `table` element.
+
+### rowAttrs (function)
+
+Unlike `tableAttrs`, `rowAttr` may be a function invoked to generate html 
+attributes of the generated `tr` elements.
+It's invoked during rendering on each row, with the Corresponding backbone 
+model as first parameter. 
+It must return an object.
+
+```javascript
+var datagrid = new Datagrid({
+  collection: collection,
+  rowAttrs: function(model) {
+    return {'data-id': model.cid, disabled: true};
+  }
+  ...
+```
 
 ### columns
 
@@ -202,14 +226,34 @@ for more details.
 
 #### comparator (function)
 
-If the column is sortable, a comparator function that is going to be used to sort the
-datagrid by the column. See the dedicated sorting section below for more
+If the column is sortable, a comparator function that is going to be used to sort 
+the datagrid by the column. See the dedicated sorting section below for more
 informations.
 
 #### cellClassName (string|callback)
 
 The class name of the cell (td or th). It can be a string or a callback which
-will be passed the model related to the current row.
+will be passed the model related to the current row. Will override `className` 
+attribute that may be returned by `cellAttrs`.
+
+### cellAttrs (function)
+
+May be a function invoked to generate html attributes of the generated `td` 
+elements.
+It's invoked during rendering on each cell, with the row backbone model as 
+first parameter. 
+It must return an object.
+
+```javascript
+var datagrid = new Datagrid({
+  collection: collection,
+  columns: [{
+    property: 'foo',
+    cellAttrs: function(model) {
+      return {'data-id': model.cid, disabled: true};
+    }
+    ...
+```
 
 #### view (string|callback|object)
 
