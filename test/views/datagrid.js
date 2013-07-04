@@ -421,7 +421,7 @@ describe('Datagrid', function() {
         inMemory: true,
       });
 
-      datagrid.$el.html().should.not.contain('val21');
+      datagrid.render().$el.html().should.not.contain('val21');
 
       collection.reset([
           {col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4'},

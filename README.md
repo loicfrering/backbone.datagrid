@@ -610,14 +610,13 @@ here is how you cant get up everything you need to contribute to
 backbone.datagrid:
 
 1. Install [Node.js](http://nodejs.org/download/).
-2. Install [phantomjs](http://phantomjs.org) for testing from the CLI.
-3. Clone the project:
+2. Clone the project:
        $ git clone https://github.com/loicfrering/backbone.datagrid.git
-4. Install dependencies with npm:
+       $ cd backbone.datagrid
+3. Install dependencies with npm:
+       $ npm install -g grunt-cli
        $ npm install
-5. Add `./node_modules/.bin` to your path:
-       $ export PATH=$PATH:./node_modules/.bin
-6. Use Grunt for:
+4. Use Grunt for:
    * Linting and testing:
          $ grunt test
    * Building:

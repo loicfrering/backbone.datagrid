@@ -55,6 +55,13 @@
     collection: planets,
     inMemory: true,
     paginated: true,
+    footerControls: {
+      left: Backbone.Datagrid.ItemsPerPage,
+      middle: {
+        control: Backbone.Datagrid.Pagination,
+        full: true
+      }
+    },
     perPage: 2,
     rowClassName: function(planet) { return planet.get('name') === 'Mars' ? 'error' : ''; },
     columns: [{
@@ -106,7 +113,7 @@
     }]
   });
 
-  datagrid1.$el.appendTo('#datagrid');
-  datagrid2.$el.appendTo('#datagrid');
+  datagrid1.render().$el.appendTo('#datagrid');
+  datagrid2.render().$el.appendTo('#datagrid');
 
 })(Backbone);

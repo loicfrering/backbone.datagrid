@@ -69,6 +69,7 @@
     $alert.hide();
     $progress.show();
     $datagrid.hide();
+    datagrid.render();
     datagrid.page(1);
     return false;
   });
