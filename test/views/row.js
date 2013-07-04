@@ -4,6 +4,24 @@ describe('Row', function() {
       var row = new Datagrid.Row({model: new Backbone.Model()});
       row.tagName.should.equal('tr');
     });
+
+    it('should cell html attributes be customized', function() {
+      var model = new Backbone.Model({foo: 'bar'});
+      var row = new Datagrid.Row({
+        model: model, 
+        columns: [{
+          property: 'foo',
+          cellAttrs: function(model) {
+            return {'data-id':model.cid, disabled: true};
+          }
+        }]
+      });
+      row.render();
+      var cell = row.$el.find('td');
+      cell.should.have.lengthOf(1);
+      cell.data('id').should.equal(model.cid);
+      cell.attr('disabled').should.equal('disabled');
+    });
   });
 
   describe('cell view resolution', function() {

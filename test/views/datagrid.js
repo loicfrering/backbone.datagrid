@@ -26,6 +26,50 @@ describe('Datagrid', function() {
       datagrid.options.emptyMessage.should.equal('<p>No results found.</p>');
     });
 
+    it('should table, row and cell html attributes be customized', function() {
+      var collection = new Backbone.Collection([{foo: 'bar'}], {url:'toto'});
+      datagrid = new Datagrid({
+        collection: collection,
+        tableAttrs: {'data-stuff': true, disabled: ''}
+      });
+      datagrid.render();
+      var table = datagrid.$el.find('table');
+      table.data('stuff').should.be.true;
+      table.attr('disabled').should.equal('disabled');
+    });
+
+    it('should row html attributes be customized', function() {
+      var collection = new Backbone.Collection([{foo: 'bar'}], {url:'toto'});
+      datagrid = new Datagrid({
+        collection: collection,
+        rowAttrs: function(model) {
+          return {'data-idrow': model.cid, disabled: true};
+        }
+      });
+      datagrid.render();
+      var row = datagrid.$el.find('tbody > tr');
+      row.should.have.lengthOf(1);
+      row.data('idrow').should.equal(collection.models[0].cid);
+      row.attr('disabled').should.equal('disabled');
+    });
+
+    it('should cell html attributes be customized', function() {
+      var collection = new Backbone.Collection([{foo: 'bar'}], {url:'toto'});
+      datagrid = new Datagrid({
+        collection: collection,
+        columns: [{
+          property: 'foo',
+          cellAttrs: function(model) {
+            return {'data-idcell':model.cid};
+          }
+        }]
+      });
+      datagrid.render();
+      var cell = datagrid.$el.find('tbody > tr > td');
+      cell.should.have.lengthOf(1);
+      cell.data('idcell').should.equal(collection.models[0].cid);
+    });
+
     it('should throw an error when perPage is less than 1', function() {
       (function() {
         datagrid = new Datagrid({

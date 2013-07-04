@@ -50,7 +50,9 @@ var Datagrid = ComposedView.extend({
       sorter:       this.sorter,
       emptyMessage: this.options.emptyMessage,
       className:    this.options.tableClassName,
-      rowClassName: this.options.rowClassName
+      rowClassName: this.options.rowClassName,
+      rowAttrs:     this.options.rowAttrs,
+      attributes:   this.options.tableAttrs
     });
 
     this.$el.append(table.render().el);
