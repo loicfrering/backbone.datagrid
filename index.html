@@ -60,22 +60,14 @@
 <p><a href="http://loicfrering.github.com/backbone.datagrid/">Backbone.Datagrid</a> is a
 powerful component, based on Backbone.View, that displays your Backbone
 collections in a dynamic datagrid table. It is highly customizable and
-configurable with sensible defaults.
-
-</p>
+configurable with sensible defaults.</p>
 <p>You can refer to the <a href="http://loicfrering.github.com/backbone.datagrid/">project&#39;s website</a>
-for a nice HTML documentation.
-
-</p>
-<p><a href="http://travis-ci.org/loicfrering/backbone.datagrid"><img src="https://secure.travis-ci.org/loicfrering/backbone.datagrid.png" alt="Build Status"></a>
-
-</p>
+for a nice HTML documentation.</p>
+<p><a href="http://travis-ci.org/loicfrering/backbone.datagrid"><img src="https://secure.travis-ci.org/loicfrering/backbone.datagrid.png" alt="Build Status"></a></p>
 <h2>Download</h2>
 <p>The raw sources can be navigated on <a href="https://github.com/loicfrering/backbone.datagrid">GitHub</a>.
 The distributed sources can be found in the <code>dist/</code> directory or
-downloaded directly via one of the following links:
-
-</p>
+downloaded directly via one of the following links:</p>
 <ul>
 <li>Production minified version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.2/dist/backbone.datagrid.min.js">backbone.datagrid.min.js (v0.3.2)</a>.</li>
 <li>Development version: <a href="https://raw.github.com/loicfrering/backbone.datagrid/v0.3.2/dist/backbone.datagrid.js">backbone.datagrid.js (v0.3.2)</a>.</li>
@@ -83,9 +75,7 @@ downloaded directly via one of the following links:
 <h2>Getting started</h2>
 <h3>Usage</h3>
 <p>Create a new datagrid with your collection and options, render it and attach
-the resulting element to your document:
-
-</p>
+the resulting element to your document:</p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> myCollection = <span class="keyword">new</span> MyCollection();
 <span class="keyword">var</span> datagrid = <span class="keyword">new</span> Backbone.Datagrid({
   collection: myCollection
@@ -94,9 +84,7 @@ $(<span class="string">'#datagrid'</span>).html(datagrid.el);</code></pre>
 <h3>Examples</h3>
 <p>You will find all the examples listed on <a href="http://loicfrering.github.com/backbone.datagrid/examples/">this page</a>. Their sources
 are available in the <a href="https://github.com/loicfrering/backbone.datagrid/tree/master/examples/">examples</a>
-directory of the repository.
-
-</p>
+directory of the repository.</p>
 <ul>
 <li>Solar: a simple and complete example with an in memory collection of planets from the
 Solar System.<ul>
@@ -113,9 +101,7 @@ Solar System.<ul>
 <h2>Description</h2>
 <p>Each component composing the datagrid really are Backbone views. Here is a
 description of these different components. You&#39;ll also find for each component
-(or view), the events that will cause a rendering of the view.
-
-</p>
+(or view), the events that will cause a rendering of the view.</p>
 <pre><code>                  Datagrid
  ____________________/\____________________
 /                                          \
@@ -142,47 +128,33 @@ description of these different components. You&#39;ll also find for each compone
 <p>The backbone.datagrid entry point. A Backbone.View that will be responsible for
 the entire datagrid management and rendering. It uses the collection passed to
 the constructor as its data source. The Datagrid view takes care of creating
-the <code>table</code> HTML element and each of the components described below.
-
-</p>
-<p>Event bindings:
-
-</p>
+the <code>table</code> HTML element and each of the components described below.</p>
+<p>Event bindings:</p>
 <ul>
 <li>collection#reset will cause a rendering of the whole datagrid.</li>
 </ul>
 <h3>Header</h3>
 <p>A Backbone.View for the datagrid&#39;s header which is going to render the <code>thead</code>
 HTML element. It is also responsible for creating a Cell for each column&#39;s
-header.
-
-</p>
+header.</p>
 <h3>Row</h3>
 <p>A Backbone.View for each row of the datagrid. The Row is responsible for
 rendering a row in the table, that is to say a <code>tr</code> HTML element, and for
 creating a Cell for each column of the datagrid. The Row uses an entry of the
-collection: a model.
-
-</p>
-<p>Event bindings:
-
-</p>
+collection: a model.</p>
+<p>Event bindings:</p>
 <ul>
 <li>model#change will cause a rendering of the row.</li>
 </ul>
 <h3>Cell</h3>
 <p>A Backbone.View for each cell in a Row. One Cell is responsible for rendering a
-<code>td</code> (or <code>th</code> for a header) HTML element.
-
-</p>
+<code>td</code> (or <code>th</code> for a header) HTML element.</p>
 <p>There are specialized cells views extending the base Cell and that allows
-custom renderings that suit your needs:
-
-</p>
+custom renderings that suit your needs:</p>
 <ul>
 <li>Cell<ul>
 <li>CallbackCell<ul>
-<li>TemplateCell (not available yet)<ul>
+<li>TemplateCell<ul>
 <li>UnderscoreTemplateCell (not available yet)</li>
 <li>HandlebarsTemplateCell (not available yet)</li>
 </ul>
@@ -195,111 +167,103 @@ custom renderings that suit your needs:
 </ul>
 <h2>Datagrid options</h2>
 <h3>collection</h3>
-<p>The Backbone.Collection that is going to be managed by the datagrid.
-
-</p>
+<p>The Backbone.Collection that is going to be managed by the datagrid.</p>
 <h3>inMemory</h3>
 <p>If the collection should be manipulated in memory for pagination and sorting.
-Otherwise use REST requests.
-
-</p>
+Otherwise use REST requests.</p>
 <h3>paginated</h3>
-<p>Whether or not the datagrid should be paginated.
-
-</p>
+<p>Whether or not the datagrid should be paginated.</p>
 <h3>tableClassName</h3>
-<p>The class attribute for the generated <code>table</code>.
-
-</p>
+<p>The class attribute for the generated <code>table</code>. Will override 
+<code>tableAttrs.className</code>.</p>
 <h3>rowClassName</h3>
 <p>The class attribute for each datagrid&#39;s row: <code>tr</code> tags. Can be a simple string
 with class names space-separated or a computed string by passing a callback
 function. The callback function will be called with the model associated to the
-current row.
-
-</p>
+current row. Will override <code>className</code> attribute that may be returned by 
+<code>rowAttrs</code>.</p>
 <h3>emptyMessage</h3>
 <p>A nice message to display when the datagrid is empty. Defaults to <code>&lt;p&gt;No
-results found.&lt;/p&gt;</code>.
-
-</p>
+results found.&lt;/p&gt;</code>.</p>
+<h3>tableAttrs (object)</h3>
+<p>If you provide an object in <code>tableAttrs</code>, they will be used as html 
+attributes of the generated <code>table</code> element.</p>
+<h3>rowAttrs (function)</h3>
+<p>Unlike <code>tableAttrs</code>, <code>rowAttr</code> may be a function invoked to generate html 
+attributes of the generated <code>tr</code> elements.
+It&#39;s invoked during rendering on each row, with the Corresponding backbone 
+model as first parameter. 
+It must return an object.</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> datagrid = <span class="keyword">new</span> Datagrid({
+  collection: collection,
+  rowAttrs: <span class="keyword">function</span>(model) {
+    <span class="keyword">return</span> {<span class="string">'data-id'</span>: model.cid, disabled: <span class="literal">true</span>};
+  }
+  ...</code></pre>
 <h3>columns</h3>
-<p>The columns definitions, see the dedicated section below.
-
-</p>
+<p>The columns definitions, see the dedicated section below.</p>
 <h2>Columns definitions</h2>
 <p>You can customize the datagrid with columns definition. It is an array of
 definitions, one for each column you want to see in the datagrid. If no
 definition is passed to the datagrid, a default column definition is going to
 be created for you for each property of the model managed by the collection you
-passed to the datagrid.
-
-</p>
+passed to the datagrid.</p>
 <p>A column definition can be a string or an object. If a string is passed, a
 default column definition will be generated with the specified string used as
-the column&#39;s property.
-
-</p>
+the column&#39;s property.</p>
 <h3>Column definition</h3>
 <h4>property (string)</h4>
 <p>The model&#39;s property that is going to be displayed in the column. Can be
 omitted if the column describe a combination of different properties of the
-model: please refer to custom views below.
-
-</p>
+model: please refer to custom views below.</p>
 <h4>title (string)</h4>
 <p>The title of the column which will be displayed in the table header. If not
 defined, the column&#39;s property will be used for generating a nicely formated
-title, here are some examples:
-
-</p>
+title, here are some examples:</p>
 <ul>
 <li>name =&gt; Name</li>
 <li>events_url =&gt; Events Url</li>
 <li>issue_events_url =&gt; Issue Events Url</li>
 </ul>
 <h4>sortable (boolean)</h4>
-<p>Whether or not the column is sortable. Default to false.
-
-</p>
+<p>Whether or not the column is sortable. Default to false.</p>
 <h4>sortBy (string)</h4>
 <p>The column which will be used for sorting, see dedicated sorting section below
-for more details.
-
-</p>
+for more details.</p>
 <h4>comparator (function)</h4>
-<p>If the column is sortable, a comparator function that is going to be used to sort the
-datagrid by the column. See the dedicated sorting section below for more
-informations.
-
-</p>
+<p>If the column is sortable, a comparator function that is going to be used to sort 
+the datagrid by the column. See the dedicated sorting section below for more
+informations.</p>
 <h4>cellClassName (string|callback)</h4>
 <p>The class name of the cell (td or th). It can be a string or a callback which
-will be passed the model related to the current row.
-
-</p>
+will be passed the model related to the current row. Will override <code>className</code> 
+attribute that may be returned by <code>cellAttrs</code>.</p>
+<h3>cellAttrs (function)</h3>
+<p>May be a function invoked to generate html attributes of the generated <code>td</code> 
+elements.
+It&#39;s invoked during rendering on each cell, with the row backbone model as 
+first parameter. 
+It must return an object.</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> datagrid = <span class="keyword">new</span> Datagrid({
+  collection: collection,
+  columns: [{
+    property: <span class="string">'foo'</span>,
+    cellAttrs: <span class="keyword">function</span>(model) {
+      <span class="keyword">return</span> {<span class="string">'data-id'</span>: model.cid, disabled: <span class="literal">true</span>};
+    }
+    ...</code></pre>
 <h4>view (string|callback|object)</h4>
 <p>The CellView that&#39;s gonna be used for rendering the column&#39;s cell associated to
-the current row.
-
-</p>
-<p>If not defined, the model&#39;s attribute corresponding to <code>column.property</code>.
-
-</p>
+the current row.</p>
+<p>If not defined, the model&#39;s attribute corresponding to <code>column.property</code>.</p>
 <p>You can pass an <a href="http://underscorejs.org/#template">Underscore template</a> as a
-string, it will be compiled and executed with the <code>model.toJSON()</code> as context.
-
-</p>
+string, it will be compiled and executed with the <code>model.toJSON()</code> as context.</p>
 <p>You can also pass a callback function. It will be called with the current row&#39;s
-model and the return value will be displayed in the cell.
-
-</p>
+model (the Backbone full model) and the return value will be displayed in the cell.</p>
 <p>You can finally pass an object to use one of the specific views provided or a
 custom view. This object must have a type property which refers to view&#39;s type
 that gonna be used for the Cell. The other properties are gonna be passed to
-the constructor function of the view.
-
-</p>
+the constructor function of the view.</p>
 <pre><code class="lang-javascript">{
   title: <span class="string">'Edit'</span>,
   view: {
@@ -315,62 +279,38 @@ the constructor function of the view.
 <h2>Pagination</h2>
 <p>By default, pagination controls are displayed for a paginated datagrid. But an
 API is also available to manually control pagination. Each of the following
-functions causes a datagrid rendering:
-
-</p>
+functions causes a datagrid rendering:</p>
 <h3>Pager</h3>
 <p>The Pager is an object extending Backbone.Model which manages the state of the
-pagination for the datagrid.
-
-</p>
+pagination for the datagrid.</p>
 <h4>datagrid.page(page)</h4>
-<p>Go to the specified page. Delegates to:
-
-</p>
+<p>Go to the specified page. Delegates to:</p>
 <pre><code class="lang-javascript">datagrid.pager.page(page);</code></pre>
 <h4>datagrid.perPage(perPage)</h4>
-<p>Set the number of items displayed per page. Delegates to:
-
-</p>
+<p>Set the number of items displayed per page. Delegates to:</p>
 <pre><code class="lang-javascript">datagrid.pager.perPage(perPage);</code></pre>
 <h4>datagrid.pager.next()</h4>
-<p>Go to the next page.
-
-</p>
+<p>Go to the next page.</p>
 <h4>datagrid.pager.prev()</h4>
-<p>Go to the previous page.
-
-</p>
+<p>Go to the previous page.</p>
 <h4>datagrid.pager.get(&#39;currentPage&#39;)</h4>
-<p>Returns the current page number.
-
-</p>
+<p>Returns the current page number.</p>
 <h4>datagrid.pager.get(&#39;perPage&#39;)</h4>
-<p>Returns the current number of element per page.
-
-</p>
+<p>Returns the current number of element per page.</p>
 <h4>datagrid.pager.hasPrev()</h4>
-<p>Tests if the collection has a previous page.
-
-</p>
+<p>Tests if the collection has a previous page.</p>
 <h4>datagrid.pager.hasNext()</h4>
-<p>Tests if the collection has a next page.
-
-</p>
+<p>Tests if the collection has a next page.</p>
 <h4>Pager&#39;s events</h4>
 <p>As Backbone.Model, you can bind <a href="http://backbonejs.org/#FAQ-events">events triggered by any object extending
 Backbone.Model</a> if you want to bind some
 behavior when the user interact with the pager. You can for example very easily
-save the current pager status in the sessionStorage:
-
-</p>
+save the current pager status in the sessionStorage:</p>
 <pre><code class="lang-javascript">datagrid.pager.on(<span class="string">'change'</span>, <span class="keyword">function</span>(pager) {
   sessionStorage.setItem(<span class="string">'datagrid-current-page'</span>, pager.get(<span class="string">'currentPage'</span>));
   sessionStorage.setItem(<span class="string">'datagrid-per-page'</span>, pager.get(<span class="string">'perPage'</span>));
 });</code></pre>
-<p>Here is another example which observes changes of the current page only:
-
-</p>
+<p>Here is another example which observes changes of the current page only:</p>
 <pre><code class="lang-javascript">datagrid.pager.on(<span class="string">'change:currentPage'</span>, <span class="keyword">function</span>(pager) {
   <span class="comment">// A really convenient alert...</span>
   alert(<span class="string">"Hey you are changing page for: "</span> + pager.get(<span class="string">'currentPage'</span>));
@@ -379,14 +319,10 @@ save the current pager status in the sessionStorage:
 <p>If the datagrid manages an in memory collection, pagination will be
 automatically handled for you by slicing the collection with the right start
 and end indexes according to the current page and the number of elements per
-page you want to be displayed.
-
-</p>
+page you want to be displayed.</p>
 <h3>Server API</h3>
 <p>When dealing with a server API, there are two things you need to configure in
-your collection for pagination to work properly:
-
-</p>
+your collection for pagination to work properly:</p>
 <ul>
 <li>set some properties, generally fetched from the API, that will tell the
 datagrid if a previous, next or specific page is available to display
@@ -396,9 +332,7 @@ needs to send to the server to the specify the current page and the number of
 items per page you want.</li>
 </ul>
 <h4>Configuring pagination controls</h4>
-<p>Some of the following properties must be set to the collection:
-
-</p>
+<p>Some of the following properties must be set to the collection:</p>
 <ul>
 <li><code>hasPrev</code> if there is a previous page to enable a control which links to the
 previous page.</li>
@@ -409,24 +343,16 @@ display full pagination controls with a link to each of the available pages.</li
 </ul>
 <p>In the case you know from the server API the total number of pages or elements,
 you just have to set one of these value for the datagrid to be able to display
-full pagination controls.
-
-</p>
+full pagination controls.</p>
 <p>In the case where this information is not available, the datagrid will only be
 able to display controls for previous and next page according to the related
-hasNext and hasPrev flags.
-
-</p>
+hasNext and hasPrev flags.</p>
 <p>You will be able to retrieve these informations from the server API you are
 dealing with, so the best place to set these properties to the collection is in
 <code>collection.parse(resp)</code> which is called by Backbone when fetching from the
-server.
-
-</p>
+server.</p>
 <p>For example, if the server API provides the total number of elements by
-wrapping the collection:
-
-</p>
+wrapping the collection:</p>
 <pre><code class="lang-javascript">{
   total: <span class="number">24</span>
   content: [{
@@ -435,9 +361,7 @@ wrapping the collection:
     foo: <span class="string">'foobar'</span>
   }]
 }</code></pre>
-<p>Here is how you could implement your collection&#39;s fetch function:
-
-</p>
+<p>Here is how you could implement your collection&#39;s fetch function:</p>
 <pre><code class="lang-javascript">parse: <span class="keyword">function</span>(resp) {
   <span class="keyword">this</span>.total = resp.total;
   <span class="keyword">return</span> resp.content;
@@ -449,9 +373,7 @@ populate the collection. See
 <a href="http://backbonejs.org/#Collection-parse">collection.parse(resp)</a> for more
 details.</li>
 </ul>
-<p>Here is a second example using GitHub&#39;s API with JSON-P:
-
-</p>
+<p>Here is a second example using GitHub&#39;s API with JSON-P:</p>
 <pre><code class="lang-javascript">parse: <span class="keyword">function</span>(resp) {
   <span class="keyword">this</span>.hasNext = <span class="literal">false</span>;
   <span class="keyword">var</span> link = _.find(resp.meta.Link, <span class="keyword">function</span>(link) {
@@ -464,21 +386,15 @@ details.</li>
 }</code></pre>
 <p>Here we just set an <code>hasNext</code> flag based on the meta link informations provided
 by GitHub. As the total number of pages is unknown, only next and previous page
-will be available as pagination controls.
-
-</p>
+will be available as pagination controls.</p>
 <h4>Configuring request parameters</h4>
 <p>You have to set the data property in your collection. This can be an object or
 a function returning an object. This object will be passed as a data option to
 Backone&#39;s collection.fetch(options) and finally passed as a query string by
-jquery to your server API while fetching a new page.
-
-</p>
+jquery to your server API while fetching a new page.</p>
 <p>The pager will be passed to the function so that you will be able to get the
 currentPage and the number of element perPage wanted to pass them as query
-parameters values. Here is an example (in your collection):
-
-</p>
+parameters values. Here is an example (in your collection):</p>
 <pre><code class="lang-javascript">data: <span class="keyword">function</span>(pager) {
   <span class="keyword">return</span> {
     page:     pager.get(<span class="string">'currentPage'</span>),
@@ -486,49 +402,33 @@ parameters values. Here is an example (in your collection):
   }
 }</code></pre>
 <p>Here would be the query string resulted from fetching the 4th page with 10
-elements per page:
-
-</p>
+elements per page:</p>
 <pre><code>?page=4&amp;per_page=10</code></pre>
 <p>Here is an alternative example that will produce the same query string but by
-directly setting an object:
-
-</p>
+directly setting an object:</p>
 <pre><code class="lang-javascript">data: {
   page:     <span class="keyword">function</span>(pager) { <span class="keyword">return</span> pager.get(<span class="string">'currentPage'</span>); },
   per_page: <span class="number">10</span>
 }</code></pre>
 <p>Here the number of elements per page is definitely fixed (which is generally
-not a good idea).
-
-</p>
+not a good idea).</p>
 <h2>Sorting</h2>
 <p>Sorted datagrid columns can be sorted by clicking on the column&#39;s header cell.
 A first click will sort in ascending order, the following clicks will toggle
 sorting direction between descending and ascending. You can also control
-sorting thanks to the following function.
-
-</p>
+sorting thanks to the following function.</p>
 <h3>Sorter</h3>
 <p>As for the Pager, the Sorter is an object extending Backbone.Model. Its role is
-to manage the sorting state of the datagrid.
-
-</p>
+to manage the sorting state of the datagrid.</p>
 <h4>datagrid.sort(column, [order])</h4>
 <p>Sort the datagrid by the specified column in the specified order. The column
 can be the column&#39;s property name or the column&#39;s index (beginning at 0). You
 can use <code>Datagrid.Sorter.ASC</code> and <code>Datagrid.Sorter.DESC</code> to specify the
-sorting direction.
-
-</p>
-<p>Delegates to <code>datagrid.sorter.sort(column, [order])</code>.
-
-</p>
+sorting direction.</p>
+<p>Delegates to <code>datagrid.sorter.sort(column, [order])</code>.</p>
 <h4>sorter.get(&#39;column&#39;)</h4>
 <p>Returns the column which is currently sorted identified by (in order of
-priority):
-
-</p>
+priority):</p>
 <ul>
 <li>sortBy if defined in the column definition.</li>
 <li>property if defined in the column definition.</li>
@@ -536,38 +436,26 @@ priority):
 </ul>
 <h4>sorter.get(&#39;order&#39;)</h4>
 <p>Returns the sorting direction, can be <code>Datagrid.Sorter.ASC</code> or
-<code>Datagrid.Sorter.DESC</code>.
-
-</p>
+<code>Datagrid.Sorter.DESC</code>.</p>
 <h4>Sorter&#39;s events</h4>
 <p>In the same way you can bind events triggered by the Pager, you can also bind
 <a href="http://backbonejs.org/#FAQ-events">events triggered by the Sorter</a> (as a
-Backbone.Model) and react to sorting state changes.
-
-</p>
+Backbone.Model) and react to sorting state changes.</p>
 <pre><code class="lang-javascript">datagrid.sorter.on(<span class="string">'change'</span>, <span class="keyword">function</span>(sorter) {
   sessionStorage.setItem(<span class="string">'datagrid-sorted-column'</span>, sorter.get(<span class="string">'column'</span>));
   sessionStorage.setItem(<span class="string">'datagrid-sorted-order'</span>, sorter.get(<span class="string">'order'</span>));
 });</code></pre>
 <h3>In memory</h3>
 <p>An in memory collection will be sorted using a comparator function that gonna
-be passed to Backbone&#39;s <code>collection.sort(options)</code>.
-
-</p>
+be passed to Backbone&#39;s <code>collection.sort(options)</code>.</p>
 <p>The comparator function is specific to a sortable column and must be specified
 in the column&#39;s definition. The functions takes two arguments : model1 and
 model2 and should follow the specifications of the compareFunction expected for
-<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/sort">Array.sort</a>.
-
-</p>
+<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/sort">Array.sort</a>.</p>
 <p>By default the comparator function will be based on
 <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/localeCompare">String.localeCompare</a>
-for a sensible alphabetical sorting.
-
-</p>
-<p>Example of a column definition with a custom comparator function:
-
-</p>
+for a sensible alphabetical sorting.</p>
+<p>Example of a column definition with a custom comparator function:</p>
 <pre><code class="lang-javascript">{
   property: <span class="string">'rank'</span>,
   sortable: <span class="literal">true</span>,
@@ -578,18 +466,12 @@ for a sensible alphabetical sorting.
 <h3>Server API</h3>
 <p>Configuring how the datagrid will pass sorting parameters to the server API is
 done in the same way as we configured pagination: using the collection&#39;s data
-attribute.
-
-</p>
+attribute.</p>
 <p>In addition to the pager, the sorter is passed as a second parameter to the
 functions which generate request parameters data. All you need to do is to map
 the request parameters your API is using for sorting to the current sorting
-status provided by the datagrid in the sorter.
-
-</p>
-<p>Here is an example data function implementation in your collection:
-
-</p>
+status provided by the datagrid in the sorter.</p>
+<p>Here is an example data function implementation in your collection:</p>
 <pre><code class="lang-javascript">data: <span class="keyword">function</span>(pager, sorter) {
   <span class="keyword">return</span> {
     per_page:  pager.get(<span class="string">'perPage'</span>),
@@ -599,29 +481,22 @@ status provided by the datagrid in the sorter.
   };
 }</code></pre>
 <p>With this configuration, requesting the 4th page with 10 element per page and
-sorting by name descendant would produce the following query string:
-
-</p>
+sorting by name descendant would produce the following query string:</p>
 <pre><code>?page=4&amp;per_page=10&amp;sort=name&amp;direction=desc</code></pre>
 <h2>Status</h2>
 <p>It is for now in its early stage of developments: the API may be subject to
-changes.
-
-</p>
+changes.</p>
 <h2>Contributing</h2>
 <p><a href="http://gruntjs.com/">Grunt</a> is used for managing the development workflow,
 here is how you cant get up everything you need to contribute to
-backbone.datagrid:
-
-</p>
+backbone.datagrid:</p>
 <ol>
 <li>Install <a href="http://nodejs.org/download/">Node.js</a>.</li>
-<li>Install <a href="http://phantomjs.org">phantomjs</a> for testing from the CLI.</li>
-<li>Clone the project:<pre><code>$ git clone https://github.com/loicfrering/backbone.datagrid.git</code></pre>
+<li>Clone the project:<pre><code>$ git clone https://github.com/loicfrering/backbone.datagrid.git
+$ cd backbone.datagrid</code></pre>
 </li>
-<li>Install dependencies with npm:<pre><code>$ npm install</code></pre>
-</li>
-<li>Add <code>./node_modules/.bin</code> to your path:<pre><code>$ export PATH=$PATH:./node_modules/.bin</code></pre>
+<li>Install dependencies with npm:<pre><code>$ npm install -g grunt-cli
+$ npm install</code></pre>
 </li>
 <li>Use Grunt for:<ul>
 <li>Linting and testing:<pre><code>$ grunt test</code></pre>
@@ -632,6 +507,20 @@ backbone.datagrid:
 </li>
 </ol>
 <h2>Changelog</h2>
+<h3>0.4.0-beta.1</h3>
+<ul>
+<li>The full Backbone.Model is passed to the CallbackCell&#39;s callback function
+instead of the serialized JSON.</li>
+<li>You can now use the TemplateCell if you need the serialized JSON (for a
+compiled template function).</li>
+<li>Update Backbone to 1.0.0.</li>
+<li>Fix some memory leaks.</li>
+<li>Introduce configurable controls with:<ul>
+<li>Pagination control</li>
+<li>ItemsPerPage control.</li>
+</ul>
+</li>
+</ul>
 <h3>0.3.2</h3>
 <ul>
 <li>Fix an issue that caused useless Ajax calls.</li>
@@ -666,8 +555,7 @@ web page with resources and documentation.</li>
 </ul>
 <h2>License</h2>
 <p>Copyright (c) 2012 <a href="https://github.com/loicfrering">Loïc Frering</a>, licensed
-under the MIT license. See the LICENSE file for more informations.
-</p>
+under the MIT license. See the LICENSE file for more informations.</p>
 
 
   <script type="text/javascript">

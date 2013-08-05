@@ -1,14 +1,34 @@
-// backbone.datagrid v0.3.2
+// backbone.datagrid v0.4.0-beta.1
 //
 // Copyright (c) 2012 Loïc Frering <loic.frering@gmail.com>
 // Distributed under the MIT license
-
 (function() {
 
-var Datagrid = Backbone.View.extend({
-  initialize: function() {
+var ComposedView = Backbone.View.extend({
+  addNestedView: function(nestedView) {
+    if (!this.nestedViews) this.nestedViews = [];
+    this.nestedViews.push(nestedView);
+  },
+
+  removeNestedViews: function() {
+    if (this.nestedViews) {
+      _.invoke(this.nestedViews, 'remove');
+      this.nestedViews = [];
+    }
+  },
+
+  remove: function() {
+    ComposedView.__super__.remove.call(this);
+    this.removeNestedViews();
+    return this;
+  }
+});
+
+var Datagrid = ComposedView.extend({
+  initialize: function(options) {
+    this.options = options;
     this.columns = this.options.columns;
-    this.options = _.defaults(this.options, {
+    _.defaults(this.options, {
       paginated:      false,
       page:           1,
       perPage:        10,
@@ -16,54 +36,69 @@ var Datagrid = Backbone.View.extend({
       emptyMessage:   '<p>No results found.</p>'
     });
 
-    this.collection.on('reset', this.render, this);
+    if (this.options.paginated && !this.options.footerControls) {
+      this.options.footerControls = {
+        middle: Pagination
+      };
+    }
+
+    this.listenTo(this.collection, 'add remove', this.render);
     this._prepare();
   },
 
   render: function() {
     this.$el.empty();
+    this.removeNestedViews();
+
+    this.renderHeader();
     this.renderTable();
-    if (this.options.paginated) {
+    this.renderFooter();
+    /*if (this.options.paginated) {
       this.renderPagination();
-    }
+    }*/
 
     return this;
   },
 
+  renderHeader: function() {
+    if (this.options.headerControls) {
+      var options = _.extend({pager: this.pager}, this.options.headerControls);
+      var headerControls = new Controls(options);
+      this.$el.append(headerControls.render().el);
+      this.addNestedView(headerControls);
+    }
+  },
+
   renderTable: function() {
-    var $table = $('<table></table>', {'class': this.options.tableClassName});
-    this.$el.append($table);
+    var table = new Table({
+      collection:   this.collection,
+      columns:      this.columns,
+      pager:        this.pager,
+      sorter:       this.sorter,
+      emptyMessage: this.options.emptyMessage,
+      className:    this.options.tableClassName,
+      rowClassName: this.options.rowClassName,
+      rowAttrs:     this.options.rowAttrs,
+      attributes:   this.options.tableAttrs
+    });
 
-    var header = new Header({columns: this.columns, sorter: this.sorter});
-    $table.append(header.render().el);
+    this.$el.append(table.render().el);
+    this.addNestedView(table);
+  },
 
-    $table.append('<tbody></tbody>');
-
-    if (this.collection.isEmpty()) {
-      this.$el.append(this.options.emptyMessage);
-    } else {
-      this.collection.forEach(this.renderRow, this);
+  renderFooter: function() {
+    if (this.options.footerControls) {
+      var options = _.extend({pager: this.pager}, this.options.footerControls);
+      var footerControls = new Controls(options);
+      this.$el.append(footerControls.render().el);
+      this.addNestedView(footerControls);
     }
   },
 
   renderPagination: function() {
     var pagination = new Pagination({pager: this.pager});
     this.$el.append(pagination.render().el);
-  },
-
-  renderRow: function(model) {
-    var options = {
-      model: model,
-      columns: this.columns
-    };
-    var rowClassName = this.options.rowClassName;
-    if (_.isFunction(rowClassName)) {
-      rowClassName = rowClassName(model);
-    }
-    options.className = rowClassName;
-
-    var row = new Row(options);
-    this.$('tbody').append(row.render(this.columns).el);
+    this.addNestedView(pagination);
   },
 
   refresh: function(options) {
@@ -91,6 +126,12 @@ var Datagrid = Backbone.View.extend({
 
   perPage: function(perPage) {
     this.pager.set('perPage', perPage);
+  },
+
+  remove: function() {
+    Datagrid.__super__.remove.call(this);
+    this.pager.off();
+    return this;
   },
 
   _sort: function() {
@@ -145,8 +186,9 @@ var Datagrid = Backbone.View.extend({
     options     = options || {};
     var success = options.success;
     var silent  = options.silent;
+    var data    = options.data || {};
 
-    options.data = this._getRequestData();
+    options.data = _.extend(data, this._getRequestData());
     options.success = _.bind(function(collection) {
       if (!this.columns || _.isEmpty(this.columns)) {
         this._prepareColumns();
@@ -162,6 +204,7 @@ var Datagrid = Backbone.View.extend({
       }
     }, this);
     options.silent = true;
+    options.reset  = true;
 
     this.collection.fetch(options);
   },
@@ -216,9 +259,9 @@ var Datagrid = Backbone.View.extend({
 
   _prepareSorter: function() {
     this.sorter = new Sorter();
-    this.sorter.on('change', function() {
+    this.listenTo(this.sorter, 'change', function() {
       this._sort(this.sorter.get('column'), this.sorter.get('order'));
-    }, this);
+    });
   },
 
   _preparePager: function() {
@@ -227,12 +270,12 @@ var Datagrid = Backbone.View.extend({
       perPage:     this.options.perPage
     });
 
-    this.pager.on('change:currentPage', function () {
+    this.listenTo(this.pager, 'change:currentPage', function () {
       this._page();
-    }, this);
-    this.pager.on('change:perPage', function() {
+    });
+    this.listenTo(this.pager, 'change:perPage', function() {
       this.page(1);
-    }, this);
+    });
   },
 
   _prepareColumns: function() {
@@ -291,15 +334,68 @@ var Datagrid = Backbone.View.extend({
   }
 });
 
-var Header = Datagrid.Header = Backbone.View.extend({
+var Table = Datagrid.Table = ComposedView.extend({
+  tagName: 'table',
+
+  initialize: function(options) {
+    this.options    = options;
+    this.collection = this.options.collection;
+    this.columns    = this.options.columns;
+    this.pager      = this.options.pager;
+    this.sorter     = this.options.sorter;
+
+    this.listenTo(this.collection, 'reset', this.render);
+  },
+
+  render: function() {
+    this.$el.empty();
+    this.removeNestedViews();
+
+    var header = new Header({columns: this.columns, sorter: this.sorter});
+    this.$el.append(header.render().el);
+    this.addNestedView(header);
+
+    this.$el.append('<tbody></tbody>');
+
+    if (this.collection.isEmpty()) {
+      this.$el.append(this.options.emptyMessage);
+    } else {
+      this.collection.forEach(this.renderRow, this);
+    }
+
+    return this;
+  },
+
+  renderRow: function(model) {
+    var options = {
+      model:      model,
+      columns:    this.columns,
+      attributes: _.isFunction(this.options.rowAttrs) ? this.options.rowAttrs(model) : this.options.rowAttrs
+    };
+    var rowClassName = this.options.rowClassName;
+    if (_.isFunction(rowClassName)) {
+      rowClassName = rowClassName(model);
+    }
+    options.className = rowClassName;
+
+    var row = new Row(options);
+    this.$('tbody').append(row.render(this.columns).el);
+    this.addNestedView(row);
+  }
+});
+
+var Header = Datagrid.Header = ComposedView.extend({
   tagName: 'thead',
 
-  initialize: function() {
+  initialize: function(options) {
+    this.options = options;
     this.columns = this.options.columns;
     this.sorter  = this.options.sorter;
   },
 
   render: function() {
+    this.removeNestedViews();
+
     var model = new Backbone.Model();
     var headerColumn, columns = [];
     _.each(this.columns, function(column, i) {
@@ -316,6 +412,7 @@ var Header = Datagrid.Header = Backbone.View.extend({
 
     var row = new Row({model: model, columns: columns, header: true});
     this.$el.html(row.render().el);
+    this.addNestedView(row);
 
     return this;
   }
@@ -324,9 +421,10 @@ var Header = Datagrid.Header = Backbone.View.extend({
 var Row = Datagrid.Row = Backbone.View.extend({
   tagName: 'tr',
 
-  initialize: function() {
+  initialize: function(options) {
+    this.options = options;
     this.columns = this.options.columns;
-    this.model.on('change', this.render, this);
+    this.listenTo(this.model, 'change', this.render);
   },
 
   render: function() {
@@ -342,8 +440,9 @@ var Row = Datagrid.Row = Backbone.View.extend({
 
   _resolveCellView: function(column) {
     var options = {
-      model:  this.model,
-      column: column
+      model:      this.model,
+      column:     column,
+      attributes: _.isFunction(column.cellAttrs) ? column.cellAttrs(this.model) : column.cellAttrs
     };
     if (this.options.header || column.header) {
       options.tagName = 'th';
@@ -361,7 +460,7 @@ var Row = Datagrid.Row = Backbone.View.extend({
     if (typeof view !== 'object' && !(view.prototype && view.prototype.render)) {
       if (_.isString(view)) {
         options.callback = _.template(view);
-        view = CallbackCell;
+        view = TemplateCell;
       } else if (_.isFunction(view) && !view.prototype.render) {
         options.callback = view;
         view = CallbackCell;
@@ -383,7 +482,71 @@ var Row = Datagrid.Row = Backbone.View.extend({
   }
 });
 
-var Pagination = Datagrid.Pagination = Backbone.View.extend({
+var Controls = Datagrid.Controls = ComposedView.extend({
+  initialize: function(options) {
+    this.options = options;
+    this.pager   = this.options.pager;
+
+    this.left   = this._resolveView(this.options.left);
+    this.middle = this._resolveView(this.options.middle);
+    this.right  = this._resolveView(this.options.right);
+  },
+
+  render: function() {
+    this.$el.empty();
+    this.removeNestedViews();
+
+    _.chain(['left', 'middle', 'right'])
+      .filter(function(position) {
+        return this[position];
+      }, this)
+      .each(function(position) {
+        var control = this[position];
+        $('<div></div>', {'class': 'control ' + position})
+          .append(control.render().el)
+          .appendTo(this.$el);
+        this.addNestedView(control);
+      }, this);
+
+    return this;
+  },
+
+  _resolveView: function(options) {
+    if (!options) {
+      return null;
+    }
+
+    var view;
+
+    if (options.prototype && options.prototype.render) {
+      view = options;
+      options = {};
+    }
+    // Resolve view from options
+    else if (typeof options === 'object') {
+      view = options.control;
+      if (!view || !view.prototype || !view.prototype.render) {
+        throw new TypeError('Invalid view passed to controls.');
+      }
+    }
+    else {
+      throw new TypeError('Invalid view passed to controls.');
+    }
+
+    _.extend(options, {pager: this.pager});
+
+    return new view(options);
+  }
+});
+
+var Control = Datagrid.Control = Backbone.View.extend({
+  initialize: function(options) {
+    this.options = options;
+    this.pager   = this.options.pager;
+  }
+});
+
+var Pagination = Datagrid.Pagination = Control.extend({
   className: 'pagination pagination-centered',
 
   events: {
@@ -392,7 +555,12 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
   },
 
   initialize: function() {
-    this.pager = this.options.pager;
+    Pagination.__super__.initialize.apply(this, arguments);
+    _.defaults(this.options, {
+      full: true
+    });
+
+    this.listenTo(this.pager, 'change', this.render);
   },
 
   render: function() {
@@ -404,7 +572,7 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
     }
     $ul.append($li);
 
-    if (this.pager.hasTotal()) {
+    if (this.options.full && this.pager.hasTotal()) {
       for (var i = 1; i <= this.pager.get('totalPages'); i++) {
         $li = $('<li></li>');
         if (i === this.pager.get('currentPage')) {
@@ -421,7 +589,7 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
     }
     $ul.append($li);
 
-    this.$el.append($ul);
+    this.$el.html($ul);
     return this;
   },
 
@@ -439,11 +607,47 @@ var Pagination = Datagrid.Pagination = Backbone.View.extend({
   }
 });
 
+var ItemsPerPage = Datagrid.ItemsPerPage = Control.extend({
+  events: {
+    change: 'perPage'
+  },
+
+  initialize: function() {
+    ItemsPerPage.__super__.initialize.apply(this, arguments);
+
+    _.defaults(this.options, {
+      increment: this.pager.get('perPage'),
+      max:       4 * this.pager.get('perPage')
+    });
+  },
+
+  render: function() {
+    var $select   = $('<select></select>'), i,
+        increment = this.options.increment,
+        max       = this.options.max;
+
+    for (i = increment; i <= max; i += increment) {
+      $option = $('<option></option>');
+      $option.html(i);
+      $select.append($option);
+    }
+
+    this.$el.html($select);
+    return this;
+  },
+
+  perPage: function(event) {
+    var perPage = $(event.target).val();
+    this.pager.set('perPage', perPage);
+  }
+});
+
 var Cell = Datagrid.Cell = Backbone.View.extend({
   tagName: 'td',
 
-  initialize: function() {
-    this.column = this.options.column;
+  initialize: function(options) {
+    this.options = options;
+    this.column  = this.options.column;
   },
 
   render: function() {
@@ -459,18 +663,18 @@ var Cell = Datagrid.Cell = Backbone.View.extend({
 
 var CallbackCell = Datagrid.CallbackCell = Cell.extend({
   initialize: function() {
-    CallbackCell.__super__.initialize.call(this);
+    CallbackCell.__super__.initialize.apply(this, arguments);
     this.callback = this.options.callback;
   },
 
   _prepareValue: function() {
-    this.value = this.callback(this.model.toJSON());
+    this.value = this.callback(this.model);
   }
 });
 
 var ActionCell = Datagrid.ActionCell = Cell.extend({
   initialize: function() {
-    ActionCell.__super__.initialize.call(this);
+    ActionCell.__super__.initialize.apply(this, arguments);
   },
 
   action: function() {
@@ -497,7 +701,7 @@ var ActionCell = Datagrid.ActionCell = Cell.extend({
 
 var HeaderCell = Datagrid.HeaderCell = Cell.extend({
   initialize: function() {
-    HeaderCell.__super__.initialize.call(this);
+    HeaderCell.__super__.initialize.apply(this, arguments);
 
     this.sorter = this.options.sorter;
 
@@ -531,6 +735,13 @@ var HeaderCell = Datagrid.HeaderCell = Cell.extend({
 
   sort: function() {
     this.sorter.sort(this.column.sortedProperty || this.column.property);
+  }
+});
+
+var TemplateCell = Datagrid.TemplateCell = CallbackCell.extend({
+
+  _prepareValue: function() {
+    this.value = this.callback(this.model.toJSON());
   }
 });
 

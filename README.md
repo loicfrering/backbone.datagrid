@@ -625,9 +625,17 @@ backbone.datagrid:
 Changelog
 ---------
 
-### 0.3.3
+### 0.4.0-beta.1
 
-* Change behaviour of CallbackCell: Backbone model is passed as function parameter instead of JSON version (see issue #23)[https://github.com/loicfrering/backbone.datagrid/issues/24]
+* The full Backbone.Model is passed to the CallbackCell's callback function
+  instead of the serialized JSON.
+* You can now use the TemplateCell if you need the serialized JSON (for a
+  compiled template function).
+* Update Backbone to 1.0.0.
+* Fix some memory leaks.
+* Introduce configurable controls with:
+  * Pagination control
+  * ItemsPerPage control.
 
 ### 0.3.2
 
