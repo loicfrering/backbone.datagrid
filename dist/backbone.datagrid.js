@@ -688,6 +688,7 @@ var ActionCell = Datagrid.ActionCell = Cell.extend({
     a.attr('href', this.options.href || '#');
     if (this.options.actionClassName) {
       var actionClassName = this.options.actionClassName;
+      // Check if the classname is actually a callback and run it if it is.
       if (_.isFunction(actionClassName)) {
 	actionClassName = actionClassName(this.model);
       }
