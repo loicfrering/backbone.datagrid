@@ -13,7 +13,11 @@ var ActionCell = Datagrid.ActionCell = Cell.extend({
     a.html(this.options.label);
     a.attr('href', this.options.href || '#');
     if (this.options.actionClassName) {
-      a.addClass(this.options.actionClassName);
+      var actionClassName = this.options.actionClassName;
+      if (_.isFunction(actionClassName)) {
+	actionClassName = actionClassName(this.model);
+      }
+      a.addClass(actionClassName);
     }
     if (this.options.action) {
       this.delegateEvents({
