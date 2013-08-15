@@ -344,7 +344,7 @@ var Table = Datagrid.Table = ComposedView.extend({
     this.pager      = this.options.pager;
     this.sorter     = this.options.sorter;
 
-    this.listenTo(this.collection, 'reset sort', this.render);
+    this.listenTo(this.collection, 'reset', this.render);
   },
 
   render: function() {
@@ -687,12 +687,7 @@ var ActionCell = Datagrid.ActionCell = Cell.extend({
     a.html(this.options.label);
     a.attr('href', this.options.href || '#');
     if (this.options.actionClassName) {
-      var actionClassName = this.options.actionClassName;
-      // Check if the classname is actually a callback and run it if it is.
-      if (_.isFunction(actionClassName)) {
-	actionClassName = actionClassName(this.model);
-      }
-      a.addClass(actionClassName);
+      a.addClass(this.options.actionClassName);
     }
     if (this.options.action) {
       this.delegateEvents({
