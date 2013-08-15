@@ -8,7 +8,7 @@ var Table = Datagrid.Table = ComposedView.extend({
     this.pager      = this.options.pager;
     this.sorter     = this.options.sorter;
 
-    this.listenTo(this.collection, 'reset sort', this.render);
+    this.listenTo(this.collection, 'reset', this.render);
   },
 
   render: function() {
