@@ -19,7 +19,8 @@ var Table = Datagrid.Table = ComposedView.extend({
     this.$el.append(header.render().el);
     this.addNestedView(header);
 
-    this.$el.append('<tbody></tbody>');
+    this.$tbody = $('<tbody></tbody>');
+    this.$el.append(this.$tbody);
 
     if (this.collection.isEmpty()) {
       this.$el.append(this.options.emptyMessage);
@@ -43,7 +44,7 @@ var Table = Datagrid.Table = ComposedView.extend({
     options.className = rowClassName;
 
     var row = new Row(options);
-    this.$('tbody').append(row.render(this.columns).el);
+    this.$tbody.append(row.render(this.columns).el);
     this.addNestedView(row);
   }
 });
